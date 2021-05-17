@@ -19,6 +19,7 @@ public class Main extends Object {
 		measurements = new ArrayList<Measurement>();
 		measurements.add(new DoubleFloatMeasurement());	
 		measurements.add(new DateTimeMeasurement());
+		measurements.add(new DecimalMeasurement());
 	}
 	
 //	static {
