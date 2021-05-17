@@ -18,6 +18,7 @@ public class Main extends Object {
 	private static void initaliseMeasurementFunctions() {
 		measurements = new ArrayList<Measurement>();
 		measurements.add(new DoubleFloatMeasurement());	
+		measurements.add(new DateTimeMeasurement());
 	}
 	
 //	static {
