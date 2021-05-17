@@ -17,7 +17,7 @@ public class Main extends Object {
 	
 	private static void initaliseMeasurementFunctions() {
 		measurements = new ArrayList<Measurement>();
-		measurements.add(new DoubleFloatMeasurement());		
+		measurements.add(new DoubleFloatMeasurement());	
 	}
 	
 //	static {
@@ -28,8 +28,10 @@ public class Main extends Object {
 	public static void main(String args[]) {		
 
 		initaliseMeasurementFunctions();
-		
-		Model model = RDFDataMgr.loadModel("zusammengefuegte_ontologie.ttl");
+			
+		String dataPath = "zusammengefuegte_ontologie.ttl";
+		dataPath = "test.rdf";
+		Model model = RDFDataMgr.loadModel(dataPath);
 
 		StmtIterator iter = model.listStatements();
 		
@@ -51,7 +53,7 @@ public class Main extends Object {
 		Logger logger = Logger.getLogger("analyse.Main");
 		
 		for(Measurement m : measurements){
-			logger.info("Anz.: " + m.getOccurs());
+			logger.info(m.toString());
 		}
 	}
 

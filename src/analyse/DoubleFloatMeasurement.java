@@ -2,16 +2,17 @@ package analyse;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.log4j.Logger;
 
 /**
- * Wie hauefig String statt Double / Float verwendet wurde 
+ * String statt Double / Float verwendet
  * Issue #8
  */
 public class DoubleFloatMeasurement extends Measurement {
 	
-	private static final Logger LOGGER = Logger.getLogger("DoubleFloatMeasurement");
-
+	public DoubleFloatMeasurement() {
+		super(DoubleFloatMeasurement.class.getName());
+	}
+	
 	@Override
 	public void conductMeasurement(Literal literal) {
 		//Nur Strings von Interesse
@@ -27,16 +28,25 @@ public class DoubleFloatMeasurement extends Measurement {
 		
 		double doubleValue = 0.0; //TODO
 		//TODO von Interesse ob Float oder Double oder nur allgemein?
+		//Weitere Spezifikation -> Int -> faellt hier auch rein
 		//-> jeder Float ist auch Double
 		try {
 			//Zahl -> Double?
 			doubleValue = NumberUtils.createDouble(lexicalValue);
-			LOGGER.info(doubleValue);
-			super.occurs++;
+//			logger.info(doubleValue);
+			//TODO Abfangen von +- inf als Werte die nicht gezaehlt werden sollten?
+			if(doubleValue != Double.POSITIVE_INFINITY && doubleValue != Double.NEGATIVE_INFINITY) {				
+				super.occurs++;
+			}
 		}catch(NumberFormatException e) {
-			LOGGER.error("Cannot parse", e);
-			LOGGER.warn("Kein Double: " + literal);
+//			logger.error("Cannot parse", e);
+//			logger.warn("Kein Double: " + literal);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return DoubleFloatMeasurement.class.getName() + ":\t" + super.occurs;
 	}
 
 }
