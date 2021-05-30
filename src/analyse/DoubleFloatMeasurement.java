@@ -1,6 +1,7 @@
 package analyse;
 
-import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.jena.datatypes.xsd.impl.RDFLangString;
+import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;
 import org.apache.jena.rdf.model.Literal;
 
 /**
@@ -16,37 +17,28 @@ public class DoubleFloatMeasurement extends Measurement {
 	@Override
 	public void conductMeasurement(Literal literal) {
 		//Nur Strings von Interesse
-		if(literal.getDatatype().getJavaClass() != String.class){
-			return;
+		if (!(literal.getDatatype() instanceof RDFLangString)
+				&& !(literal.getDatatype() instanceof XSDBaseStringType)) {
+			System.err.println("Hier");
 		}
 		
 		String lexicalValue = literal.getLexicalForm();
-		//Keine Zahl
-		if(! NumberUtils.isCreatable(lexicalValue)) {
-			return;
-		}
 		
-		double doubleValue = 0.0; //TODO
-		//TODO von Interesse ob Float oder Double oder nur allgemein?
-		//Weitere Spezifikation -> Int -> faellt hier auch rein
-		//-> jeder Float ist auch Double
-		try {
-			//Zahl -> Double?
-			doubleValue = NumberUtils.createDouble(lexicalValue);
-//			logger.info(doubleValue);
-			//TODO Abfangen von +- inf als Werte die nicht gezaehlt werden sollten?
-			if(doubleValue != Double.POSITIVE_INFINITY && doubleValue != Double.NEGATIVE_INFINITY) {				
-				super.occurs++;
-			}
-		}catch(NumberFormatException e) {
-//			logger.error("Cannot parse", e);
-//			logger.warn("Kein Double: " + literal);
+		if(StringUtil.isValidFloat(lexicalValue)) {
+			super.insertElement("Float");
+			super.insertElement("Double");
+		}else if(StringUtil.isValidDouble(lexicalValue)) {
+			super.insertElement("Double");
 		}
 	}
-	
+		
 	@Override
 	public String toString() {
-		return DoubleFloatMeasurement.class.getName() + ":\t" + super.occurs;
+		String s = DoubleFloatMeasurement.class.getName() + ":\n";
+		for (String key : super.occurs.keySet()) {
+			s += "\t" + key + "\t" + super.occurs.get(key) + "\n";
+		}
+		return s;
 	}
 
 }

@@ -1,11 +1,12 @@
 package analyse;
 
+import org.apache.jena.datatypes.xsd.impl.RDFLangString;
+import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;
 import org.apache.jena.rdf.model.Literal;
-
-import java.util.regex.*;
 
 /**
  * Verwendung von String statt Decimal 
+ * 
  * Issue #5
  */
 public class DecimalMeasurement extends Measurement {
@@ -17,33 +18,25 @@ public class DecimalMeasurement extends Measurement {
 	@Override
 	public void conductMeasurement(Literal literal) {
 		// Nur Strings von Interesse
-		if (literal.getDatatype().getJavaClass() != String.class) {
-			return;
+		if (!(literal.getDatatype() instanceof RDFLangString)
+				&& !(literal.getDatatype() instanceof XSDBaseStringType)) {
+			System.err.println("Hier");
 		}
-		
-		//RegEx fuer xsd:decimal
-		//optionales Vorzeichen +/-
-		//beliebig viele Ziffern vor dem . <- Trennzeichen
-		//wenn Kommazahl dann . 
-		//Nachkommastellen oder Vorkommastellen mit mind. 1 Ziffer
-		//Zwischen $ und ^ damit dies der einzige Inhalt des Strings ist
-		Pattern pattern = Pattern.compile("^(\\+|-)?[0-9]*\\.?[0-9]+$");
-		
-		String lexicalValue = literal.getLexicalForm();		
-		Matcher matcher = pattern.matcher(lexicalValue);
-		
-		if(matcher.find()) {
-			super.occurs++;
-//			logger.info("Decimal:\t" + lexicalValue);
+
+		String lexicalValue = literal.getLexicalForm();
+
+		if (StringUtil.isValidDecimal(lexicalValue)) {
+			super.insertElement("xsd:decimal");
 		}
-//		else {
-//			logger.error("Kein Decimal:\t" + lexicalValue);
-//		}
 	}
 
 	@Override
 	public String toString() {
-		return DecimalMeasurement.class.getName() + ":\t" + super.occurs;
+		String s = DecimalMeasurement.class.getName() + ":\n";
+		for (String key : super.occurs.keySet()) {
+			s += "\t" + key + "\t" + super.occurs.get(key) + "\n";
+		}
+		return s;
 	}
 
 }
