@@ -1,13 +1,18 @@
-package analyse;
+package utils;
 
 import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Functions for examining Strings
+ */
 public abstract class StringUtil {
-	
+
 	/**
 	 * Check if the passed String can be stored as a double
+	 * 
+	 * Also considers the accuracy of double
 	 * 
 	 * @param s String to examine
 	 * @return true if s can be stored as a double, else double
@@ -15,18 +20,18 @@ public abstract class StringUtil {
 	public static boolean isValidDouble(String s) {
 		Double doubleValue;
 		BigDecimal decimalValue;
-		
+
 		try {
-			//interpret the String as double value
+			// interpret the String as double value
 			doubleValue = Double.parseDouble(s);
-		}catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return false;
 		}
 		try {
 			// interpret the string as a decimal
 			decimalValue = new BigDecimal(s);
-		}catch(NumberFormatException e) {
-			//special valid cases from double that aren't valid as BigDecimal 
+		} catch (NumberFormatException e) {
+			// special valid cases from double that aren't valid as BigDecimal
 			return doubleValue.isNaN() | doubleValue.isInfinite();
 		}
 		try {
@@ -41,6 +46,8 @@ public abstract class StringUtil {
 
 	/**
 	 * Check if the passed String can be stored as a float
+	 * 
+	 * Also considers the accuracy of float
 	 * 
 	 * @param s String to examine
 	 * @return true if s can be stored as a float, else false
@@ -58,7 +65,8 @@ public abstract class StringUtil {
 			// interpret the string as a decimal
 			decimalValue = new BigDecimal(s);
 		} catch (NumberFormatException e) {
-			// special cases from Float that can't be stored as BigDecimal but are valid float values
+			// special cases from Float that can't be stored as BigDecimal but are valid
+			// float values
 			return floatValue.isNaN() | floatValue.isInfinite();
 		}
 		try {
@@ -119,5 +127,51 @@ public abstract class StringUtil {
 
 		Matcher matcher = pattern.matcher(s);
 		return matcher.find();
+	}
+
+	/**
+	 * Check if the parameter can be stored as float, but not as decimal
+	 * 
+	 * Check if the parameter can be interpreted as float
+	 * </p>
+	 * NaN, + and - infinity can't be represented by decimal
+	 * </p>
+	 * -> test if the parameter is one of them
+	 * 
+	 * 
+	 * @param s Literal that is checked
+	 * @return true if the parameter is Nan, + infinity, - infinity and can be
+	 *         stored as a float, else false
+	 */
+	/* TODO weg?
+	 * -> double Methode ausreichend, was bei Float NaN, +/- inf ist, ist auch 
+	 * bei double einer dieser Werte*/
+	/*public static boolean isValidFloatAndInvalidDecimal(String s) {
+		/*Float floatValue;
+		try {
+			// interpret String as Float
+			floatValue = Float.parseFloat(s);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		// the accuracy of float is not of interest at this point
+		// NaN and +/- infinity can't be represented by decimal
+		return floatValue.isInfinite() || floatValue.isNaN();
+		return isValidDoubleOrFloatAndInvalidDecimal(s);
+	}*/
+	
+	/**
+	 * Check if the parameter can be stored as double or float, but not as decimal
+	 * 
+	 * </p>
+	 * NaN, + and - infinity can't be represented by decimal
+	 * </p>
+	 * -> test if the parameter is one of them
+	 * 
+	 * @param s literal that is checked
+	 * @return true if the parameter is Nan, + infinity, - infinity, else false
+	 */
+	public static boolean isValidDoubleOrFloatAndInvalidDecimal(String s) {
+		return s.equals("NaN") || s.equals("Infinity") || s.equals("-Infinity");  
 	}
 }
