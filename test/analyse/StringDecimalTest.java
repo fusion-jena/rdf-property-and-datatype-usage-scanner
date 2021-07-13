@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import utils.StringUtil;
+
 class StringDecimalTest {
 
 	@Test
@@ -54,8 +56,13 @@ class StringDecimalTest {
 				"+1,234+.456",
 				//Leerzeichen und Buchstaben
 				" 1 234.456",
-				"a345bw54"
+				"a345bw54",
+				//NaN, inf, -inf,
+				"NaN",
+				"-Infinity", 
+				"Infinity"
 				);
+	
 		for (String number : numbers) {
 			if(StringUtil.isValidDecimal(number)) {
 				System.out.println(number);

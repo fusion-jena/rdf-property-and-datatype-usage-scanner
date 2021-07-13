@@ -7,17 +7,19 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import utils.StringUtil;
+
 class StringDoubleTest {
 
 	@Test
 	void validDoubleInvalidBigDecimalTest() {
-		List<String> numbers = Arrays.asList(Double.longBitsToDouble(0x7ff8000000000000L) + "", // -inf
-				Double.longBitsToDouble(0xfff0000000000000L) + "", // NaN
-				Double.longBitsToDouble(0x7ff0000000000000L) + "" // +inf
+		List<String> numbers = Arrays.asList(Double.NEGATIVE_INFINITY + "", // -inf
+				Double.NaN + "", // NaN
+				Double.POSITIVE_INFINITY + "" // +inf
 		);
 
 		for (String number : numbers) {
-			assertTrue(StringUtil.isValidFloat(number));
+			assertTrue(StringUtil.isValidDouble(number));
 		}
 	}
 
@@ -27,7 +29,7 @@ class StringDoubleTest {
 		for (Double number : numbers) {
 			assertTrue(StringUtil.isValidDouble(number + ""));
 		}
-		List<String> numbers2 = Arrays.asList("5E-1", "1250E-4", "0.0", "0.0", "10E2");
+		List<String> numbers2 = Arrays.asList("5E-1", "1250E-4", "0.0", "0.1875", "10E2");
 		for (String number : numbers2) {
 			assertTrue(StringUtil.isValidDouble(number + ""));
 		}
@@ -35,7 +37,7 @@ class StringDoubleTest {
 
 	@Test
 	void invalidDoubleValidBigDecimalTest() {
-		// TODO Pruefen ,
+		// https://www.h-schmidt.net/FloatConverter/IEEE754de.html
 		List<Double> numbers = Arrays.asList(0.2, -0.9, (double) (Math.pow(2, 10) + 7.1),
 				(double) 1 / 3, (double) -9 / 7, 0.6, (double) Math.pow(5, -10));
 		for (Double number : numbers) {
