@@ -1,0 +1,25 @@
+<property_1> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#double>  <graph1>  .
+<property_1> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#double>  <graph2>  .
+<property_2> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#int>  <graph1>  .
+<property_2> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#double>  <graph1>  .
+#StringDecimalMeasurement, StringDoubleFloatMeasurement:
+<item_1> <property_1> "10" <graph1> .
+<item_2> <property_1> "11.5" <graph2> .
+<item_3> <property_2> "-3.3356" <graph1> .
+<item_7> <property_7> "-15.125" <graph1> .
+#StringDoubleFloatNotDecimalMeasurement:
+<item_4> <special_prop> "NaN" <graph1> .
+<item_5> <special_prop> "Infinity" <graph2> .
+<item_6> <special_prop> "-Infinity" <graph2> .
+#StringDateTimeMeasurement
+<item_4> <no-date_time_prop> "1997-05-23T" <graph2> .
+<item_4> <date_time_prop> "1997-10-31T12:45:23Z" <graph1> .
+<item_5> <date_time_prop> "2004-11-10T05:53:12+07:30" <graph1> .
+#DoubleFloatDecimalMeasurement
+<item_4> <property_3> "0.333333333333"^^<http://www.w3.org/2001/XMLSchema#double> <graph1> .
+<item_4> <property_4> "0.5"^^<http://www.w3.org/2001/XMLSchema#float> <graph2> .
+<item_5> <property_1> "-0.2"^^<http://www.w3.org/2001/XMLSchema#float> <graph1> .
+<item_5> <property_2> "+0.125"^^<http://www.w3.org/2001/XMLSchema#double> <graph2> .
+#Error:
+<item_8> <property_8> "0.2"@zh_tw <graph2>   .
+<item_8> <property_9> "10"@zh.tw <graph1>   .

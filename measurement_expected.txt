@@ -1,0 +1,29 @@
+Number of lines with errors: 2
+
+measurements.PropertyRangeMeasurement:
+  property_1  double  1
+  property_2  int 1
+  property_2  double  1
+
+measurements.StringDecimalMeasurement:
+  property_1  2
+  property_2  1
+  property_7  1
+
+measurements.StringDateTimeMeasurement:
+  date_time_prop  2
+
+measurements.DoubleFloatDecimalMeasurement:
+  property_3  1	double
+  property_1  1	float
+
+measurements.StringDoubleFloatMeasurement:
+  property_1  2 float
+  property_1  2 double
+  property_7  1 float
+  property_7  1 double
+  special_prop  3 float
+  special_prop  3 double
+
+measurements.StringDoubleFloatNotDecimalMeasurement:
+  special_prop  3
