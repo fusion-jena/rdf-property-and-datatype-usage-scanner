@@ -27,7 +27,7 @@ public class Main extends Object {
 	private static org.slf4j.Logger log;
 
 	/**
-	 * Inital setup
+	 * Initial setup
 	 * 
 	 * initalisation of measurements, initial creation of dataset for speed up set
 	 * datapath init logger
@@ -59,23 +59,21 @@ public class Main extends Object {
 	 * @return String of the filename that will be examined
 	 */
 	private static String examplePaths() {
-		String dataPath;
-//		dataPath = "zusammengefuegte_ontologie.ttl";
-//		dataPath = "ccrdf.html-rdfa.sample(1).nq";
-//		dataPath = "dpef.html-rdfa.nq-00000";
-//		dataPath = "test_nq.nq";
-		dataPath = "measurement_test.nq";
-//		dataPath = "long_nq.nq";
+		String dataPath = "src/main/resources/";
+//		dataPath += "ccrdf.html-rdfa.sample.nq";
+//		dataPath += "dpef.html-rdfa.nq-00000";
+//		dataPath += "test_nq.nq";
+		dataPath += "customExample.nq";
+//		dataPath += "long_nq.nq";
 		return dataPath;
 	}
 
 	public static void main(String args[]) {
-
+			
 		initalisationProcess();
 
 		List<Statement> allStatements = ModelUtil.parseLineByLine(dataPath, log);
 		ModelUtil.conductMeasurements(measurements, allStatements, log);
-
 		// get the results
 		for (Measurement<?, ?> me : measurements) {
 			log.info(me.toString());

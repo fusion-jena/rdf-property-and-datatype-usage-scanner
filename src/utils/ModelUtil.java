@@ -61,15 +61,8 @@ public abstract class ModelUtil {
 			while (line != null) {// iterate over the lines
 				lineNumber++;
 				try {
-					Dataset dataset = DatasetFactory.create();
-					// Try to parse the current line into the dataset
-					RDFParser.fromString(line).lang(Lang.NQUADS)
-							.errorHandler(ErrorHandlerFactory.errorHandlerStrictNoLogging).parse(dataset);
-					// If the parsing was successful, add the corresponding tuple to the list 
-					StmtIterator stmtIt = dataset.getUnionModel().listStatements();
-					while(stmtIt.hasNext()) {
-						allStatements.add(stmtIt.next());
-					}
+					// Add all the statements from the current line
+					allStatements.addAll(createStatementsFromLine(line));
 				} catch (RiotException e) {
 					// In case of an error while parsing the line, log an error instead of adding
 					// the tuple to the model
@@ -84,10 +77,10 @@ public abstract class ModelUtil {
 
 			reader.close();
 		} catch (FileNotFoundException e) {
-			// log.error(e.getMessage());
+			log.error(e.getMessage());
 			System.exit(1);
 		} catch (IOException e) {
-			// log.error(e.getMessage());
+			log.error(e.getMessage());
 			System.exit(1);
 		}
 		long endParse = System.currentTimeMillis();
@@ -98,28 +91,56 @@ public abstract class ModelUtil {
 	}
 
 	/**
+	 * Returns the statement of a single line
+	 * 
+	 * Parse a String, create a model of the created data set and return the contained statement  
+	 * <p>
+	 * 
+	 * @param line String to parse
+	 * @return the statement of the parsed line as a list (listStatements of model)
+	 * @throws RiotException exception while parsing the line
+	 */
+	public static List<Statement> createStatementsFromLine(String line) throws RiotException {
+		// contains all the statements of the line
+		List<Statement> allStatements = new ArrayList<Statement>();
+
+		Dataset dataSet = DatasetFactory.create();
+		// Try to parse the current line into the dataset
+		RDFParser.fromString(line).lang(Lang.NQUADS).errorHandler(ErrorHandlerFactory.errorHandlerStrictNoLogging)
+				.parse(dataSet);
+		// If the parsing was successful, add the corresponding tuple to the list
+		StmtIterator stmtIt = dataSet.getUnionModel().listStatements();
+		while (stmtIt.hasNext()) {
+			allStatements.add(stmtIt.next());
+		}
+
+		return allStatements;
+	}
+
+	/**
 	 * Conducts the measurements that are contained in the list for each statement
 	 * that is contained in the model
 	 * 
-	 * @param measurements List of classes for each measurement that will be
-	 *                     conducted
-	 * @param allStatements        Model whose statements will be examined
-	 * @param log          Logging of information
+	 * @param measurements  List of classes for each measurement that will be
+	 *                      conducted
+	 * @param allStatements Model whose statements will be examined
+	 * @param log           Logging of information
 	 */
-	public static void conductMeasurements(List<Measurement<?, ?>> measurements, List<Statement> allStatements, org.slf4j.Logger log) {
+	public static void conductMeasurements(List<Measurement<?, ?>> measurements, List<Statement> allStatements,
+			org.slf4j.Logger log) {
 		Iterator<Statement> iter = allStatements.iterator();
 		long startMeasurement = System.currentTimeMillis();
 		log.debug("Starting the measurements");
-		
+
 		while (iter.hasNext()) {
 			Statement stmt = iter.next();
-			
+
 			RDFNode subject = stmt.getSubject();
 			Property property = stmt.getPredicate();
 			RDFNode object = stmt.getObject();
 
 			// Conduct all measurements on the current statement
-			for (Measurement<?,?> measurement : measurements) {
+			for (Measurement<?, ?> measurement : measurements) {
 				measurement.conductMeasurement(subject, property, object);
 			}
 
@@ -140,7 +161,7 @@ public abstract class ModelUtil {
 	 * @return List which contains all the statements of the document
 	 */
 	@Deprecated
-	private static List<Statement> kompletteDateiParsen(String dataPath, org.slf4j.Logger log) {
+	private static List<Statement> parseWholeFile(String dataPath, org.slf4j.Logger log) {
 		List<Statement> allStatements = new ArrayList<Statement>();
 		try {
 			log.debug("Start parsing file with apache jena");
@@ -150,10 +171,10 @@ public abstract class ModelUtil {
 					.errorHandler(ErrorHandlerFactory.errorHandlerStrict(log));
 			builder.parse(dataset);
 			Iterator<String> modelNamesIt = dataset.listNames();
-			while(modelNamesIt.hasNext()) {
+			while (modelNamesIt.hasNext()) {
 				Model model = dataset.getNamedModel(modelNamesIt.next());
 				StmtIterator stmtIt = model.listStatements();
-				while(stmtIt.hasNext()) {
+				while (stmtIt.hasNext()) {
 					allStatements.add(stmtIt.next());
 				}
 			}
