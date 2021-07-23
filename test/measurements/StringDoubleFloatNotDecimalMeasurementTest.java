@@ -1,4 +1,4 @@
-package analyse;
+package measurements;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import utils.StringUtil;
 
-class StringDoubleFloatNotDecimalTest {
+class StringDoubleFloatNotDecimalMeasurementTest {
 
 	@Test
 	void testValidFloatValidDecimal() {

@@ -1,7 +1,7 @@
 Number of lines with errors: 2
 
 measurements.PropertyRangeMeasurement:
-  property_1  double  1
+  property_1  double  2
   property_2  int 1
   property_2  double  1
 
