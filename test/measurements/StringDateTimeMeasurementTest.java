@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.jena.rdf.model.Statement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import utils.ModelUtil;
 import utils.StringUtil;
 
 class StringDateTimeMeasurementTest {
@@ -44,7 +42,6 @@ class StringDateTimeMeasurementTest {
 	private List<Measurement<?, ?>> measurements;
 	private StringDateTimeMeasurement m;
 
-	private String predicateName = "test:predicate";
 
 	@BeforeEach
 	void init() {
@@ -52,12 +49,6 @@ class StringDateTimeMeasurementTest {
 		measurements = new ArrayList<Measurement<?, ?>>();
 		m = new StringDateTimeMeasurement();
 		measurements.add(m);
-	}
-
-	String createLine(String object) {
-		String line = "<test:subject> <" + predicateName + "> ";
-		line += "\"" + object + "\" <test:graph>.";
-		return line;
 	}
 
 	/**
@@ -100,9 +91,9 @@ class StringDateTimeMeasurementTest {
 	@Test
 	void validDatesWithoutOffsetNQ() {
 		for (String date : validDatesWithoutOffset) {
-			List<Statement> allStatements = ModelUtil.createStatementsFromLine(createLine(date));
-			ModelUtil.conductMeasurements(measurements, allStatements, log);
-			assertEquals(m.getOccurs().get(predicateName), 1);
+			String line = MeasurementTestUtil.createStringLine(date);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertEquals(m.getOccurs().get(MeasurementTestUtil.predicateName), 1);
 			m.getOccurs().clear();
 		}
 	}
@@ -110,8 +101,8 @@ class StringDateTimeMeasurementTest {
 	@Test
 	void invalidDatesWithoutOffsetNQ() {
 		for (String date : invalidDatesWithoutOffset) {
-			List<Statement> allStatements = ModelUtil.createStatementsFromLine(createLine(date));
-			ModelUtil.conductMeasurements(measurements, allStatements, log);
+			String line = MeasurementTestUtil.createStringLine(date);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
 			assertTrue(m.getOccurs().keySet().isEmpty());
 			m.getOccurs().clear();
 		}
@@ -120,9 +111,9 @@ class StringDateTimeMeasurementTest {
 	@Test
 	void validDatesWithOffsetNQ() {
 		for (String date : validDatesWithOffset) {
-			List<Statement> allStatements = ModelUtil.createStatementsFromLine(createLine(date));
-			ModelUtil.conductMeasurements(measurements, allStatements, log);
-			assertEquals(m.getOccurs().get(predicateName), 1);
+			String line = MeasurementTestUtil.createStringLine(date);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertEquals(m.getOccurs().get(MeasurementTestUtil.predicateName), 1);
 			m.getOccurs().clear();
 		}
 	}
@@ -130,8 +121,8 @@ class StringDateTimeMeasurementTest {
 	@Test
 	void invalidDatesWithOffsetNQ() {
 		for (String date : invalidDatesWithOffset) {
-			List<Statement> allStatements = ModelUtil.createStatementsFromLine(createLine(date));
-			ModelUtil.conductMeasurements(measurements, allStatements, log);
+			String line = MeasurementTestUtil.createStringLine(date);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
 			assertTrue(m.getOccurs().keySet().isEmpty());
 			m.getOccurs().clear();
 		}

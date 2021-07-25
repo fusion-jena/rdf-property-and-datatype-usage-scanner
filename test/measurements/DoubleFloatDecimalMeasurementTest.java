@@ -2,17 +2,107 @@ package measurements;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import utils.GlobalNames;
 import utils.NumberUtil;
 
 class DoubleFloatDecimalMeasurementTest {
+	
+	List<String> specialValues = Arrays.asList(
+			"NaN", 
+			"INF", 
+			"-INF");
+	
+	List<String> validDoubleValues = Arrays.asList(
+			"0.0",
+			"-0.0",
+			"0.5",
+			"3125e-5",
+			"10.5",
+			"314129",
+			"53460.9887E4",
+			"314125E-3",
+			"1.024E3",
+			"-9.765625e-4"
+			);
+	
+	List<String> invalidDoubleValues = Arrays.asList(
+			"0.1",
+			"0.2",
+			"200E-3",
+			"-10.71",
+			"5876E-2");
+	
+	List<String> validFloatValues = Arrays.asList(
+			"0.0",
+			"-0.0",
+			"-0.5",
+			"31.25E-1",
+			"534609888",
+			"-25E-2",
+			"800.0078125",
+			"0.125E5"
+			);
+	
+	List<String> invalidFloatValues = Arrays.asList(
+			"0.1", 
+			"-0.3",
+			"3.14129",
+			"7893465E-5",
+			"0.000000059",
+			"0.999"
+			);
+	
+	private org.slf4j.Logger log;
+	private List<Measurement<?, ?>> measurements;
+	private DoubleFloatDecimalMeasurement m;
 
+	
+	@BeforeEach
+	void init() {
+		log = org.slf4j.LoggerFactory.getLogger("test");
+		measurements = new ArrayList<Measurement<?, ?>>();
+		m = new DoubleFloatDecimalMeasurement();
+		measurements.add(m);
+	}
+	
+	/***************************************************************/
+	/***************************Double******************************/
+	/***************************************************************/
+	
 	@Test
-	void replaceDoubleByDecimal() {
+	void replaceDoubleByDecimalNQ() {
+		for (String value : invalidDoubleValues) {
+			String line = MeasurementTestUtil.createDoubleLine(value);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).size()); //only double entries
+			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).get(GlobalNames.DOUBLE));
+			m.getOccurs().clear();
+		}
+	}
+	
+	@Test
+	void notReplaceDoubleByDecimalNQ() {
+		for (String value : specialValues) {
+			String line = MeasurementTestUtil.createDoubleLine(value);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertTrue(m.getOccurs().isEmpty());
+		}
+		for (String value : validDoubleValues) {
+			String line = MeasurementTestUtil.createDoubleLine(value);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertTrue(m.getOccurs().isEmpty());
+		}
+	}
+	
+	@Test
+	void replaceDoubleByDecimalMethod() {
 		//values that should be stored as decimal and not as double
 		List<Double> doubleValues = Arrays.asList(
 				(double) 1 / 3, 
@@ -30,7 +120,7 @@ class DoubleFloatDecimalMeasurementTest {
 	}
 	
 	@Test
-	void notReplaceDoubleByDecimal() {
+	void notReplaceDoubleByDecimalMethod() {
 		//values that can be stored as double
 		List<Double> doubleValues = Arrays.asList(
 				(double) 1/2,
@@ -59,8 +149,37 @@ class DoubleFloatDecimalMeasurementTest {
 		}
 	}
 	
+	/***************************************************************/
+	/****************************Float******************************/
+	/***************************************************************/
+	
 	@Test
-	void floatReplaceByDecimal() {
+	void replaceFloatByDecimalNQ() {
+		for (String value : invalidFloatValues) {
+			String line = MeasurementTestUtil.createFloatLine(value);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).size());
+			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).get(GlobalNames.FLOAT));
+			m.getOccurs().clear();
+		}
+	}
+	
+	@Test 
+	void notReplaceFloatByDecimalNQ() {
+		for (String value : specialValues) {
+			String line = MeasurementTestUtil.createFloatLine(value);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertTrue(m.getOccurs().isEmpty());
+		}
+		for (String value : validFloatValues) {
+			String line = MeasurementTestUtil.createFloatLine(value);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertTrue(m.getOccurs().isEmpty());
+		}
+	}
+	
+	@Test
+	void floatReplaceByDecimalMethod() {
 		List<Float> floatValues = Arrays.asList(
 				(float) 1/3,
 				(float) -1/5, 
@@ -79,9 +198,9 @@ class DoubleFloatDecimalMeasurementTest {
 			assertTrue(NumberUtil.shouldBeReplacedByDecimal(floatValues.get(i), stringValues.get(i)));
 		}
 	}
-	
+		
 	@Test
-	void notReplaceFloatByDecimal() {
+	void notReplaceFloatByDecimalMethod() {
 		//values that can be stored as float
 		List<Float> floatValues = Arrays.asList(
 				(float) 1 / 2, 
