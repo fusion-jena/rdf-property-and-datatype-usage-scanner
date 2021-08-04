@@ -1,4 +1,4 @@
-package measurements;
+package test.java.measurements;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +9,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import utils.StringUtil;
+import main.java.measurements.Measurement;
+import main.java.measurements.StringDecimalMeasurement;
+import main.java.utils.StringUtil;
 
 class StringDecimalMeasurementTest {
 

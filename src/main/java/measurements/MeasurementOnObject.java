@@ -1,4 +1,4 @@
-package measurements;
+package main.java.measurements;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Property;

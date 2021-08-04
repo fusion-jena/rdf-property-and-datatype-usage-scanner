@@ -1,4 +1,4 @@
-package measurements;
+package test.java.measurements;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import utils.StringUtil;
+import main.java.utils.StringUtil;
 
 class StringFloatTest {
 

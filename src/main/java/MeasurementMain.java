@@ -1,4 +1,4 @@
-package main;
+package main.java;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,16 +6,16 @@ import java.util.List;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
 
-import measurements.StringDateTimeMeasurement;
-import measurements.StringDecimalMeasurement;
-import measurements.StringDoubleFloatMeasurement;
-import measurements.StringDoubleFloatNotDecimalMeasurement;
-import measurements.DoubleFloatDecimalMeasurement;
-import measurements.Measurement;
-import measurements.PropertyRangeMeasurement;
-import utils.ModelUtil;
+import main.java.measurements.StringDateTimeMeasurement;
+import main.java.measurements.StringDecimalMeasurement;
+import main.java.measurements.StringDoubleFloatMeasurement;
+import main.java.measurements.StringDoubleFloatNotDecimalMeasurement;
+import main.java.measurements.DoubleFloatDecimalMeasurement;
+import main.java.measurements.Measurement;
+import main.java.measurements.PropertyRangeMeasurement;
+import main.java.utils.ModelUtil;
 
-public class Main extends Object {
+public class MeasurementMain {
 
 	/**
 	 * Contains one class for each measurement that will be conducted

@@ -1,10 +1,11 @@
-package measurements;
+package test.java.measurements;
 
 import java.util.List;
 
 import org.apache.jena.rdf.model.Statement;
 
-import utils.ModelUtil;
+import main.java.measurements.Measurement;
+import main.java.utils.ModelUtil;
 
 public final class MeasurementTestUtil {
 

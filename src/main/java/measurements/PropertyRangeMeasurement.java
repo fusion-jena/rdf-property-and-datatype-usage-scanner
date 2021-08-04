@@ -1,4 +1,4 @@
-package measurements;
+package main.java.measurements;
 
 import java.util.HashMap;
 
@@ -6,8 +6,8 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.vocabulary.RDFS;
 
-import utils.GlobalNames;
-import utils.HashMapInsertUtil;
+import main.java.utils.GlobalNames;
+import main.java.utils.HashMapInsertUtil;
 
 /**
  * Check, if a statement defines a range for a property

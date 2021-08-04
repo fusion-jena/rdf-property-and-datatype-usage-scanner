@@ -1,4 +1,4 @@
-package measurements;
+package main.java.measurements;
 
 import java.util.HashMap;
 
@@ -6,9 +6,9 @@ import org.apache.jena.datatypes.xsd.impl.RDFLangString;
 import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;
 import org.apache.jena.rdf.model.Literal;
 
-import utils.GlobalNames;
-import utils.StringUtil;
-import utils.HashMapInsertUtil;
+import main.java.utils.GlobalNames;
+import main.java.utils.StringUtil;
+import main.java.utils.HashMapInsertUtil;
 
 /**
  * Use of String when Float or Double should be used

@@ -1,4 +1,4 @@
-package measurements;
+package main.java.measurements;
 
 import java.util.HashMap;
 
@@ -6,9 +6,9 @@ import org.apache.jena.datatypes.xsd.impl.XSDDouble;
 import org.apache.jena.datatypes.xsd.impl.XSDFloat;
 import org.apache.jena.rdf.model.Literal;
 
-import utils.GlobalNames;
-import utils.NumberUtil;
-import utils.HashMapInsertUtil;
+import main.java.utils.GlobalNames;
+import main.java.utils.NumberUtil;
+import main.java.utils.HashMapInsertUtil;
 
 /**
  * Using Double or Float but Decimal should be used

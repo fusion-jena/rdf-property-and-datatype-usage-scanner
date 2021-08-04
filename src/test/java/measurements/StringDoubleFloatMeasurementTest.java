@@ -1,4 +1,4 @@
-package measurements;
+package test.java.measurements;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,8 +9,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import utils.GlobalNames;
-import utils.StringUtil;
+import main.java.utils.GlobalNames;
+import main.java.utils.StringUtil;
+import main.java.measurements.StringDoubleFloatMeasurement;
+import main.java.measurements.Measurement;
 
 class StringDoubleFloatMeasurementTest {
 	
