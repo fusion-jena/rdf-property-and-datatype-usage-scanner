@@ -1,6 +1,8 @@
 package main.java.utils;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -174,4 +176,19 @@ public abstract class StringUtil {
 	public static boolean isValidDoubleOrFloatAndInvalidDecimal(String s) {
 		return s.equals("NaN") || s.equals("Infinity") || s.equals("-Infinity");  
 	}
+	
+	/**
+	 * Creates a string containing the current date and time combined with the file name
+	 * 
+	 * @param fileName last substring of the generated file name
+	 * @return string combined of current date time and the file name
+	 */
+	public static String createStorageFile(String fileName) {
+		Date date = new Date();
+		SimpleDateFormat dayFormatter = new SimpleDateFormat("dd-MM-yyyy");  
+		SimpleDateFormat timeFormatter = new SimpleDateFormat("HH-mm-ss");
+//		return dayFormatter.format(date) + "T" + timeFormatter.format(date) + "_" + fileName;
+		return "_" + fileName;
+	}
+	
 }

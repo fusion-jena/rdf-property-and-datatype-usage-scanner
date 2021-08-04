@@ -1,10 +1,13 @@
 package main.java;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
+import org.apache.log4j.PropertyConfigurator;
 
 import main.java.measurements.StringDateTimeMeasurement;
 import main.java.measurements.StringDecimalMeasurement;
@@ -14,6 +17,7 @@ import main.java.measurements.DoubleFloatDecimalMeasurement;
 import main.java.measurements.Measurement;
 import main.java.measurements.PropertyRangeMeasurement;
 import main.java.utils.ModelUtil;
+import main.java.utils.StringUtil;
 
 public class MeasurementMain {
 
@@ -35,10 +39,17 @@ public class MeasurementMain {
 	private static void initalisationProcess() {
 		ModelFactory.createDefaultModel();
 		initaliseMeasurementFunctions();
-		dataPath = examplePaths();
+		if (dataPath == null) {
+			dataPath = examplePaths();
+		}
+		
+		//TODO log durch die entsprechende Dateinummer austauschen
+		System.setProperty("fName", StringUtil.createStorageFile("log"));
+		
+		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		log = org.slf4j.LoggerFactory.getLogger(dataPath);
 	}
-
+	
 	/**
 	 * Initialises the list with the classes for each measurement that will be
 	 * conducted
@@ -68,9 +79,18 @@ public class MeasurementMain {
 		return dataPath;
 	}
 
+	/**
+	 * If no argument is passed, one of the example files is used
+	 * @param args
+	 */
 	public static void main(String args[]) {
+				
+		if(args.length == 1) {
+			dataPath = args[0];
+		}
 			
 		initalisationProcess();
+		
 
 		List<Statement> allStatements = ModelUtil.parseLineByLine(dataPath, log);
 		ModelUtil.conductMeasurements(measurements, allStatements, log);
