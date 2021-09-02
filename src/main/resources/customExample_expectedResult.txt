@@ -16,14 +16,16 @@ measurements.StringDateTimeMeasurement:
 measurements.DoubleFloatDecimalMeasurement:
   property_3  1	double
   property_1  1	float
+  
+measurements.ShouldBeFloat:
+	property_7	1	FLOAT
+	special_prop	3	FLOAT
+	property_1	2	FLOAT
 
-measurements.StringDoubleFloatMeasurement:
-  property_1  2 float
-  property_1  2 double
-  property_7  1 float
-  property_7  1 double
-  special_prop  3 float
-  special_prop  3 double
+measurements.ShouldBeDouble:
+	property_7	1	DOUBLE
+	special_prop	3	DOUBLE
+	property_1	2	DOUBLE
 
 measurements.StringDoubleFloatNotDecimalMeasurement:
   special_prop  3
