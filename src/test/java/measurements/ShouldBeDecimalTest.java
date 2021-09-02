@@ -1,6 +1,8 @@
 package test.java.measurements;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,13 +11,30 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import main.java.measurements.DoubleFloatDecimalMeasurement;
-import main.java.measurements.Measurement;
+import main.java.measurements.ShouldBeDecimal;
 import main.java.utils.GlobalNames;
 import main.java.utils.NumberUtil;
+import main.java.utils.StringUtil;
+import main.java.measurements.Measurement;
 
-class DoubleFloatDecimalMeasurementTest {
+public class ShouldBeDecimalTest {
 	
+	private org.slf4j.Logger log;
+	private List<Measurement<?, ?>> measurements;
+	private ShouldBeDecimal m;
+
+	
+	@BeforeEach
+	void init() {
+		log = org.slf4j.LoggerFactory.getLogger("test");
+		measurements = new ArrayList<Measurement<?, ?>>();
+		m = new ShouldBeDecimal();
+		measurements.add(m);
+	}
+	
+	/********************************************************************
+	 ***************************** Double *******************************
+	 ********************************************************************/
 	List<String> specialValues = Arrays.asList(
 			"NaN", 
 			"INF", 
@@ -41,49 +60,14 @@ class DoubleFloatDecimalMeasurementTest {
 			"-10.71",
 			"5876E-2");
 	
-	List<String> validFloatValues = Arrays.asList(
-			"0.0",
-			"-0.0",
-			"-0.5",
-			"31.25E-1",
-			"534609888",
-			"-25E-2",
-			"800.0078125",
-			"0.125E5"
-			);
-	
-	List<String> invalidFloatValues = Arrays.asList(
-			"0.1", 
-			"-0.3",
-			"3.14129",
-			"7893465E-5",
-			"0.000000059",
-			"0.999"
-			);
-	
-	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
-	private DoubleFloatDecimalMeasurement m;
-
-	
-	@BeforeEach
-	void init() {
-		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
-		m = new DoubleFloatDecimalMeasurement();
-		measurements.add(m);
-	}
-	
-	/***************************************************************/
-	/***************************Double******************************/
-	/***************************************************************/
-	
 	@Test
 	void replaceDoubleByDecimalNQ() {
 		for (String value : invalidDoubleValues) {
 			String line = MeasurementTestUtil.createDoubleLine(value);
 			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).size()); //only double entries
+			//only double entries
+			assertFalse(m.getOccurs().get(MeasurementTestUtil.predicateName).containsKey(GlobalNames.FLOAT)); 
+			assertFalse(m.getOccurs().get(MeasurementTestUtil.predicateName).containsKey(GlobalNames.STRING));
 			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).get(GlobalNames.DOUBLE));
 			m.getOccurs().clear();
 		}
@@ -143,7 +127,7 @@ class DoubleFloatDecimalMeasurementTest {
 		for (int i = 0; i < doubleValues.size(); i++) {
 			assertFalse(NumberUtil.shouldBeReplacedByDecimal(doubleValues.get(i), stringValues.get(i)));
 		}
-		//values that can't be stored as decimal
+		//Values that can't be stored as decimal
 		doubleValues = Arrays.asList(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NaN);
 		stringValues = Arrays.asList("Infinity", "-Infinity", "NaN");
 		for (int i = 0; i < doubleValues.size(); i++) {
@@ -151,16 +135,37 @@ class DoubleFloatDecimalMeasurementTest {
 		}
 	}
 	
-	/***************************************************************/
-	/****************************Float******************************/
-	/***************************************************************/
+	/********************************************************************
+	 ****************************** Float *******************************
+	 ********************************************************************/
+	
+	List<String> validFloatValues = Arrays.asList(
+			"0.0",
+			"-0.0",
+			"-0.5",
+			"31.25E-1",
+			"534609888",
+			"-25E-2",
+			"800.0078125",
+			"0.125E5"
+			);
+	
+	List<String> invalidFloatValues = Arrays.asList(
+			"0.1", 
+			"-0.3",
+			"3.14129",
+			"7893465E-5",
+			"0.000000059",
+			"0.999"
+			);
 	
 	@Test
 	void replaceFloatByDecimalNQ() {
 		for (String value : invalidFloatValues) {
 			String line = MeasurementTestUtil.createFloatLine(value);
 			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).size());
+			assertFalse(m.getOccurs().get(MeasurementTestUtil.predicateName).containsKey(GlobalNames.DOUBLE));
+			assertFalse(m.getOccurs().get(MeasurementTestUtil.predicateName).containsKey(GlobalNames.STRING));
 			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).get(GlobalNames.FLOAT));
 			m.getOccurs().clear();
 		}
@@ -188,7 +193,7 @@ class DoubleFloatDecimalMeasurementTest {
 				(float) 3.14129,
 				(float) -758.1024569,
 				(float) 534609887);
-		//534609887 -> kann nicht als float dargestellt werden
+		//534609887 -> can't be stored as float
 		List<String> stringValues = Arrays.asList(
 				"0.33333333",
 				"-0.2", 
@@ -224,5 +229,85 @@ class DoubleFloatDecimalMeasurementTest {
 			assertFalse(NumberUtil.shouldBeReplacedByDecimal(floatValues.get(i), stringValues.get(i)));
 		}
 	}
+	
+	/********************************************************************
+	 ****************************** String ******************************
+	 ********************************************************************/
+	private List<String> validNumbers = Arrays.asList(
+			//positive ganze Zahlen
+			"19", 
+			"+200000",
+			"23553.0",
+			"09832569769785347897",
+			//negative ganze Zahlen
+			"-0987325",
+			"-89734",
+			//positive Kommazahlen
+			"19.14298", 
+			"+200000.12449786235",
+			"23553.0",
+			"098325697.69785347897",
+			//negative Kommazahlen
+			"-098732.5",
+			"-89734.015567",
+			"-8.888888888888");
+	
+	private List<String> invalidNumbers = Arrays.asList(
+			//, statt .
+			",",
+			"89734,015567",
+			"-897,34015567",
+			//mehr als ein .
+			"-89734.015.567",
+			//exp Darstellung
+			"1234.456E+2",
+			"-1234.456E-2",
+			//, und .
+			"+1,234.456",
+			//mehrere Vorzeichen
+			"+-1,234.456",
+			"+1,234+.456",
+			//Leerzeichen und Buchstaben
+			" 1 234.456",
+			"a345bw54",
+			//NaN, inf, -inf,
+			"NaN",
+			"-Infinity", 
+			"Infinity"
+			);
+	
+	@Test
+	void validStringsNQ() {
+		for (String number : validNumbers) {
+			String line = MeasurementTestUtil.createStringLine(number);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertFalse(m.getOccurs().get(MeasurementTestUtil.predicateName).containsKey(GlobalNames.DOUBLE));
+			assertFalse(m.getOccurs().get(MeasurementTestUtil.predicateName).containsKey(GlobalNames.FLOAT));
+			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).get(GlobalNames.STRING));
+			m.getOccurs().clear();
+		}
+	}
+	
+	@Test
+	void validStringsMethod() {
+		for (String number : validNumbers) {
+			assertTrue(StringUtil.isValidDecimal(number));
+		}
+	}
 
+	@Test
+	void invalidStringsNQ() {
+		for(String number : invalidNumbers) {
+			String line = MeasurementTestUtil.createStringLine(number);
+			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			assertTrue(m.getOccurs().isEmpty());
+		}
+	}
+	
+	@Test
+	void invalidStringsMethod() {
+		for (String number : invalidNumbers) {
+			assertFalse(StringUtil.isValidDecimal(number));
+		}
+	}
 }
