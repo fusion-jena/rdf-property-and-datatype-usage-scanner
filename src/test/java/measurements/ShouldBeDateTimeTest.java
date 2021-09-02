@@ -10,10 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import main.java.measurements.Measurement;
-import main.java.measurements.StringDateTimeMeasurement;
+import main.java.measurements.ShouldBeDateTime;
 import main.java.utils.StringUtil;
 
-class StringDateTimeMeasurementTest {
+class ShouldBeDateTimeTest {
 
 	private List<String> validDatesWithoutOffset = Arrays.asList("2001-10-26T21:32:52", "2001-10-26T21:32:52.123", // ms
 																													// is
@@ -42,14 +42,14 @@ class StringDateTimeMeasurementTest {
 
 	private org.slf4j.Logger log;
 	private List<Measurement<?, ?>> measurements;
-	private StringDateTimeMeasurement m;
+	private ShouldBeDateTime m;
 
 
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
 		measurements = new ArrayList<Measurement<?, ?>>();
-		m = new StringDateTimeMeasurement();
+		m = new ShouldBeDateTime();
 		measurements.add(m);
 	}
 

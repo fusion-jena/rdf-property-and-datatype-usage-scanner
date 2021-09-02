@@ -10,19 +10,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import main.java.measurements.Measurement;
-import main.java.measurements.PropertyRangeMeasurement;
+import main.java.measurements.PropertyHasRange;
 
-class PropertyRangeMeasurementTest {
+class PropertyHasRangeTest {
 
 	private org.slf4j.Logger log;
 	private List<Measurement<?, ?>> measurements;
-	private PropertyRangeMeasurement m;
+	private PropertyHasRange m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
 		measurements = new ArrayList<Measurement<?,?>>();
-		m = new PropertyRangeMeasurement();
+		m = new PropertyHasRange();
 		measurements.add(m);
 	}
 	

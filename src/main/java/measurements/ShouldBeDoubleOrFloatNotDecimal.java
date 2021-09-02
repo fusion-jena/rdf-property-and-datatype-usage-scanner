@@ -11,38 +11,40 @@ import main.java.utils.StringUtil;
 import main.java.utils.HashMapInsertUtil;
 
 /**
- * Statement uses data type string but xsd:dateTime should be used
+ * Literals that have the data type String, but also could be Float or Double
+ * but NOT Decimal
  * 
- * Issue #6
+ * Issue #11
  */
-public class StringDateTimeMeasurement extends MeasurementOnObject<String, Long> {
+public class ShouldBeDoubleOrFloatNotDecimal extends MeasurementOnObject<String, Long> {
 
-	public StringDateTimeMeasurement() {
+	public ShouldBeDoubleOrFloatNotDecimal() {
 		super();
 		super.occurs = new HashMap<String, Long>();
 	}
 
 	@Override
 	public void conductMeasurement(String propertyName, Literal literal) {
-		// Only strings are of interest
+		// Only Strings of interest
 		if (!(literal.getDatatype() instanceof RDFLangString)
 				&& !(literal.getDatatype() instanceof XSDBaseStringType)) {
 			return;
 		}
 
 		String lexicalValue = literal.getLexicalForm();
-		
-		if (StringUtil.isValidDate(lexicalValue)) {
+
+		// NaN, + inf, - inf are equal for Float and Double
+		if (StringUtil.isValidDoubleOrFloatAndInvalidDecimal(lexicalValue)) {
 			HashMapInsertUtil.insertElement(propertyName, super.occurs);
 		}
-
 	}
 
 	@Override
 	public String toString() {
-		String s = StringDateTimeMeasurement.class.getName() + ":";
-		for (String key : super.occurs.keySet()) {
-			s += "\n\t" + key + "\t" + super.occurs.get(key) + "\t" + GlobalNames.XSD_DATETIME;
+		String s = ShouldBeDoubleOrFloatNotDecimal.class.getName() + ":";
+		for (String propertyName : super.occurs.keySet()) {
+			s += "\n\t" + propertyName + "\t" + super.occurs.get(propertyName) + "\t" + GlobalNames.DOUBLE + "/"
+					+ GlobalNames.FLOAT;
 		}
 		return s;
 	}
