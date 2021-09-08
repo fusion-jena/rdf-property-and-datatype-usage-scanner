@@ -1,11 +1,14 @@
 package test.java.measurements;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
-import org.apache.jena.rdf.model.Statement;
 
+import main.java.measurements.FileMeasurement;
 import main.java.measurements.Measurement;
-import main.java.utils.ModelUtil;
 
 public final class MeasurementTestUtil {
 
@@ -40,8 +43,19 @@ public final class MeasurementTestUtil {
 
 	public static final void conductMeasurement(List<Measurement<?, ?>> measurements, org.slf4j.Logger log,
 			String line) {
-		List<Statement> allStatements = ModelUtil.createStatementsFromLine(line);
-		ModelUtil.conductMeasurements(measurements, allStatements, log);
+	    try {
+	    	File tmpFile = File.createTempFile("data", ".nq");
+	    	BufferedWriter writer = new BufferedWriter(new FileWriter(tmpFile.getAbsoluteFile()));
+	        writer.write(line);
+			writer.close();
+			
+			
+			FileMeasurement fileMeasurement = new FileMeasurement("file:///" + tmpFile.getAbsolutePath(), measurements, log);
+			fileMeasurement.startMeasurement();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			System.exit(1);
+		}
 	}
 
 }

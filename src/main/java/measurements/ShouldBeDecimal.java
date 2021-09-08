@@ -1,6 +1,8 @@
 package main.java.measurements;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.jena.datatypes.xsd.impl.RDFLangString;
 import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;
@@ -53,17 +55,30 @@ public class ShouldBeDecimal extends MeasurementOnObject<String, HashMap<GlobalN
 
 		HashMapInsertUtil.insertElement(propertyName, datatype, super.occurs);
 	}
+
+	@Override
+	public List<String> writeToDatabase() {
+		List<String> values = new ArrayList<String>();
+		for(String property : super.occurs.keySet()) {
+			HashMap<GlobalNames, Long> innerHashMap = super.occurs.get(property);
+			for(GlobalNames datatype: innerHashMap.keySet()) {
+				values.add("'" + property + "', '" + this.getClass().getSimpleName() + "', '" + datatype + "', " + innerHashMap.get(datatype));
+			}
+		}
+		return values;
+	}
 	
 	@Override
 	public String toString() {
-		String s = ShouldBeDecimal.class.getName() + ":";
+		String s = "\n" + this.getClass().getSimpleName() + ":";
 		for (String key : super.occurs.keySet()) {
 			HashMap<GlobalNames, Long> hashMap = super.occurs.get(key);
 			for (GlobalNames datatype : hashMap.keySet()) {
 				long value = hashMap.get(datatype);
-				s += "\n\t" + key + "\t" + value + "\t" + datatype;
+				s += "\n\t" + datatype + "\t" + key + "\t" + value;
 			}
 		}
 		return s;
 	}
+
 }

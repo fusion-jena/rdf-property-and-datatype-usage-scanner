@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Statement;
 import org.apache.log4j.PropertyConfigurator;
 
-import main.java.measurements.StringDateTimeMeasurement;
-import main.java.measurements.StringDecimalMeasurement;
-import main.java.measurements.StringDoubleFloatNotDecimalMeasurement;
-import main.java.measurements.DoubleFloatDecimalMeasurement;
+import main.java.measurements.ShouldBeDateTime;
+import main.java.measurements.ShouldBeDecimal;
+import main.java.measurements.ShouldBeDoubleOrFloatNotDecimal;
+import main.java.measurements.FileMeasurement;
 import main.java.measurements.Measurement;
-import main.java.measurements.PropertyRangeMeasurement;
+import main.java.measurements.PropertyHasRange;
 import main.java.measurements.ShouldBeDouble;
 import main.java.measurements.ShouldBeFloat;
-import main.java.utils.ModelUtil;
 import main.java.utils.StringUtil;
 
 public class MeasurementMain {
@@ -61,14 +59,12 @@ public class MeasurementMain {
 	 */
 	private static void initaliseMeasurementFunctions() {
 		measurements = new ArrayList<Measurement<?, ?>>();
-//		measurements.add(new StringDoubleFloatMeasurement());
 		measurements.add(new ShouldBeFloat());
 		measurements.add(new ShouldBeDouble());
-		measurements.add(new StringDateTimeMeasurement());
-		measurements.add(new StringDecimalMeasurement());
-		measurements.add(new StringDoubleFloatNotDecimalMeasurement());
-		measurements.add(new DoubleFloatDecimalMeasurement());
-		measurements.add(new PropertyRangeMeasurement());
+		measurements.add(new ShouldBeDateTime());
+		measurements.add(new ShouldBeDoubleOrFloatNotDecimal());
+		measurements.add(new ShouldBeDecimal());
+		measurements.add(new PropertyHasRange());
 	}
 
 	/**
@@ -77,7 +73,7 @@ public class MeasurementMain {
 	 * @return String of the filename that will be examined
 	 */
 	private static String examplePaths() {
-		String dataPath = "src/main/resources/";
+		String dataPath = "file:///C:/Users/Merle/Desktop/Uni2/fsu_jena/ss21/hiwi/analyse/src/main/resources/";
 //		dataPath += "ccrdf.html-rdfa.sample.nq";
 //		dataPath += "dpef.html-rdfa.nq-00000";
 //		dataPath += "test_nq.nq";
@@ -103,16 +99,12 @@ public class MeasurementMain {
 	}
 	
 	private static void measurement() {
-		List<Statement> allStatements = ModelUtil.parseLineByLine(dataPath, log);
-		ModelUtil.conductMeasurements(measurements, allStatements, log);
+		FileMeasurement fileIterator = new FileMeasurement(dataPath, measurements, log);
+		fileIterator.startMeasurement();
 		// get the results
 		for (Measurement<?, ?> me : measurements) {
 			log.info(me.toString());
 		}
-	}
-	
-	public static List<Measurement<?, ?>> getMeasurements(){
-		return measurements;
 	}
 
 }

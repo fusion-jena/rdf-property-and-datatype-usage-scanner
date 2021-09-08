@@ -35,10 +35,22 @@ public class PropertyHasRange extends Measurement<String, HashMap<String, Long>>
 		}
 		HashMapInsertUtil.insertElement(subject.toString(), object.toString(), super.occurs);
 	}
+
+	@Override
+	public List<String> writeToDatabase() {
+		List<String> values = new ArrayList<String>();
+		for(String property : super.occurs.keySet()) {
+			HashMap<String, Long> innerHashMap = super.occurs.get(property);
+			for(String range : innerHashMap.keySet()) {
+				values.add("'" +property + "', '" + this.getClass().getSimpleName() + "', '" + range +"', " + innerHashMap.get(range));
+			}
+		}
+		return values;
+	}
 	
 	@Override
 	public String toString() {
-		String s = PropertyHasRange.class.getName() + ":";
+		String s = "\n" + this.getClass().getSimpleName() + ":";
 		for (String propertyName : super.occurs.keySet()) {
 			HashMap<String, Long> innerHashMap = super.occurs.get(propertyName);
 			for (String range : innerHashMap.keySet()) {

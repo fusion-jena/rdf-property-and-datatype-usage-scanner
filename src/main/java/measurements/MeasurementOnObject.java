@@ -13,10 +13,6 @@ import org.apache.jena.rdf.model.RDFNode;
 
 public abstract class MeasurementOnObject<K, V> extends Measurement<K, V> {
 
-	public MeasurementOnObject() {
-		super();
-	}
-
 	/**
 	 * Conduct the measurment on the literal of the statement 
 	 * 

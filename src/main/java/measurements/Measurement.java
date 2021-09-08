@@ -1,6 +1,7 @@
 package main.java.measurements;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
@@ -15,9 +16,6 @@ public abstract class Measurement<K, V> {
 
 	protected HashMap<K, V> occurs;
 
-	public Measurement() {
-	}
-
 	/**
 	 * Conduct the measorement on a single statement
 	 * 
@@ -30,6 +28,19 @@ public abstract class Measurement<K, V> {
 	public HashMap<K, V> getOccurs() {
 		return occurs;
 	}
+	
+	/**
+	 * Creates a list of Strings that can be used to fill a database
+	 * 
+	 * <p>
+	 * Important: each string must be appended to another string which contains:
+	 * </p>
+	 * <p>
+	 * 'INSERT into <NAME OF DATABASE> values ( <FILE_IDENTIFIER>, ' and ')'
+	 * </p>
+	 * @return a list of String statements 
+	 */
+	public abstract List<String> writeToDatabase();
 
 	@Override
 	public abstract String toString();

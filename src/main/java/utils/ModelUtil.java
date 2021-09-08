@@ -1,26 +1,18 @@
 package main.java.utils;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.RDFParser;
-import org.apache.jena.riot.RDFParserBuilder;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
 
@@ -30,6 +22,28 @@ import main.java.measurements.Measurement;
  * Functions for different operations (parsing, analysing) a model
  */
 public abstract class ModelUtil {
+	
+	/**
+	 * Creates an iterator over the statements of the individual lines of the document 
+	 * 
+	 * @param urlString path to the document
+	 * @param log for logging
+	 * 
+	 * @return an iterator over the statements of the file
+	 */
+	public static FileIterator parseURLlineByLine(String urlString, org.slf4j.Logger log) {
+		FileIterator result = null;
+		
+		try {
+			result = new FileIterator(urlString, log);
+		} catch (IOException e) {
+			log.error(e.getMessage());
+			System.exit(1);
+		}
+		
+		return result;
+
+	}
 
 	/**
 	 * Generates a model by parsing the document line by line.
@@ -44,8 +58,10 @@ public abstract class ModelUtil {
 	 *                 document
 	 * @return List which contains all the statements of the document
 	 */
+	/*
 	public static List<Statement> parseLineByLine(String dataPath, org.slf4j.Logger log) {
 		// will contain the tuple in the end
+		
 		List<Statement> allStatements = new ArrayList<Statement>();
 		long lineNumber = 0;
 		long numError = 0;
@@ -88,6 +104,7 @@ public abstract class ModelUtil {
 		log.info("Number of lines with an error: " + numError);
 		return allStatements;
 	}
+	*/
 
 	/**
 	 * Returns the statement of a single line
@@ -125,12 +142,10 @@ public abstract class ModelUtil {
 	 * @param allStatements Model whose statements will be examined
 	 * @param log           Logging of information
 	 */
-	public static void conductMeasurements(List<Measurement<?, ?>> measurements, List<Statement> allStatements,
+	public static void conductMeasurements(List<Measurement<?, ?>> measurements, FileIterator allStatements,
 			org.slf4j.Logger log) {
+		//Iterate over all statements of the file
 		Iterator<Statement> iter = allStatements.iterator();
-		long startMeasurement = System.currentTimeMillis();
-		log.debug("Starting the measurements");
-
 		while (iter.hasNext()) {
 			Statement stmt = iter.next();
 
@@ -142,48 +157,8 @@ public abstract class ModelUtil {
 			for (Measurement<?, ?> measurement : measurements) {
 				measurement.conductMeasurement(subject, property, object);
 			}
-
 		}
 
-		long endMeasurement = System.currentTimeMillis();
-		log.info("Conducting all measurements on all statements: " + (endMeasurement - startMeasurement) + " ms");
-	}
-
-	/**
-	 * Tries to parse the whole file with apacheJena, if an error occurs, switches
-	 * to parsing the file line by line
-	 * 
-	 * Shouldn't be used - Takes longer than parsing the file line by line
-	 * 
-	 * @param dataPath File to parse
-	 * @param log      Logging Errors
-	 * @return List which contains all the statements of the document
-	 */
-	@Deprecated
-	private static List<Statement> parseWholeFile(String dataPath, org.slf4j.Logger log) {
-		List<Statement> allStatements = new ArrayList<Statement>();
-		try {
-			log.debug("Start parsing file with apache jena");
-			Dataset dataset = DatasetFactory.create();
-			long startParseOld = System.currentTimeMillis();
-			RDFParserBuilder builder = RDFParserBuilder.create().source(dataPath).lang(RDFLanguages.NQ)
-					.errorHandler(ErrorHandlerFactory.errorHandlerStrict(log));
-			builder.parse(dataset);
-			Iterator<String> modelNamesIt = dataset.listNames();
-			while (modelNamesIt.hasNext()) {
-				Model model = dataset.getNamedModel(modelNamesIt.next());
-				StmtIterator stmtIt = model.listStatements();
-				while (stmtIt.hasNext()) {
-					allStatements.add(stmtIt.next());
-				}
-			}
-			long endParseOld = System.currentTimeMillis();
-			log.info("Parsing with apache Jena: " + (endParseOld - startParseOld) + " ms");
-		} catch (RiotException e) {
-			log.info("Error while parsing the file - Parsing the file line by line instead ");
-			allStatements = parseLineByLine(dataPath, log);
-		}
-		return allStatements;
 	}
 
 }
