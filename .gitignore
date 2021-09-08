@@ -113,4 +113,10 @@ buildNumber.properties
 
 *.ttl
 *.rdf
-*.nq
+*.nq*
+
+# Datenbank
+*.db
+
+#Dateien mit Links
+*.list
