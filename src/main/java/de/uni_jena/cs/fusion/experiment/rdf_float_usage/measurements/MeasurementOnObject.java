@@ -14,7 +14,7 @@ import org.apache.jena.rdf.model.RDFNode;
 public abstract class MeasurementOnObject<K, V> extends Measurement<K, V> {
 
 	/**
-	 * Conduct the measurment on the literal of the statement 
+	 * Conduct the measurement on the literal of the statement 
 	 * 
 	 * @param propertyName - property of the statement, key for the HashMap
 	 * @param literal - object of the statement, is examined 

@@ -17,7 +17,7 @@ public abstract class Measurement<K, V> {
 	protected HashMap<K, V> occurs;
 
 	/**
-	 * Conduct the measorement on a single statement
+	 * Conduct the measurement on a single statement
 	 * 
 	 * @param subject  of the statement
 	 * @param property of the statement
