@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.FileIterator;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.ModelUtil;
@@ -40,10 +42,10 @@ public class FileMeasurement {
 	/**
 	 * Viewing a file from a database
 	 * 
-	 * @param fileID   Identifier of the file in the database
-	 * @param url location of the file
-	 * @param con      Connection to the database
-	 * @param log      Logging information
+	 * @param fileID Identifier of the file in the database
+	 * @param url    location of the file
+	 * @param con    Connection to the database
+	 * @param log    Logging information
 	 */
 	public FileMeasurement(Long fileID, String url, Connection con, org.slf4j.Logger log) throws SQLException {
 		this.con = con;
@@ -53,13 +55,14 @@ public class FileMeasurement {
 		this.dataPath = url;
 		this.fileIter = ModelUtil.parseURLlineByLine(url, log);
 	}
-	
+
 	/**
-	 * No database context 
+	 * No database context
 	 * 
-	 * @param dataPath where to find the file, must be from the form file:///<path>
+	 * @param dataPath     where to find the file, must be from the form
+	 *                     file:///<path>
 	 * @param measurements which measurements should be conducted
-	 * @param log logging information
+	 * @param log          logging information
 	 */
 	public FileMeasurement(String dataPath, List<Measurement<?, ?>> measurements, org.slf4j.Logger log) {
 		this.dataPath = dataPath;
@@ -67,9 +70,10 @@ public class FileMeasurement {
 		this.measurements = measurements;
 		this.fileIter = ModelUtil.parseURLlineByLine(dataPath, log);
 	}
-	
+
 	/**
-	 * calls {@link ModelUtil#conductMeasurements(Measurements, FileIterator, Logger) 
+	 * calls
+	 * {@link ModelUtil#conductMeasurements(Measurements, FileIterator, Logger)
 	 * which conducts all measurements on each statement of the file
 	 */
 	public void startMeasurement() {
@@ -84,11 +88,13 @@ public class FileMeasurement {
 	 * Write the results to each database after the measurements are conducted
 	 * 
 	 * <p>
-	 * The total number of lines, if applicable the parsing errors and the results 
+	 * The total number of lines, if applicable the parsing errors and the results
 	 * of the measurements
-	 * </p><p>
+	 * </p>
+	 * <p>
 	 * Also set the end time to mark the file as processed
 	 * </p>
+	 * 
 	 * @throws SQLException when an error occurs during writing to the database
 	 */
 	public void writeToDatabase() throws SQLException {
@@ -114,9 +120,9 @@ public class FileMeasurement {
 		}
 		log.info("Finished writing errors");
 	}
-	
+
 	/**
-	 * writes the results of the different measurements to the database 
+	 * writes the results of the different measurements to the database
 	 * 
 	 * @throws SQLException when an error occurs during writing to the database
 	 */
@@ -133,19 +139,20 @@ public class FileMeasurement {
 		}
 		log.info("Finished writing results from file " + fileID);
 	}
-	
+
 	/**
 	 * writes the total number of lines in the file organisation database
 	 * 
 	 * @throws SQLException when an error occurs during writing to the database
 	 */
-	private void writeNumLines() throws SQLException{
+	private void writeNumLines() throws SQLException {
 		log.info("Start writing total number of lines of file " + fileID);
-		String query = "UPDATE " + H2Util.FILE_DATABASE + " SET TOTAL_NUMBER_OF_LINES = " + fileIter.getNumLines() + " WHERE FILE_ID = " + fileID;
+		String query = "UPDATE " + H2Util.FILE_DATABASE + " SET TOTAL_NUMBER_OF_LINES = " + fileIter.getNumLines()
+				+ " WHERE FILE_ID = " + fileID;
 		H2Util.executeAndUpdate(con, query);
 		log.info("Finished writing total number of lines of file " + fileID);
 	}
-	
+
 	/**
 	 * Configure, which measurements will be conducted
 	 */
@@ -159,6 +166,10 @@ public class FileMeasurement {
 		measurements.add(new PropertyHasRange());
 		measurements.add(new CouldBeBoolean());
 		measurements.add(new CouldBeInteger());
+	}
+
+	public long getFileID() {
+		return fileID;
 	}
 
 }
