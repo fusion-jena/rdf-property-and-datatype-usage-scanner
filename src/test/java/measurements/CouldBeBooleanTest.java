@@ -13,7 +13,7 @@ import main.java.measurements.CouldBeBoolean;
 import main.java.measurements.Measurement;
 import main.java.utils.StringUtil;
 
-public class CouldBeBooleanTest {
+class CouldBeBooleanTest {
 	
 	private List<String> validBoolean = Arrays.asList("true", "false", "0", "1");
 	
@@ -32,7 +32,7 @@ public class CouldBeBooleanTest {
 	}
 	
 	/***********************************************************************************/
-	/************************************Method****************************************/
+	/************************************Method*****************************************/
 	/***********************************************************************************/
 	
 	@Test

@@ -188,6 +188,52 @@ public abstract class StringUtil {
 	public static boolean isValidBoolean(String s) {
 		return s.equals("true") || s.equals("false") || s.equals("1") || s.equals("0");
 	}
+	
+	/**
+	 * Check if a string can be interpreted as an integer
+	 *
+	 * @param s Literal that is checked
+	 * @return true if the parameter can be stored as integer, else false
+	 */
+	public static boolean isValidInteger(String s) {
+		/*
+		//See
+		//https://www.w3.org/TR/xmlschema11-2/#integer-lexical-representation
+		//for regular expression of an integer
+		 */
+		Pattern pattern = Pattern.compile("^" // String beginning
+				+ "(\\+|-)?" // optional sign
+				+ "[0-9]+" //a finite sequence of digits
+				+ "$" // End of the string
+				);
+		Matcher matcher = pattern.matcher(s);
+		return matcher.find();
+		
+		/*
+		Integer intValue;
+		BigDecimal decimalValue;
+		try {
+			// interpret the string as a integer
+			intValue = Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		try {
+			// interpret the string as a decimal
+			decimalValue = new BigDecimal(s);
+		} catch (NumberFormatException e) {
+			//TODO stimmt das ?
+			return false;
+		}
+		try {
+			// convert the float to decimal
+			BigDecimal intToDecimal = new BigDecimal(intValue);
+			// check if the values are identical, if not the precision from float is to low
+			return decimalValue.compareTo(intToDecimal) == 0;
+		} catch (NumberFormatException e) {
+			return false;
+		}*/
+	}
 
 	/**
 	 * Creates a string containing the current date and time combined with the file
