@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.uni_jena.cs.fusion</groupId>
-	<artifactId>experiment.rdf-float-usage</artifactId>
+	<artifactId>experiment.rdf-datatype-usage</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
 	<properties>
