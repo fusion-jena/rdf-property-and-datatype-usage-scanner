@@ -1,4 +1,4 @@
-package test.java.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,9 +9,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import main.java.measurements.CouldBeBoolean;
-import main.java.measurements.Measurement;
-import main.java.utils.StringUtil;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeBoolean;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 class CouldBeBooleanTest {
 	
