@@ -37,10 +37,6 @@ public class FileMeasurement {
 	 */
 	private Long fileID;
 
-	//Column names
-	private final String START = "START_TIME";
-	private final String END = "END_TIME";
-
 	/**
 	 * Viewing a file from a database
 	 * 
@@ -55,7 +51,6 @@ public class FileMeasurement {
 		initaliseMeasurements();
 		this.log = log;
 		this.dataPath = url;
-		writeTime(START);
 		this.fileIter = ModelUtil.parseURLlineByLine(url, log);
 	}
 	
@@ -100,7 +95,7 @@ public class FileMeasurement {
 		writeNumLines();
 		writeToErrorDatabase();
 		writeToResultDatabase();
-		writeTime(END);
+		H2Util.writeTime(con, H2Util.END, fileID, log);
 	}
 
 	/**
@@ -137,20 +132,6 @@ public class FileMeasurement {
 			}
 		}
 		log.info("Finished writing results from file " + fileID);
-	}
-
-	/**
-	 * writes the current time in the given column 
-	 * 
-	 * @param column where to write the current time, start or end 
-	 * 
-	 * @throws SQLException when an error occurs during writing to the database
-	 */
-	private void writeTime(String column) throws SQLException {
-		log.info("Start writing time to " + column + " of file " + fileID);
-		String query = "UPDATE " + H2Util.FILE_DATABASE + " SET " + column + " = '" + new Timestamp(System.currentTimeMillis()) + "' WHERE FILE_ID = " + fileID;
-		H2Util.executeAndUpdate(con, query);
-		log.info("Finished writing time to " + column + " of file " + fileID);
 	}
 	
 	/**
