@@ -157,6 +157,7 @@ public class FileMeasurement {
 		measurements.add(new ShouldBeDecimal());
 		measurements.add(new ShouldBeDoubleOrFloatNotDecimal());
 		measurements.add(new PropertyHasRange());
+		measurements.add(new CouldBeBoolean());
 	}
 
 }

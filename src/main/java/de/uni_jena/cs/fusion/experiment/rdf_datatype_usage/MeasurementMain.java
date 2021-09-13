@@ -10,6 +10,7 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeas
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.PropertyHasRange;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDateTime;
+import main.java.measurements.CouldBeBoolean;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDouble;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDoubleOrFloatNotDecimal;
@@ -65,6 +66,7 @@ public class MeasurementMain {
 		measurements.add(new ShouldBeDoubleOrFloatNotDecimal());
 		measurements.add(new ShouldBeDecimal());
 		measurements.add(new PropertyHasRange());
+		measurements.add(new CouldBeBoolean());
 	}
 
 	/**

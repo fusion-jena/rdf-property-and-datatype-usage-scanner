@@ -145,23 +145,19 @@ public abstract class StringUtil {
 	 * @return true if the parameter is Nan, + infinity, - infinity and can be
 	 *         stored as a float, else false
 	 */
-	/* TODO weg?
-	 * -> double Methode ausreichend, was bei Float NaN, +/- inf ist, ist auch 
-	 * bei double einer dieser Werte*/
-	/*public static boolean isValidFloatAndInvalidDecimal(String s) {
-		/*Float floatValue;
-		try {
-			// interpret String as Float
-			floatValue = Float.parseFloat(s);
-		} catch (NumberFormatException e) {
-			return false;
-		}
-		// the accuracy of float is not of interest at this point
-		// NaN and +/- infinity can't be represented by decimal
-		return floatValue.isInfinite() || floatValue.isNaN();
-		return isValidDoubleOrFloatAndInvalidDecimal(s);
-	}*/
-	
+	/*
+	 * TODO weg? -> double Methode ausreichend, was bei Float NaN, +/- inf ist, ist
+	 * auch bei double einer dieser Werte
+	 */
+	/*
+	 * public static boolean isValidFloatAndInvalidDecimal(String s) { /*Float
+	 * floatValue; try { // interpret String as Float floatValue =
+	 * Float.parseFloat(s); } catch (NumberFormatException e) { return false; } //
+	 * the accuracy of float is not of interest at this point // NaN and +/-
+	 * infinity can't be represented by decimal return floatValue.isInfinite() ||
+	 * floatValue.isNaN(); return isValidDoubleOrFloatAndInvalidDecimal(s); }
+	 */
+
 	/**
 	 * Check if the parameter can be stored as double or float, but not as decimal
 	 * 
@@ -174,21 +170,38 @@ public abstract class StringUtil {
 	 * @return true if the parameter is Nan, + infinity, - infinity, else false
 	 */
 	public static boolean isValidDoubleOrFloatAndInvalidDecimal(String s) {
-		return s.equals("NaN") || s.equals("Infinity") || s.equals("-Infinity");  
+		return s.equals("NaN") || s.equals("INF") || s.equals("+INF") || s.equals("-INF");
 	}
-	
+
 	/**
-	 * Creates a string containing the current date and time combined with the file name
+	 * Check if the parameter is a valid boolean
+	 * 
+	 * <p>
+	 * Lexical values that are boolean true, false and 0 or 1
+	 * </p>
+	 * <p>
+	 * {@link https://www.w3.org/TR/xmlschema11-2/#boolean}
+	 * </p>
+	 * @param s literal that is checked
+	 * @return true if the parameter is one of true, false, 0 and 1, else false
+	 */
+	public static boolean isValidBoolean(String s) {
+		return s.equals("true") || s.equals("false") || s.equals("1") || s.equals("0");
+	}
+
+	/**
+	 * Creates a string containing the current date and time combined with the file
+	 * name
 	 * 
 	 * @param fileName last substring of the generated file name
 	 * @return string combined of current date time and the file name
 	 */
 	public static String createStorageFile(String fileName) {
 		Date date = new Date();
-		SimpleDateFormat dayFormatter = new SimpleDateFormat("dd-MM-yyyy");  
+		SimpleDateFormat dayFormatter = new SimpleDateFormat("dd-MM-yyyy");
 		SimpleDateFormat timeFormatter = new SimpleDateFormat("HH-mm-ss");
 //		return dayFormatter.format(date) + "T" + timeFormatter.format(date) + "_" + fileName;
 		return "_" + fileName;
 	}
-	
+
 }
