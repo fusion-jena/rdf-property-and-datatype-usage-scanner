@@ -103,18 +103,43 @@ public abstract class StringUtil {
 	}
 
 	/**
-	 * Check if parameter is formated like a valid xsd:dateTime object
+	 * Check if parameter is formated like a valid xsd:dateTime, xsd:dateTimeStamp,
+	 * xsd:date or xsd:time object
 	 * 
 	 * @param s Literal that is checked
-	 * @return false - if the parameter can't be stored as a xsd:dateTime, else true
+	 * @return false - if the parameter can't be stored as one of xsd:dateTime,
+	 *         xsd:dateTimeStamp, xsd:date or xsd:time, else true
 	 */
-	public static boolean isValidDate(String s) {
+	public static boolean isValidTemporal(String s) {
+
+		return isValidDateTime(s) || isValidDate(s) || isValidTime(s);
+	}
+
+	/**
+	 * Check if parameter is formated like a valid xsd:dateTime or xsd:dateTimeStamp
+	 * object
+	 * 
+	 * <p>
+	 * the two types are checked together because we're only interested in the
+	 * result, IF the parameter can be interpreted as xsd:dateTime or
+	 * xsd:dateTimeStamp, but not which one
+	 * </p>
+	 * 
+	 * @param s literal that is checked
+	 * @return true if the parameter can be stored as xsd:dateTime or as
+	 *         xsd:dateTimeStamp, else false
+	 */
+	public static boolean isValidDateTime(String s) {
 		/*
 		 * Regular expression for xsd:dateTime see
 		 * https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/datatypes.html#dateTime
 		 * 3.3.7.2 Lexical Mapping mandatory information: yyyy-MM-DD'T'HH:mm:ss where T
 		 * is a delimeter between day and hour can be followed by .ms and an optional
 		 * timezone offset (z for utc or else [-14:00,+14:00])
+		 * 
+		 * this regular expression is also used for xsd:dateTimeStamp, as in
+		 * https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/datatypes.html# stated,
+		 * in dateTimeStamp the timezone offset is obligatory
 		 */
 
 		Pattern pattern = Pattern.compile("^" + // beginning of the string
@@ -122,11 +147,58 @@ public abstract class StringUtil {
 				"-(0[1-9]|1[0-2])" + // month
 				"-(0[1-9]|[12][0-9]|3[01])" + // day
 				"T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?|(24:00:00(\\.0+)?))" +
-				// hour:min:sec[.ms]
+				// hour:min:sec[.ms] or midnight
 				"(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?" // optional timezone offset
 				+ "$" // end of the string
 		);
 
+		Matcher matcher = pattern.matcher(s);
+		return matcher.find();
+	}
+
+	/**
+	 * Check if parameter is formated like a valid xsd:date object
+	 * 
+	 * @param s literal that is checked
+	 * @return true if the parameter can be stored as xsd:date, else false
+	 */
+	public static boolean isValidDate(String s) {
+		/*
+		 * Regular expression for xsd:date see
+		 * https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/datatypes.html#date
+		 * 3.3.9.2 Lexical Mapping
+		 */
+		Pattern pattern = Pattern.compile("^" // beginning of the string
+				+ "-?" //optional leading - 
+				+ "([1-9][0-9]{3,}|0[0-9]{3})-" // year
+				+ "(0[1-9]|1[0-2])-"  // month
+				+ "(0[1-9]|[12][0-9]|3[01])" // day
+				+ "(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?" // optional timezone offset
+				+ "$" // end of the string
+				);
+		Matcher matcher = pattern.matcher(s);
+		return matcher.find();
+	}
+
+	/**
+	 * Check if parameter is formated like a valid xsd:time object
+	 * 
+	 * @param s literal that is checked
+	 * @return true if the parameter can be stored as xsd:time, else false
+	 */
+	public static boolean isValidTime(String s) {
+		//Regular expression for xsd:time see
+		//https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/datatypes.html#time
+		//3.3.8.2 Lexical Mappings
+		Pattern pattern = Pattern.compile("^" // beginning of the string
+				+ "(([01][0-9]|2[0-3]):" //hour
+				+ "[0-5][0-9]:" //minutes
+				+ "[0-5][0-9]" //seconds
+				+ "(\\.[0-9]+)?" //optional milli seconds
+				+ "|(24:00:00(\\.0+)?))" //midnight with optional milliseconds 
+				+ "(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?" //optional timezone offset
+				+ "$" // end of the string
+				);
 		Matcher matcher = pattern.matcher(s);
 		return matcher.find();
 	}
@@ -182,13 +254,14 @@ public abstract class StringUtil {
 	 * <p>
 	 * {@link https://www.w3.org/TR/xmlschema11-2/#boolean}
 	 * </p>
+	 * 
 	 * @param s literal that is checked
 	 * @return true if the parameter is one of true, false, 0 and 1, else false
 	 */
 	public static boolean isValidBoolean(String s) {
 		return s.equals("true") || s.equals("false") || s.equals("1") || s.equals("0");
 	}
-	
+
 	/**
 	 * Check if a string can be interpreted as an integer
 	 *
@@ -196,16 +269,16 @@ public abstract class StringUtil {
 	 * @return true if the parameter can be stored as integer, else false
 	 */
 	public static boolean isValidInteger(String s) {
-		//See
-		//https://www.w3.org/TR/xmlschema11-2/#integer-lexical-representation
-		//for regular expression of an integer
+		// See
+		// https://www.w3.org/TR/xmlschema11-2/#integer-lexical-representation
+		// for regular expression of an integer
 		Pattern pattern = Pattern.compile("^" // String beginning
 				+ "(\\+|-)?" // optional sign
-				+ "[0-9]+" //a finite sequence of digits
+				+ "[0-9]+" // a finite sequence of digits
 				+ "$" // End of the string
-				);
+		);
 		Matcher matcher = pattern.matcher(s);
-		
+
 		return matcher.find();
 	}
 

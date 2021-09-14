@@ -160,7 +160,7 @@ public class FileMeasurement {
 		measurements = new ArrayList<Measurement<?, ?>>();
 		measurements.add(new ShouldBeFloat());
 		measurements.add(new ShouldBeDouble());
-		measurements.add(new ShouldBeDateTime());
+		measurements.add(new CouldBeTemporal());
 		measurements.add(new ShouldBeDecimal());
 		measurements.add(new ShouldBeDoubleOrFloatNotDecimal());
 		measurements.add(new PropertyHasRange());

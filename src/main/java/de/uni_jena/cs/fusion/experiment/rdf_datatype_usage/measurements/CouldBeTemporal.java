@@ -8,11 +8,12 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUt
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 /**
- * Statement uses data type String but xsd:dateTime should be used
+ * Statement uses data type String but xsd:dateTime, xsd:dateTimeStamp, xsd:date
+ * or xsd:time should be used
  * 
  * Issue #6
  */
-public class ShouldBeDateTime extends MeasurementOnObjectWithDatatypeString {
+public class CouldBeTemporal extends MeasurementOnObjectWithDatatypeString {
 
 	@Override
 	public void conductMeasurement(String propertyName, Literal literal) {
@@ -24,7 +25,7 @@ public class ShouldBeDateTime extends MeasurementOnObjectWithDatatypeString {
 
 		String lexicalValue = literal.getLexicalForm();
 
-		if (StringUtil.isValidDate(lexicalValue)) {
+		if (StringUtil.isValidTemporal(lexicalValue)) {
 			HashMapInsertUtil.insertElement(propertyName, super.occurs);
 		}
 

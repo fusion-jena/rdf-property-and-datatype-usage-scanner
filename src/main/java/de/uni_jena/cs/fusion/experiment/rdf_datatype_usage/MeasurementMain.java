@@ -9,7 +9,7 @@ import org.apache.log4j.PropertyConfigurator;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasurement;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.PropertyHasRange;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDateTime;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeTemporal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeBoolean;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeInteger;
@@ -63,7 +63,7 @@ public class MeasurementMain {
 		measurements = new ArrayList<Measurement<?, ?>>();
 		measurements.add(new ShouldBeFloat());
 		measurements.add(new ShouldBeDouble());
-		measurements.add(new ShouldBeDateTime());
+		measurements.add(new CouldBeTemporal());
 		measurements.add(new ShouldBeDoubleOrFloatNotDecimal());
 		measurements.add(new ShouldBeDecimal());
 		measurements.add(new PropertyHasRange());
