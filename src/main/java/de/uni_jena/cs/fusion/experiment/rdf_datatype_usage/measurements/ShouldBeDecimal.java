@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.jena.datatypes.xsd.impl.RDFLangString;
-import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;
 import org.apache.jena.datatypes.xsd.impl.XSDDouble;
 import org.apache.jena.datatypes.xsd.impl.XSDFloat;
 import org.apache.jena.rdf.model.Literal;
@@ -13,10 +11,9 @@ import org.apache.jena.rdf.model.Literal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.GlobalNames;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUtil;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.NumberUtil;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 /**
- * Using String, Double or Float but Decimal should be used
+ * Using Double or Float but Decimal should be used
  * 
  * Issue #7
  */
@@ -43,12 +40,6 @@ public class ShouldBeDecimal extends MeasurementOnObject<String, HashMap<GlobalN
 			if (!NumberUtil.shouldBeReplacedByDecimal(doubleValue, lexicalForm)) {
 				return;
 			}
-		} else if (literal.getDatatype() instanceof RDFLangString
-				|| literal.getDatatype() instanceof XSDBaseStringType) {
-			datatype = GlobalNames.STRING;
-			if(! StringUtil.isValidDecimal(lexicalForm)) {
-				return;
-			}
 		} else {
 			return;
 		}
@@ -59,15 +50,16 @@ public class ShouldBeDecimal extends MeasurementOnObject<String, HashMap<GlobalN
 	@Override
 	public List<String> writeToDatabase() {
 		List<String> values = new ArrayList<String>();
-		for(String property : super.occurs.keySet()) {
+		for (String property : super.occurs.keySet()) {
 			HashMap<GlobalNames, Long> innerHashMap = super.occurs.get(property);
-			for(GlobalNames datatype: innerHashMap.keySet()) {
-				values.add("'" + property + "', '" + this.getClass().getSimpleName() + "', '" + datatype + "', " + innerHashMap.get(datatype));
+			for (GlobalNames datatype : innerHashMap.keySet()) {
+				values.add("'" + property + "', '" + this.getClass().getSimpleName() + "', '" + datatype + "', "
+						+ innerHashMap.get(datatype));
 			}
 		}
 		return values;
 	}
-	
+
 	@Override
 	public String toString() {
 		String s = "\n" + this.getClass().getSimpleName() + ":";
