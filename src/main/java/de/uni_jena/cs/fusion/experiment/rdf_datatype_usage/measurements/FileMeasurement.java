@@ -158,11 +158,11 @@ public class FileMeasurement {
 	 */
 	private void initaliseMeasurements() {
 		measurements = new ArrayList<Measurement<?, ?>>();
-		measurements.add(new ShouldBeFloat());
-		measurements.add(new ShouldBeDouble());
+		measurements.add(new CouldBeFloat());
+		measurements.add(new CouldBeDouble());
 		measurements.add(new CouldBeTemporal());
 		measurements.add(new ShouldBeDecimal());
-		measurements.add(new ShouldBeDoubleOrFloatNotDecimal());
+		measurements.add(new CouldBeDoubleOrFloatNotDecimal());
 		measurements.add(new PropertyHasRange());
 		measurements.add(new CouldBeBoolean());
 		measurements.add(new CouldBeInteger());

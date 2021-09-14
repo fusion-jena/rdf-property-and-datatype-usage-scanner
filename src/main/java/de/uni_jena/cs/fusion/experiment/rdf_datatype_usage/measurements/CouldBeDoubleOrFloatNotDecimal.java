@@ -8,16 +8,16 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUt
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 /**
- * Using String but Double should be used
+ * Literals that have the data type String, but also could be Float or Double
+ * but NOT Decimal
  * 
- * Issue #8
- *
+ * Issue #11
  */
-public class ShouldBeDouble extends MeasurementOnObjectWithDatatypeString {
+public class CouldBeDoubleOrFloatNotDecimal extends MeasurementOnObjectWithDatatypeString {
 
 	@Override
 	public void conductMeasurement(String propertyName, Literal literal) {
-		// Only Strings are of interest
+		// Only Strings of interest
 		if (!(literal.getDatatype() instanceof RDFLangString)
 				&& !(literal.getDatatype() instanceof XSDBaseStringType)) {
 			return;
@@ -25,7 +25,8 @@ public class ShouldBeDouble extends MeasurementOnObjectWithDatatypeString {
 
 		String lexicalValue = literal.getLexicalForm();
 
-		if (StringUtil.isValidDouble(lexicalValue)) {
+		// NaN, + inf, - inf are equal for Float and Double
+		if (StringUtil.isValidDoubleOrFloatAndInvalidDecimal(lexicalValue)) {
 			HashMapInsertUtil.insertElement(propertyName, super.occurs);
 		}
 	}

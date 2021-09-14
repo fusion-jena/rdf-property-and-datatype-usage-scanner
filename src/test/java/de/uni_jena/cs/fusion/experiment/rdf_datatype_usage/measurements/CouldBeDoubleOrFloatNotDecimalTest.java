@@ -10,10 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDoubleOrFloatNotDecimal;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDoubleOrFloatNotDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
-class ShouldBeDoubleOrFloatNotDecimalTest {
+class CouldBeDoubleOrFloatNotDecimalTest {
 	
 	private List<String> invalidFloatNumbers = Arrays.asList("23 9707897", "3.34j23", "9789H23", "dsaf");
 	
@@ -25,14 +25,14 @@ class ShouldBeDoubleOrFloatNotDecimalTest {
 	
 	private org.slf4j.Logger log;
 	private List<Measurement<?, ?>> measurements;
-	private ShouldBeDoubleOrFloatNotDecimal m;
+	private CouldBeDoubleOrFloatNotDecimal m;
 
 
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
 		measurements = new ArrayList<Measurement<?, ?>>();
-		m = new ShouldBeDoubleOrFloatNotDecimal();
+		m = new CouldBeDoubleOrFloatNotDecimal();
 		measurements.add(m);
 	}
 	

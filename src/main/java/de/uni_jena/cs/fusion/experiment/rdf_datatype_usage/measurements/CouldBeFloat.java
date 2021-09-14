@@ -13,7 +13,7 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
  * Issue #8
  *
  */
-public class ShouldBeFloat extends MeasurementOnObjectWithDatatypeString {
+public class CouldBeFloat extends MeasurementOnObjectWithDatatypeString {
 
 	@Override
 	public void conductMeasurement(String propertyName, Literal literal) {

@@ -12,10 +12,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeFloat;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeFloat;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
-public class ShouldBeFloatTest {
+public class CouldBeFloatTest {
 	
 private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity");
 	
@@ -29,13 +29,13 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 	
 	private org.slf4j.Logger log;
 	private List<Measurement<?, ?>> measurements;
-	private ShouldBeFloat m;
+	private CouldBeFloat m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
 		measurements = new ArrayList<Measurement<?, ?>>();
-		m = new ShouldBeFloat();
+		m = new CouldBeFloat();
 		measurements.add(m);
 	}
 	

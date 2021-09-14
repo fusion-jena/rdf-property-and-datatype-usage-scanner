@@ -13,9 +13,9 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeT
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeBoolean;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeInteger;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDouble;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDoubleOrFloatNotDecimal;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeFloat;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDouble;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDoubleOrFloatNotDecimal;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeFloat;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 public class MeasurementMain {
@@ -61,10 +61,10 @@ public class MeasurementMain {
 	 */
 	private static void initaliseMeasurementFunctions() {
 		measurements = new ArrayList<Measurement<?, ?>>();
-		measurements.add(new ShouldBeFloat());
-		measurements.add(new ShouldBeDouble());
+		measurements.add(new CouldBeFloat());
+		measurements.add(new CouldBeDouble());
 		measurements.add(new CouldBeTemporal());
-		measurements.add(new ShouldBeDoubleOrFloatNotDecimal());
+		measurements.add(new CouldBeDoubleOrFloatNotDecimal());
 		measurements.add(new ShouldBeDecimal());
 		measurements.add(new PropertyHasRange());
 		measurements.add(new CouldBeBoolean());
