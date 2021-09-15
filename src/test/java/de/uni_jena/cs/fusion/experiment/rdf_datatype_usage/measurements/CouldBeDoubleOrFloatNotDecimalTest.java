@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDoubleOrFloatNotDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
@@ -24,16 +24,16 @@ class CouldBeDoubleOrFloatNotDecimalTest {
 	List<String> validDouble = Arrays.asList("5E-1", "1250E-4", "0.0", "0.52886675", "10E2");
 	
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
+	private List<Measure<?, ?>> measures;
 	private CouldBeDoubleOrFloatNotDecimal m;
 
 
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
+		measures = new ArrayList<Measure<?, ?>>();
 		m = new CouldBeDoubleOrFloatNotDecimal();
-		measurements.add(m);
+		measures.add(m);
 	}
 	
 	/*****************************************************************/
@@ -43,8 +43,8 @@ class CouldBeDoubleOrFloatNotDecimalTest {
 	@Test
 	void testValidFloatValidDecimalNQ() {
 		for(String number : validFloat) {
-			String line = MeasurementTestUtil.createStringLine(number);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(number);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
@@ -71,13 +71,13 @@ class CouldBeDoubleOrFloatNotDecimalTest {
 	@Test
 	void testValidDoubleValidDecimalNQ() {
 		for (String number : validDouble) {
-			String line = MeasurementTestUtil.createStringLine(number);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(number);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 		for (String number : validFloat) {
-			String line = MeasurementTestUtil.createStringLine(number);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(number);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
@@ -103,9 +103,9 @@ class CouldBeDoubleOrFloatNotDecimalTest {
 	@Test
 	void testValidFloatOrDoubleInvalidDecimalNQ() {
 		for (String number: specialFloatingpointValues) {
-			String line = MeasurementTestUtil.createStringLine(number);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(number);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -120,8 +120,8 @@ class CouldBeDoubleOrFloatNotDecimalTest {
 	@Test
 	void testInvalidNumberNQ() {
 		for (String number : invalidFloatNumbers) {
-			String line = MeasurementTestUtil.createStringLine(number);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(number);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}

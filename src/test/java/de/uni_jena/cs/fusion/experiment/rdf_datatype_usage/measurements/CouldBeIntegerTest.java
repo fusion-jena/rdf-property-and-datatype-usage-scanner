@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeInteger;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 class CouldBeIntegerTest {
@@ -27,15 +27,15 @@ class CouldBeIntegerTest {
 	private List<String> invalidEntries = Arrays.asList("as235", "9/345,23", "kjldsfjk", "NaN", "+INF", "-INF");
 
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
+	private List<Measure<?, ?>> measures;
 	private CouldBeInteger m;
 
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
+		measures = new ArrayList<Measure<?, ?>>();
 		m = new CouldBeInteger();
-		measurements.add(m);
+		measures.add(m);
 	}
 
 	/***********************************************************************************/
@@ -77,9 +77,9 @@ class CouldBeIntegerTest {
 	@Test
 	void validPositiveIntegersNQ() {
 		for (String entry : validPositiveIntegers) {
-			String line = MeasurementTestUtil.createStringLine(entry);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(entry);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -87,9 +87,9 @@ class CouldBeIntegerTest {
 	@Test
 	void validNegativeIntegersNQ() {
 		for (String entry : validNegativeIntegers) {
-			String line = MeasurementTestUtil.createStringLine(entry);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(entry);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -97,8 +97,8 @@ class CouldBeIntegerTest {
 	@Test
 	void invalidFloatingPointNumbersNQ() {
 		for (String entry : floatingPointNumbers) {
-			String line = MeasurementTestUtil.createStringLine(entry);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(entry);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
@@ -106,8 +106,8 @@ class CouldBeIntegerTest {
 	@Test
 	void invalidEntriesNQ() {
 		for (String entry : invalidEntries) {
-			String line = MeasurementTestUtil.createStringLine(entry);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(entry);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}

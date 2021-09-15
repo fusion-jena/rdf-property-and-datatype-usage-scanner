@@ -11,7 +11,7 @@ import org.apache.jena.rdf.model.RDFNode;
  * @param <V> - can be a HashMap for data type and value or a single value
  */
 
-public abstract class MeasurementOnObject<K, V> extends Measurement<K, V> {
+public abstract class MeasureOnObject<K, V> extends Measure<K, V> {
 
 	/**
 	 * Conduct the measurement on the literal of the statement 
@@ -19,13 +19,13 @@ public abstract class MeasurementOnObject<K, V> extends Measurement<K, V> {
 	 * @param propertyName - property of the statement, key for the HashMap
 	 * @param literal - object of the statement, is examined 
 	 */
-	public abstract void conductMeasurement(String propertyName, Literal literal);
+	public abstract void measure(String propertyName, Literal literal);
 
 	@Override
-	public final void conductMeasurement(RDFNode subject, Property property, RDFNode object) {
+	public final void measure(RDFNode subject, Property property, RDFNode object) {
 		// Only statements with literals are of interest
 		if(object.isLiteral()) {
-			conductMeasurement(property.getURI(), object.asLiteral());		
+			measure(property.getURI(), object.asLiteral());		
 		}
 	}
 	

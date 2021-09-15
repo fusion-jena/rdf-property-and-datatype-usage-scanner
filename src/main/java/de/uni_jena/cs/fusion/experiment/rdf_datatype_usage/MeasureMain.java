@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.log4j.PropertyConfigurator;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasurement;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.PropertyHasRange;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.UsedAsPropertyRange;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeTemporal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeBoolean;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDecimal;
@@ -18,21 +18,21 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeD
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeFloat;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
-public class MeasurementMain {
+public class MeasureMain {
 
 	/**
 	 * Contains one class for each measurement that will be conducted
 	 */
-	private static List<Measurement<?, ?>> measurements;
+	private static List<Measure<?, ?>> measures;
 
 	private static String dataPath;
 
 	private static org.slf4j.Logger log;
 	
-	public MeasurementMain(String dataPath) {
-		MeasurementMain.dataPath = dataPath;
+	public MeasureMain(String dataPath) {
+		MeasureMain.dataPath = dataPath;
 		initalisationProcess();
-		measurement();
+		startMeasurement();
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class MeasurementMain {
 	 */
 	private static void initalisationProcess() {
 		ModelFactory.createDefaultModel();
-		initaliseMeasurementFunctions();
+		initaliseMeasureFunctions();
 		if (dataPath == null) {
 			dataPath = examplePaths();
 		}
@@ -59,16 +59,16 @@ public class MeasurementMain {
 	 * Initialises the list with the classes for each measurement that will be
 	 * conducted
 	 */
-	private static void initaliseMeasurementFunctions() {
-		measurements = new ArrayList<Measurement<?, ?>>();
-		measurements.add(new CouldBeFloat());
-		measurements.add(new CouldBeDouble());
-		measurements.add(new CouldBeTemporal());
-		measurements.add(new CouldBeDoubleOrFloatNotDecimal());
-		measurements.add(new ShouldBeDecimal());
-		measurements.add(new PropertyHasRange());
-		measurements.add(new CouldBeBoolean());
-		measurements.add(new CouldBeInteger());
+	private static void initaliseMeasureFunctions() {
+		measures = new ArrayList<Measure<?, ?>>();
+		measures.add(new CouldBeFloat());
+		measures.add(new CouldBeDouble());
+		measures.add(new CouldBeTemporal());
+		measures.add(new CouldBeDoubleOrFloatNotDecimal());
+		measures.add(new ShouldBeDecimal());
+		measures.add(new UsedAsPropertyRange());
+		measures.add(new CouldBeBoolean());
+		measures.add(new CouldBeInteger());
 	}
 
 	/**
@@ -98,15 +98,15 @@ public class MeasurementMain {
 			
 		initalisationProcess();
 		
-		measurement();
+		startMeasurement();
 		
 	}
 	
-	private static void measurement() {
-		FileMeasurement fileIterator = new FileMeasurement(dataPath, measurements, log);
-		fileIterator.startMeasurement();
+	private static void startMeasurement() {
+		FileMeasure fileIterator = new FileMeasure(dataPath, measures, log);
+		fileIterator.startMeasurements();
 		// get the results
-		for (Measurement<?, ?> me : measurements) {
+		for (Measure<?, ?> me : measures) {
 			log.info(me.toString());
 		}
 	}

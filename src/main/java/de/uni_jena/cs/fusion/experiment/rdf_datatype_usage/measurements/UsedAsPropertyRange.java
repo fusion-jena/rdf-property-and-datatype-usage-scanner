@@ -20,15 +20,15 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUt
  * </p>
  * Issue #4
  */
-public class PropertyHasRange extends Measurement<String, HashMap<String, Long>> {
+public class UsedAsPropertyRange extends Measure<String, HashMap<String, Long>> {
 
-	public PropertyHasRange() {
+	public UsedAsPropertyRange() {
 		super();
 		super.occurs = new HashMap<String, HashMap<String, Long>>();
 	}
 
 	@Override
-	public void conductMeasurement(RDFNode subject, Property property, RDFNode object) {
+	public void measure(RDFNode subject, Property property, RDFNode object) {
 		// check if in this statement the property is rdfs:range
 		if (!RDFS.range.equals(property)) {
 			return;

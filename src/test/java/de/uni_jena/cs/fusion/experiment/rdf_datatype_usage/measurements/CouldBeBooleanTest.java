@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeBoolean;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 class CouldBeBooleanTest {
@@ -20,15 +20,15 @@ class CouldBeBooleanTest {
 	private List<String> invalidBoolean = Arrays.asList("True", "False", "0.0", "1.0", "dieser satz ergibt keinen sinn", "(8)", "231");
 	
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
+	private List<Measure<?, ?>> measures;
 	private CouldBeBoolean m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
+		measures = new ArrayList<Measure<?, ?>>();
 		m = new CouldBeBoolean();
-		measurements.add(m);
+		measures.add(m);
 	}
 	
 	/***********************************************************************************/
@@ -56,9 +56,9 @@ class CouldBeBooleanTest {
 	@Test
 	void validBooleanNQ() {
 		for(String validEntry : validBoolean) {
-			String line = MeasurementTestUtil.createStringLine(validEntry);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(validEntry);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -66,8 +66,8 @@ class CouldBeBooleanTest {
 	@Test
 	void invalidBooleanNQ() {
 		for(String invalidEntry : invalidBoolean) {
-			String line = MeasurementTestUtil.createStringLine(invalidEntry);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(invalidEntry);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}

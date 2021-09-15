@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeFloat;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
@@ -28,15 +28,15 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 	
 	
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
+	private List<Measure<?, ?>> measures;
 	private CouldBeFloat m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
+		measures = new ArrayList<Measure<?, ?>>();
 		m = new CouldBeFloat();
-		measurements.add(m);
+		measures.add(m);
 	}
 	
 	@Test
@@ -84,9 +84,9 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 	@Test
 	void validFloatValidDecimalNQ() {
 		for (String value : validFloatingpointNumber) {
-			String line = MeasurementTestUtil.createStringLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -94,9 +94,9 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 	@Test 
 	void validFloatInvalidDecimalNQ() {
 		for (String value : specialValues) {
-			String line = MeasurementTestUtil.createStringLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -104,8 +104,8 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 	@Test
 	void invalidNumbersNQ() {
 		for (String value : invalidNumbers) {
-			String line = MeasurementTestUtil.createStringLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
@@ -113,8 +113,8 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 	@Test
 	void invalidFloatValidDecimalNQ() {
 		for (String value : invalidFloatingpointNumber) {
-			String line = MeasurementTestUtil.createStringLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}

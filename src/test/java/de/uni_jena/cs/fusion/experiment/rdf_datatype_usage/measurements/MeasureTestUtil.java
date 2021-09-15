@@ -6,10 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasurement;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 
-public final class MeasurementTestUtil {
+public final class MeasureTestUtil {
 
 	public static final String predicateName = "test:predicate";
 
@@ -30,7 +30,7 @@ public final class MeasurementTestUtil {
 	}
 
 	public static final String createStringLine(String object) {
-		String line = "<test:subject> <" + MeasurementTestUtil.predicateName + "> ";
+		String line = "<test:subject> <" + MeasureTestUtil.predicateName + "> ";
 		line += "\"" + object + "\" <test:graph>.";
 		return line;
 	}
@@ -40,7 +40,7 @@ public final class MeasurementTestUtil {
 		return line;
 	}
 
-	public static final void conductMeasurement(List<Measurement<?, ?>> measurements, org.slf4j.Logger log,
+	public static final void conductMeasurement(List<Measure<?, ?>> measurements, org.slf4j.Logger log,
 			String line) {
 	    try {
 	    	File tmpFile = File.createTempFile("data", ".nq");
@@ -49,8 +49,8 @@ public final class MeasurementTestUtil {
 			writer.close();
 			
 			
-			FileMeasurement fileMeasurement = new FileMeasurement("file:///" + tmpFile.getAbsolutePath(), measurements, log);
-			fileMeasurement.startMeasurement();
+			FileMeasure fileMeasure = new FileMeasure("file:///" + tmpFile.getAbsolutePath(), measurements, log);
+			fileMeasure.startMeasurements();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			System.exit(1);

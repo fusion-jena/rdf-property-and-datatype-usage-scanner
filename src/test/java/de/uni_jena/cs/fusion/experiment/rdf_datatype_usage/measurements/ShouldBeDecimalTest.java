@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.GlobalNames;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.NumberUtil;
@@ -19,16 +19,16 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.NumberUtil;
 public class ShouldBeDecimalTest {
 	
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
+	private List<Measure<?, ?>> measures;
 	private ShouldBeDecimal m;
 
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
+		measures = new ArrayList<Measure<?, ?>>();
 		m = new ShouldBeDecimal();
-		measurements.add(m);
+		measures.add(m);
 	}
 	
 	/********************************************************************
@@ -62,11 +62,11 @@ public class ShouldBeDecimalTest {
 	@Test
 	void replaceDoubleByDecimalNQ() {
 		for (String value : invalidDoubleValues) {
-			String line = MeasurementTestUtil.createDoubleLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createDoubleLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			//only double entries
-			assertFalse(m.getOccurs().get(MeasurementTestUtil.predicateName).containsKey(GlobalNames.FLOAT)); 
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).get(GlobalNames.DOUBLE));
+			assertFalse(m.getOccurs().get(MeasureTestUtil.predicateName).containsKey(GlobalNames.FLOAT)); 
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName).get(GlobalNames.DOUBLE));
 			m.getOccurs().clear();
 		}
 	}
@@ -74,13 +74,13 @@ public class ShouldBeDecimalTest {
 	@Test
 	void notReplaceDoubleByDecimalNQ() {
 		for (String value : specialValues) {
-			String line = MeasurementTestUtil.createDoubleLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createDoubleLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 		for (String value : validDoubleValues) {
-			String line = MeasurementTestUtil.createDoubleLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createDoubleLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
@@ -160,10 +160,10 @@ public class ShouldBeDecimalTest {
 	@Test
 	void replaceFloatByDecimalNQ() {
 		for (String value : invalidFloatValues) {
-			String line = MeasurementTestUtil.createFloatLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertFalse(m.getOccurs().get(MeasurementTestUtil.predicateName).containsKey(GlobalNames.DOUBLE));
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).get(GlobalNames.FLOAT));
+			String line = MeasureTestUtil.createFloatLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertFalse(m.getOccurs().get(MeasureTestUtil.predicateName).containsKey(GlobalNames.DOUBLE));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName).get(GlobalNames.FLOAT));
 			m.getOccurs().clear();
 		}
 	}
@@ -171,13 +171,13 @@ public class ShouldBeDecimalTest {
 	@Test 
 	void notReplaceFloatByDecimalNQ() {
 		for (String value : specialValues) {
-			String line = MeasurementTestUtil.createFloatLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createFloatLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 		for (String value : validFloatValues) {
-			String line = MeasurementTestUtil.createFloatLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createFloatLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}

@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDouble;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
@@ -25,15 +25,15 @@ public class CouldBeDoubleTest {
 	private List<String> invalidFloatingpointNumber = Arrays.asList("-0.1", "2e-1", "0.33333333", "-909E-2", "3.14159e-5", "10e-12");
 	
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
+	private List<Measure<?, ?>> measures;
 	private CouldBeDouble m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
+		measures = new ArrayList<Measure<?, ?>>();
 		m = new CouldBeDouble();
-		measurements.add(m);
+		measures.add(m);
 	}
 	
 	@Test
@@ -74,9 +74,9 @@ public class CouldBeDoubleTest {
 	@Test
 	void validDoubleValidDecimalNQ() {
 		for (String value : validFloatingpointNumber) {
-			String line = MeasurementTestUtil.createStringLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -84,9 +84,9 @@ public class CouldBeDoubleTest {
 	@Test 
 	void validDoubleInvalidDecimalNQ() {
 		for (String value : specialValues) {
-			String line = MeasurementTestUtil.createStringLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -94,8 +94,8 @@ public class CouldBeDoubleTest {
 	@Test
 	void invalidNumbersNQ() {
 		for (String value : invalidNumbers) {
-			String line = MeasurementTestUtil.createStringLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
@@ -103,8 +103,8 @@ public class CouldBeDoubleTest {
 	@Test
 	void invalidDoubleValidDecimalNQ() {
 		for (String value : invalidFloatingpointNumber) {
-			String line = MeasurementTestUtil.createStringLine(value);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(value);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}

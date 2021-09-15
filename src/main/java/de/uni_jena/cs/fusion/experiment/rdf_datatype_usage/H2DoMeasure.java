@@ -13,11 +13,11 @@ import org.apache.log4j.PropertyConfigurator;
 import org.h2.tools.Server;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.exceptions.NoItemException;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
-public class H2DoMeasurements extends Thread {
+public class H2DoMeasure extends Thread {
 
 	private static org.slf4j.Logger log;
 	
@@ -42,28 +42,28 @@ public class H2DoMeasurements extends Thread {
 			System.exit(1);
 		}
 
-		H2DoMeasurements thread1 = new H2DoMeasurements();
+		H2DoMeasure thread1 = new H2DoMeasure();
 		thread1.start();
 
-		H2DoMeasurements thread2 = new H2DoMeasurements();
+		H2DoMeasure thread2 = new H2DoMeasure();
 		thread2.start();
 
-		H2DoMeasurements thread3 = new H2DoMeasurements();
+		H2DoMeasure thread3 = new H2DoMeasure();
 		thread3.start();
 
-		H2DoMeasurements thread4 = new H2DoMeasurements();
+		H2DoMeasure thread4 = new H2DoMeasure();
 		thread4.start();
 
 		server.stop();
 		log.info("Server stopped");
 	}
 
-	private FileMeasurement getNextFileMeasurement(Connection con) throws NoItemException {
+	private FileMeasure getNextFileMeasure (Connection con) throws NoItemException {
 		synchronized (lock) {
-			FileMeasurement fileMeasurement = null;
+			FileMeasure fileMeasure = null;
 			try {
 				Statement stmt = con.createStatement();
-				String queryFilesToWorkOn = "SELECT FILE_ID, URL FROM " + H2Util.FILE_DATABASE + " WHERE (START_TIME < '"
+				String queryFilesToWorkOn = "SELECT FILE_ID, URL FROM " + H2Util.FILE_DATABASE_TABLE + " WHERE (START_TIME < '"
 						+ new Timestamp(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000) // restart after a week
 						+ "' AND END_TIME IS NULL) OR START_TIME IS NULL LIMIT 1";
 				ResultSet result = stmt.executeQuery(queryFilesToWorkOn);
@@ -72,15 +72,15 @@ public class H2DoMeasurements extends Thread {
 					return null;
 				}
 				
-				fileMeasurement = new FileMeasurement(result.getLong("FILE_ID"), result.getString("URL"), con, log);
+				fileMeasure = new FileMeasure(result.getLong("FILE_ID"), result.getString("URL"), con, log);
 				result.close();
 
-				H2Util.writeTime(con, H2Util.START, fileMeasurement.getFileID(), log);
+				H2Util.writeTime(con, H2Util.START, fileMeasure.getFileID(), log);
 			} catch (SQLException e) {
 				throw new NoItemException(e.getMessage());
 			}
 
-			return fileMeasurement;
+			return fileMeasure;
 		}
 	}
 
@@ -98,18 +98,18 @@ public class H2DoMeasurements extends Thread {
 
 		long identifier = -1;
 		try {
-			FileMeasurement fileMeasurement = getNextFileMeasurement(con);
-			while (fileMeasurement != null) {
-				identifier = fileMeasurement.getFileID();
+			FileMeasure fileMeasure = getNextFileMeasure(con);
+			while (fileMeasure != null) {
+				identifier = fileMeasure.getFileID();
 
 				log.info(new Timestamp(System.currentTimeMillis()) + " - Thread " + this.getId()
 						+ " - Start processing file: " + identifier);
-				fileMeasurement.startMeasurement();
-				fileMeasurement.writeToDatabase();
+				fileMeasure.startMeasurements();
+				fileMeasure.writeToDatabase();
 				log.info(new Timestamp(System.currentTimeMillis()) + " - Thread " + this.getId()
 						+ " - Finished processing file: " + identifier);
 				// Get the next file
-				fileMeasurement = getNextFileMeasurement(con);
+				fileMeasure = getNextFileMeasure(con);
 			}
 		} catch (SQLException e) {
 			log.info("Error when working on file " + identifier);

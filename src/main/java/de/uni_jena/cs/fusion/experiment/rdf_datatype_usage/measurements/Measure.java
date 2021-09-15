@@ -12,7 +12,7 @@ import org.apache.jena.rdf.model.RDFNode;
  * @param K - property name
  * @param V - can be a HashMap for data type and value or a single value
  */
-public abstract class Measurement<K, V> {
+public abstract class Measure<K, V> {
 
 	protected HashMap<K, V> occurs;
 
@@ -23,7 +23,7 @@ public abstract class Measurement<K, V> {
 	 * @param property of the statement
 	 * @param object   of the statement
 	 */
-	public abstract void conductMeasurement(RDFNode subject, Property property, RDFNode object);
+	public abstract void measure(RDFNode subject, Property property, RDFNode object);
 
 	public HashMap<K, V> getOccurs() {
 		return occurs;

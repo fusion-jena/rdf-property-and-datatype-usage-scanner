@@ -7,10 +7,10 @@ import org.apache.jena.rdf.model.Literal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUtil;
 
-public class CouldBeInteger extends MeasurementOnObjectWithDatatypeString {
+public class CouldBeInteger extends MeasureOnObjectWithDatatypeString {
 
 	@Override
-	public void conductMeasurement(String propertyName, Literal literal) {
+	public void measure(String propertyName, Literal literal) {
 		// Only strings are of interest
 		if (!(literal.getDatatype() instanceof RDFLangString)
 				&& !(literal.getDatatype() instanceof XSDBaseStringType)) {

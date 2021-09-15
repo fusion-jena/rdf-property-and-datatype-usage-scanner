@@ -16,7 +16,7 @@ import org.apache.jena.riot.RDFParser;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 
 /**
  * Functions for different operations (parsing, analysing) a model
@@ -142,7 +142,7 @@ public abstract class ModelUtil {
 	 * @param allStatements Model whose statements will be examined
 	 * @param log           Logging of information
 	 */
-	public static void conductMeasurements(List<Measurement<?, ?>> measurements, FileIterator allStatements,
+	public static void conductMeasurements(List<Measure<?, ?>> measurements, FileIterator allStatements,
 			org.slf4j.Logger log) {
 		//Iterate over all statements of the file
 		Iterator<Statement> iter = allStatements.iterator();
@@ -154,8 +154,8 @@ public abstract class ModelUtil {
 			RDFNode object = stmt.getObject();
 
 			// Conduct all measurements on the current statement
-			for (Measurement<?, ?> measurement : measurements) {
-				measurement.conductMeasurement(subject, property, object);
+			for (Measure<?, ?> measurement : measurements) {
+				measurement.measure(subject, property, object);
 			}
 		}
 

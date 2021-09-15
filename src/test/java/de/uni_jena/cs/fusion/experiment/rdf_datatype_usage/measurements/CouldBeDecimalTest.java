@@ -57,15 +57,15 @@ class CouldBeDecimalTest {
 			);
 	
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
+	private List<Measure<?, ?>> measures;
 	private CouldBeDecimal m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
+		measures = new ArrayList<Measure<?, ?>>();
 		m = new CouldBeDecimal();
-		measurements.add(m);
+		measures.add(m);
 	}
 	
 	
@@ -73,9 +73,9 @@ class CouldBeDecimalTest {
 	@Test
 	void validStringsNQ() {
 		for (String number : validNumbers) {
-			String line = MeasurementTestUtil.createStringLine(number);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(number);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -90,8 +90,8 @@ class CouldBeDecimalTest {
 	@Test
 	void invalidStringsNQ() {
 		for(String number : invalidNumbers) {
-			String line = MeasurementTestUtil.createStringLine(number);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(number);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}

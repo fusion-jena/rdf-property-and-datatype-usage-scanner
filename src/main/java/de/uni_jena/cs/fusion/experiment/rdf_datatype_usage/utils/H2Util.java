@@ -15,9 +15,9 @@ public abstract class H2Util {
 	public static final String PASS = "pwd";
 
 	// Name of database
-	public static final String FILE_DATABASE = "FILE_ORGANISATION";
-	public static final String RESULT_DATABASE = "MEASUREMENT_RESULT";
-	public static final String ERROR_DATABASE = "ERROR_LINES";
+	public static final String FILE_DATABASE_TABLE = "FILE_ORGANISATION";
+	public static final String RESULT_DATABASE_TABLE = "MEASUREMENT_RESULT";
+	public static final String ERROR_DATABASE_TABLE = "ERROR_LINES";
 	
 	//Column names
 	public static final String START = "START_TIME";
@@ -46,7 +46,7 @@ public abstract class H2Util {
 	 */
 	public static void writeTime(Connection con, String column, long fileID, org.slf4j.Logger log) throws SQLException {
 		log.info("Start writing time to " + column + " of file " + fileID);
-		String query = "UPDATE " + H2Util.FILE_DATABASE + " SET " + column + " = '" + new Timestamp(System.currentTimeMillis()) + "' WHERE FILE_ID = " + fileID;
+		String query = "UPDATE " + H2Util.FILE_DATABASE_TABLE + " SET " + column + " = '" + new Timestamp(System.currentTimeMillis()) + "' WHERE FILE_ID = " + fileID;
 		H2Util.executeAndUpdate(con, query);
 		log.info("Finished writing time to " + column + " of file " + fileID);
 	}

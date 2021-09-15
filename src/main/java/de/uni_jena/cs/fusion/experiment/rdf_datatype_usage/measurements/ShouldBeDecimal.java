@@ -17,7 +17,7 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.NumberUtil;
  * 
  * Issue #7
  */
-public class ShouldBeDecimal extends MeasurementOnObject<String, HashMap<GlobalNames, Long>> {
+public class ShouldBeDecimal extends MeasureOnObject<String, HashMap<GlobalNames, Long>> {
 
 	public ShouldBeDecimal() {
 		super();
@@ -25,7 +25,7 @@ public class ShouldBeDecimal extends MeasurementOnObject<String, HashMap<GlobalN
 	}
 
 	@Override
-	public void conductMeasurement(String propertyName, Literal literal) {
+	public void measure(String propertyName, Literal literal) {
 		GlobalNames datatype;
 		String lexicalForm = literal.getLexicalForm();
 		if (literal.getDatatype() instanceof XSDFloat) {

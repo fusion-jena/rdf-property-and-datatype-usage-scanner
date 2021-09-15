@@ -6,9 +6,9 @@ import java.util.List;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.GlobalNames;
 
-public abstract class MeasurementOnObjectWithDatatypeString extends MeasurementOnObject<String, Long> {
+public abstract class MeasureOnObjectWithDatatypeString extends MeasureOnObject<String, Long> {
 	
-	public MeasurementOnObjectWithDatatypeString() {
+	public MeasureOnObjectWithDatatypeString() {
 		super();
 		super.occurs = new HashMap<String, Long>();
 	}

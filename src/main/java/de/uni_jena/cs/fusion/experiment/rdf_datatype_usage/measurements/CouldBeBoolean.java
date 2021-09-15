@@ -13,10 +13,10 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUt
  *
  * Issue #16
  */
-public class CouldBeBoolean extends MeasurementOnObjectWithDatatypeString {
+public class CouldBeBoolean extends MeasureOnObjectWithDatatypeString {
 
 	@Override
-	public void conductMeasurement(String propertyName, Literal literal) {
+	public void measure(String propertyName, Literal literal) {
 		// Only Strings are of interest
 		if (!(literal.getDatatype() instanceof RDFLangString)
 				&& !(literal.getDatatype() instanceof XSDBaseStringType)) {

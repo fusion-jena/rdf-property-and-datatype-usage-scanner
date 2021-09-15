@@ -9,23 +9,23 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeTemporal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 class CouldBeTemporalTest {
 
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
+	private List<Measure<?, ?>> measures;
 	private CouldBeTemporal m;
 
 
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?, ?>>();
+		measures = new ArrayList<Measure<?, ?>>();
 		m = new CouldBeTemporal();
-		measurements.add(m);
+		measures.add(m);
 	}
 	
 	/*************************************************************************/
@@ -66,9 +66,9 @@ class CouldBeTemporalTest {
 	@Test
 	void validDateTimesWithoutOffsetNQ() {
 		for (String date : validDateTimesWithoutOffset) {
-			String line = MeasurementTestUtil.createStringLine(date);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(m.getOccurs().get(MeasurementTestUtil.predicateName), 1);
+			String line = MeasureTestUtil.createStringLine(date);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(m.getOccurs().get(MeasureTestUtil.predicateName), 1);
 			m.getOccurs().clear();
 		}
 	}
@@ -76,8 +76,8 @@ class CouldBeTemporalTest {
 	@Test
 	void invalidDateTimesWithoutOffsetNQ() {
 		for (String date : invalidDateTimesWithoutOffset) {
-			String line = MeasurementTestUtil.createStringLine(date);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(date);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().keySet().isEmpty());
 			m.getOccurs().clear();
 		}
@@ -115,9 +115,9 @@ class CouldBeTemporalTest {
 	@Test
 	void validDateTimeStampsWithOffsetNQ() {
 		for (String date : validDateTimeStampsWithOffset) {
-			String line = MeasurementTestUtil.createStringLine(date);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(m.getOccurs().get(MeasurementTestUtil.predicateName), 1);
+			String line = MeasureTestUtil.createStringLine(date);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(m.getOccurs().get(MeasureTestUtil.predicateName), 1);
 			m.getOccurs().clear();
 		}
 	}
@@ -125,8 +125,8 @@ class CouldBeTemporalTest {
 	@Test
 	void invalidDateTimeStampsWithOffsetNQ() {
 		for (String date : invalidDateTimeStampsWithOffset) {
-			String line = MeasurementTestUtil.createStringLine(date);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(date);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().keySet().isEmpty());
 		}
 	}
@@ -200,9 +200,9 @@ class CouldBeTemporalTest {
 	@Test
 	void validDatesWithoutOffsetNQ() {
 		for (String date : validDatesWithoutOffset) {
-			String line = MeasurementTestUtil.createStringLine(date);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(date);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -210,9 +210,9 @@ class CouldBeTemporalTest {
 	@Test
 	void validDatesWithOffsetNQ() {
 		for (String date : validDatesWithOffset) {
-			String line = MeasurementTestUtil.createStringLine(date);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(date);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -220,8 +220,8 @@ class CouldBeTemporalTest {
 	@Test
 	void invalidDatesWithoutOffsetNQ() {
 		for (String date : invalidDatesWithoutOffset) {
-			String line = MeasurementTestUtil.createStringLine(date);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(date);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
@@ -229,8 +229,8 @@ class CouldBeTemporalTest {
 	@Test
 	void invalidDatesWithOffsetNQ() {
 		for (String date : invalidDatesWithOffset) {
-			String line = MeasurementTestUtil.createStringLine(date);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(date);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
@@ -301,34 +301,34 @@ class CouldBeTemporalTest {
 	@Test
 	void validTimesWithoutOffsetNQ() {
 		for(String time : validTimesWithoutOffset) {
-			String line = MeasurementTestUtil.createStringLine(time);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(time);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
 	@Test
 	void validTimesWithOffsetNQ() {
 		for(String time : validTimesWithOffset) {
-			String line = MeasurementTestUtil.createStringLine(time);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName));
+			String line = MeasureTestUtil.createStringLine(time);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
 	@Test
 	void invalidTimesWithoutOffsetNQ() {
 		for (String time : invalidTimesWithoutOffset) {
-			String line = MeasurementTestUtil.createStringLine(time);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(time);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
 	@Test
 	void invalidTimesWithOffsetNQ() {
 		for (String time : invalidTimesWithOffset) {
-			String line = MeasurementTestUtil.createStringLine(time);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(time);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}

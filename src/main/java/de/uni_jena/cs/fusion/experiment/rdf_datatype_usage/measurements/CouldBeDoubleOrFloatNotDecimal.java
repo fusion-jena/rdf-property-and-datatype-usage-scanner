@@ -13,10 +13,10 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
  * 
  * Issue #11
  */
-public class CouldBeDoubleOrFloatNotDecimal extends MeasurementOnObjectWithDatatypeString {
+public class CouldBeDoubleOrFloatNotDecimal extends MeasureOnObjectWithDatatypeString {
 
 	@Override
-	public void conductMeasurement(String propertyName, Literal literal) {
+	public void measure(String propertyName, Literal literal) {
 		// Only Strings of interest
 		if (!(literal.getDatatype() instanceof RDFLangString)
 				&& !(literal.getDatatype() instanceof XSDBaseStringType)) {

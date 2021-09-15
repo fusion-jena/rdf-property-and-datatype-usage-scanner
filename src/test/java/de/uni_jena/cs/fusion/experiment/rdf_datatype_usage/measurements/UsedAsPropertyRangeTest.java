@@ -9,21 +9,21 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measurement;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.PropertyHasRange;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.UsedAsPropertyRange;
 
-class PropertyHasRangeTest {
+class UsedAsPropertyRangeTest {
 
 	private org.slf4j.Logger log;
-	private List<Measurement<?, ?>> measurements;
-	private PropertyHasRange m;
+	private List<Measure<?, ?>> measures;
+	private UsedAsPropertyRange m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measurements = new ArrayList<Measurement<?,?>>();
-		m = new PropertyHasRange();
-		measurements.add(m);
+		measures = new ArrayList<Measure<?,?>>();
+		m = new UsedAsPropertyRange();
+		measures.add(m);
 	}
 	
 	@Test
@@ -36,10 +36,10 @@ class PropertyHasRangeTest {
 				);
 		
 		for (String type : datatypes) {
-			String line = MeasurementTestUtil.createPropertyRangeLine(type);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
-			assertTrue(m.getOccurs().containsKey(MeasurementTestUtil.predicateName));
-			assertEquals(1, m.getOccurs().get(MeasurementTestUtil.predicateName).get(type));
+			String line = MeasureTestUtil.createPropertyRangeLine(type);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName).get(type));
 			m.getOccurs().clear();
 		}
 	}
@@ -54,17 +54,17 @@ class PropertyHasRangeTest {
 				);
 		
 		for (String object : objects) {
-			String line = MeasurementTestUtil.createStringLine(object);
-			MeasurementTestUtil.conductMeasurement(measurements, log, line);
+			String line = MeasureTestUtil.createStringLine(object);
+			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 		
-		String line = MeasurementTestUtil.createFloatLine("5025e-2");
-		MeasurementTestUtil.conductMeasurement(measurements, log, line);
+		String line = MeasureTestUtil.createFloatLine("5025e-2");
+		MeasureTestUtil.conductMeasurement(measures, log, line);
 		assertTrue(m.getOccurs().isEmpty());
 		
-		line = MeasurementTestUtil.createDoubleLine("90");
-		MeasurementTestUtil.conductMeasurement(measurements, log, line);
+		line = MeasureTestUtil.createDoubleLine("90");
+		MeasureTestUtil.conductMeasurement(measures, log, line);
 		assertTrue(m.getOccurs().isEmpty());
 	}
 
