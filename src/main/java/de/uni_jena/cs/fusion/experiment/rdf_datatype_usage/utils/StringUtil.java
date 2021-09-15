@@ -101,6 +101,58 @@ public abstract class StringUtil {
 		Matcher matcher = pattern.matcher(s);
 		return matcher.find();
 	}
+	
+	/**
+	 * Check if the parameter can be stored as double or float, but not as decimal
+	 * 
+	 * </p>
+	 * NaN, + and - infinity can't be represented by decimal
+	 * </p>
+	 * -> test if the parameter is one of them
+	 * 
+	 * @param s literal that is checked
+	 * @return true if the parameter is Nan, + infinity, - infinity, else false
+	 */
+	public static boolean isValidDoubleOrFloatAndInvalidDecimal(String s) {
+		return s.equals("NaN") || s.equals("INF") || s.equals("+INF") || s.equals("-INF");
+	}
+
+	/**
+	 * Check if the parameter is a valid boolean
+	 * 
+	 * <p>
+	 * Lexical values that are boolean true, false and 0 or 1
+	 * </p>
+	 * <p>
+	 * {@link https://www.w3.org/TR/xmlschema11-2/#boolean}
+	 * </p>
+	 * 
+	 * @param s literal that is checked
+	 * @return true if the parameter is one of true, false, 0 and 1, else false
+	 */
+	public static boolean isValidBoolean(String s) {
+		return s.equals("true") || s.equals("false") || s.equals("1") || s.equals("0");
+	}
+
+	/**
+	 * Check if a string can be interpreted as an integer
+	 *
+	 * @param s Literal that is checked
+	 * @return true if the parameter can be stored as integer, else false
+	 */
+	public static boolean isValidInteger(String s) {
+		// See
+		// https://www.w3.org/TR/xmlschema11-2/#integer-lexical-representation
+		// for regular expression of an integer
+		Pattern pattern = Pattern.compile("^" // String beginning
+				+ "(\\+|-)?" // optional sign
+				+ "[0-9]+" // a finite sequence of digits
+				+ "$" // End of the string
+		);
+		Matcher matcher = pattern.matcher(s);
+
+		return matcher.find();
+	}
 
 	/**
 	 * Check if parameter is formated like a valid xsd:dateTime, xsd:dateTimeStamp,
@@ -229,58 +281,6 @@ public abstract class StringUtil {
 	 * infinity can't be represented by decimal return floatValue.isInfinite() ||
 	 * floatValue.isNaN(); return isValidDoubleOrFloatAndInvalidDecimal(s); }
 	 */
-
-	/**
-	 * Check if the parameter can be stored as double or float, but not as decimal
-	 * 
-	 * </p>
-	 * NaN, + and - infinity can't be represented by decimal
-	 * </p>
-	 * -> test if the parameter is one of them
-	 * 
-	 * @param s literal that is checked
-	 * @return true if the parameter is Nan, + infinity, - infinity, else false
-	 */
-	public static boolean isValidDoubleOrFloatAndInvalidDecimal(String s) {
-		return s.equals("NaN") || s.equals("INF") || s.equals("+INF") || s.equals("-INF");
-	}
-
-	/**
-	 * Check if the parameter is a valid boolean
-	 * 
-	 * <p>
-	 * Lexical values that are boolean true, false and 0 or 1
-	 * </p>
-	 * <p>
-	 * {@link https://www.w3.org/TR/xmlschema11-2/#boolean}
-	 * </p>
-	 * 
-	 * @param s literal that is checked
-	 * @return true if the parameter is one of true, false, 0 and 1, else false
-	 */
-	public static boolean isValidBoolean(String s) {
-		return s.equals("true") || s.equals("false") || s.equals("1") || s.equals("0");
-	}
-
-	/**
-	 * Check if a string can be interpreted as an integer
-	 *
-	 * @param s Literal that is checked
-	 * @return true if the parameter can be stored as integer, else false
-	 */
-	public static boolean isValidInteger(String s) {
-		// See
-		// https://www.w3.org/TR/xmlschema11-2/#integer-lexical-representation
-		// for regular expression of an integer
-		Pattern pattern = Pattern.compile("^" // String beginning
-				+ "(\\+|-)?" // optional sign
-				+ "[0-9]+" // a finite sequence of digits
-				+ "$" // End of the string
-		);
-		Matcher matcher = pattern.matcher(s);
-
-		return matcher.find();
-	}
 
 	/**
 	 * Creates a string containing the current date and time combined with the file
