@@ -1,6 +1,8 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,70 +11,76 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDouble;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
-public class CouldBeDoubleTest {
-
-	private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity");
+public class CouldBeFloatTest {
+	
+private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity");
 	
 	private List<String> invalidNumbers = Arrays.asList("235 34.324", "3A-5", "--34", "12,56");
 	
-	private List<String> validFloatingpointNumber = Arrays.asList("5E-1", "1250E-4", "0.0", "+0.0", "-0.0", "37.25", "314", "0.1875", "10E2", "534609887");
-	// 534609887 is valid double but invalid float
+	private List<String> validFloatingpointNumber = Arrays.asList("5E-1", "1250E-4", "0.0", "+0.0", "-0.0", "37.25", "314", "0.1875", "10E2");
 	
-	private List<String> invalidFloatingpointNumber = Arrays.asList("-0.1", "2e-1", "0.33333333", "-909E-2", "3.14159e-5", "10e-12");
+	private List<String> invalidFloatingpointNumber = Arrays.asList("-0.1", "2e-1", "0.33333333", "-909E-2", "3.14159e-5", "10e-12", "534609887");
+	//534609887 is valid double but invalid float
+	
 	
 	private org.slf4j.Logger log;
 	private List<Measure<?, ?>> measures;
-	private CouldBeDouble m;
+	private CouldBeFloat m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
 		measures = new ArrayList<Measure<?, ?>>();
-		m = new CouldBeDouble();
+		m = new CouldBeFloat();
 		measures.add(m);
 	}
 	
 	@Test
-	void validDoubleInvalidDecimalMethod() {
+	void validFloatInvalidDecimalMethod() {
 		for (String number : specialValues) {
-			assertTrue(StringUtil.isValidDouble(number));
+			assertTrue(StringUtil.isValidFloat(number));
 		}
 	}
-	
+
 	@Test
-	void validDoubleValidDecimalMethod() {
-		List<Double> numbers = Arrays.asList(0.5, 0.25, -0.125, +0.0, -0.0, 1.0, 10.0, -15.0, 3456.0, 1.5, -3.125);
-		for (Double number : numbers) {
-			assertTrue(StringUtil.isValidDouble(number + ""));
+	void validFloatValidDecimalMethod() {
+		// Kommadarstellung
+		List<Float> numbers = Arrays.asList(
+				// Integer
+				0.0f, +0.0f, -0.0f, -123f, 457000000f, -8908f, (float) (Math.pow(2, 10)),
+				// Kommazahlen
+				1.5f, -1.5f, (float) (Math.pow(2, 11)), (float) (-1 / 8));
+
+		for (Float number : numbers) {
+			assertTrue(StringUtil.isValidFloat(number + ""));
 		}
+
 		for (String number : validFloatingpointNumber) {
-			assertTrue(StringUtil.isValidDouble(number));
+			assertTrue(StringUtil.isValidFloat(number));
 		}
 	}
-		
+
 	@Test
-	void invalidDoubleValidDecimalMethod() {
+	public void invalidFloatValidDecimalMethod() {
 		// https://www.h-schmidt.net/FloatConverter/IEEE754de.html
-		List<Double> numbers = Arrays.asList(0.2, -0.9, (double) (Math.pow(2, 10) + 7.1),
-				(double) 1 / 3, (double) -9 / 7, 0.6, (double) Math.pow(5, -10));
-		for (Double number : numbers) {
-			assertFalse(StringUtil.isValidDouble(number + ""));
+		List<Float> numbers = Arrays.asList(0.2f, -0.9f, (float) (Math.pow(2, 10) + 7.1), (float) 1 / 3, (float) -9 / 7,
+				(float) 0.6, (float) Math.pow(5, -10));
+		for (Float number : numbers) {
+			assertFalse(StringUtil.isValidFloat(number + ""));
 		}
 	}
-	
+
 	@Test
-	void invalidDoubleMethod() {
+	public void invalidFloatMethod() {
 		for (String number : invalidNumbers) {
 			assertFalse(StringUtil.isValidFloat(number));
 		}
 	}
 	
 	@Test
-	void validDoubleValidDecimalNQ() {
+	void validFloatValidDecimalNQ() {
 		for (String value : validFloatingpointNumber) {
 			String line = MeasureTestUtil.createStringLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
@@ -82,7 +90,7 @@ public class CouldBeDoubleTest {
 	}
 	
 	@Test 
-	void validDoubleInvalidDecimalNQ() {
+	void validFloatInvalidDecimalNQ() {
 		for (String value : specialValues) {
 			String line = MeasureTestUtil.createStringLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
@@ -101,11 +109,12 @@ public class CouldBeDoubleTest {
 	}
 
 	@Test
-	void invalidDoubleValidDecimalNQ() {
+	void invalidFloatValidDecimalNQ() {
 		for (String value : invalidFloatingpointNumber) {
 			String line = MeasureTestUtil.createStringLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
 		}
 	}
+
 }

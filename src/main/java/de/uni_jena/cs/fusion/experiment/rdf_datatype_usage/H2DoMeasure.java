@@ -6,14 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.h2.tools.Server;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.exceptions.NoItemException;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.FileMeasure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 

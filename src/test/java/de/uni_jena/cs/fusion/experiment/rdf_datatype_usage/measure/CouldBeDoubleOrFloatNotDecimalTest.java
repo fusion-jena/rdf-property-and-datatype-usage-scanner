@@ -1,4 +1,4 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,15 +9,13 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDoubleOrFloatNotDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 class CouldBeDoubleOrFloatNotDecimalTest {
 	
 	private List<String> invalidFloatNumbers = Arrays.asList("23 9707897", "3.34j23", "9789H23", "dsaf");
 	
-	private List<String> specialFloatingpointValues = Arrays.asList("Infinity", "-Infinity", "NaN");
+	private List<String> specialFloatingpointValues = Arrays.asList("INF", "-INF", "NaN");
 	
 	private List<String> validFloat = Arrays.asList("+0.0", "-0.0", "123E-12", "-0.625E-1", "100E-20", "98656E25", "3.4E38", "0.33333", "3.14129", "345.2349235");
 	

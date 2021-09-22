@@ -6,16 +6,16 @@ import java.util.List;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.log4j.PropertyConfigurator;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasure;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.UsedAsPropertyRange;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeTemporal;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeBoolean;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDecimal;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeInteger;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDouble;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeDoubleOrFloatNotDecimal;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.CouldBeFloat;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.CouldBeBoolean;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.CouldBeDouble;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.CouldBeDoubleOrFloatNotDecimal;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.CouldBeFloat;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.CouldBeInteger;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.CouldBeTemporal;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.FileMeasure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.Measure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.ShouldBeDecimal;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.UsedAsPropertyRange;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 public class MeasureMain {

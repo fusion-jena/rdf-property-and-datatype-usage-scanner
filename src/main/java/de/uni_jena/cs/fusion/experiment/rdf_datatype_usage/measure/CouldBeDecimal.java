@@ -1,4 +1,4 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
 import org.apache.jena.datatypes.xsd.impl.RDFLangString;
 import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;
@@ -8,12 +8,11 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUt
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 /**
- * Using String but Float should be used
+ * Using String but Decimal could be used
  * 
- * Issue #8
- *
+ * Issue #5
  */
-public class CouldBeFloat extends MeasureOnObjectWithDatatypeString {
+public class CouldBeDecimal extends MeasureOnObjectWithDatatypeString {
 
 	@Override
 	public void measure(String propertyName, Literal literal) {
@@ -25,7 +24,7 @@ public class CouldBeFloat extends MeasureOnObjectWithDatatypeString {
 
 		String lexicalValue = literal.getLexicalForm();
 
-		if (StringUtil.isValidFloat(lexicalValue)) {
+		if (StringUtil.isValidDecimal(lexicalValue)) {
 			HashMapInsertUtil.insertElement(propertyName, super.occurs);
 		}
 	}

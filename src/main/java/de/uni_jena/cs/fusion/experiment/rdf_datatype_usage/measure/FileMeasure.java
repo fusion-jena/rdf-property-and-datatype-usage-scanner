@@ -1,13 +1,10 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.FileIterator;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;

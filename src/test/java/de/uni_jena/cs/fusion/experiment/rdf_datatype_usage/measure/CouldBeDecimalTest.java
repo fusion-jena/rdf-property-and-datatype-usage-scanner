@@ -1,4 +1,4 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
 import static org.junit.jupiter.api.Assertions.*;
 

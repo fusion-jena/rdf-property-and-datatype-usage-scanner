@@ -1,4 +1,4 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,9 +8,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.UsedAsPropertyRange;
 
 class UsedAsPropertyRangeTest {
 

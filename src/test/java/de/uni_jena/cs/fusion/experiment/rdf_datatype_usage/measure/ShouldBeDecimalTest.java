@@ -1,4 +1,4 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -11,8 +11,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.ShouldBeDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.GlobalNames;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.NumberUtil;
 

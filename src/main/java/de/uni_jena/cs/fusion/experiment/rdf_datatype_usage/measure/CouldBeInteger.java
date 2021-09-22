@@ -1,4 +1,4 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
 import org.apache.jena.datatypes.xsd.impl.RDFLangString;
 import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;

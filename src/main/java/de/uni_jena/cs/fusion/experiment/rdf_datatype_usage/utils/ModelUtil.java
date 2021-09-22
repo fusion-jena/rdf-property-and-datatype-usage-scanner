@@ -16,7 +16,7 @@ import org.apache.jena.riot.RDFParser;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.Measure;
 
 /**
  * Functions for different operations (parsing, analysing) a model

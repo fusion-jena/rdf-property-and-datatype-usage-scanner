@@ -1,4 +1,4 @@
-package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements;
+package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,8 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.FileMeasure;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measurements.Measure;
 
 public final class MeasureTestUtil {
 
