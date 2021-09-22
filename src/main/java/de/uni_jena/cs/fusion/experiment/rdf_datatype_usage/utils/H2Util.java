@@ -10,7 +10,7 @@ public abstract class H2Util {
 	public static final String JDBC_DRIVER = "org.h2.Driver";
 
 	//	public static final String DB_URL = "jdbc:h2:mem:"; //in memory 
-	public static final String DB_URL = "jdbc:h2:file:C:/Users/Merle/Desktop/Uni2/fsu_jena/ss21/hiwi/analyse/h2/rdf-analyse;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090";
+	public static final String DB_URL = "jdbc:h2:file:"+ System.getProperty("user.dir") + "/h2/rdf-analyse;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090";
 	public static final String USER = "user_00";
 	public static final String PASS = "pwd";
 
