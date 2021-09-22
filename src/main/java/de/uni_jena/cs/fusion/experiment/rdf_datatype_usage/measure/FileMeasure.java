@@ -164,6 +164,7 @@ public class FileMeasure {
 		measures.add(new UsedAsPropertyRange());
 		measures.add(new CouldBeBoolean());
 		measures.add(new CouldBeInteger());
+		measures.add(new UsageCount());
 	}
 
 	public long getFileID() {

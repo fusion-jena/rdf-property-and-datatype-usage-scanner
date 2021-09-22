@@ -15,6 +15,7 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.CouldBeTempor
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.FileMeasure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.ShouldBeDecimal;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.UsageCount;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.UsedAsPropertyRange;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
@@ -69,6 +70,7 @@ public class MeasureMain {
 		measures.add(new UsedAsPropertyRange());
 		measures.add(new CouldBeBoolean());
 		measures.add(new CouldBeInteger());
+		measures.add(new UsageCount());
 	}
 
 	/**

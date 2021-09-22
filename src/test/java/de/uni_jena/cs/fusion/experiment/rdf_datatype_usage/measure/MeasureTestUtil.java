@@ -11,10 +11,11 @@ public final class MeasureTestUtil {
 
 	public static final String predicateName = "test:predicate";
 
-	private static String doubleIRI = "<http://www.w3.org/2001/XMLSchema#double>";
-	private static String floatIRI = "<http://www.w3.org/2001/XMLSchema#float>";
-	private static String rangeIRI = "<http://www.w3.org/2000/01/rdf-schema#range>";
-
+	public static final String doubleIRI = "<http://www.w3.org/2001/XMLSchema#double>";
+	public static final String floatIRI = "<http://www.w3.org/2001/XMLSchema#float>";
+	public static final String rangeIRI = "<http://www.w3.org/2000/01/rdf-schema#range>";
+	public static final String stringIRI = "<http://www.w3.org/2001/XMLSchema#string>";
+	
 	public static final String createDoubleLine(String object) {
 		String line = "<test:subject> <" + predicateName + "> ";
 		line += "\"" + object + "\"^^" + doubleIRI + " <test:graph>.";
@@ -38,7 +39,7 @@ public final class MeasureTestUtil {
 		return line;
 	}
 
-	public static final void conductMeasurement(List<Measure<?, ?>> measurements, org.slf4j.Logger log,
+	public static final void conductMeasurement(List<Measure<?, ?>> measures, org.slf4j.Logger log,
 			String line) {
 	    try {
 	    	File tmpFile = File.createTempFile("data", ".nq");
@@ -47,7 +48,7 @@ public final class MeasureTestUtil {
 			writer.close();
 			
 			
-			FileMeasure fileMeasure = new FileMeasure("file:///" + tmpFile.getAbsolutePath(), measurements, log);
+			FileMeasure fileMeasure = new FileMeasure("file:///" + tmpFile.getAbsolutePath(), measures, log);
 			fileMeasure.startMeasurements();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
