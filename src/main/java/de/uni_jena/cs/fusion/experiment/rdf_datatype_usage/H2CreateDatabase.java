@@ -47,19 +47,19 @@ public class H2CreateDatabase {
 	 * List of files which store the links to the .nq files
 	 */
 	private static List<String> listFiles = Arrays.asList(// number of files in the document
-			"html-embedded-jsonld", // 5273
-			"html-mf-adr", // 19
-			"html-mf-geo", // 4
+//			"html-embedded-jsonld", // 5273
+//			"html-mf-adr", // 19
+//			"html-mf-geo", // 4
 			"html-mf-hcalendar", // 13
-			"html-mf-hcard", // 2316
-			"html-mf-hlisting", // 4
-			"html-mf-hrecipe", // 4
+//			"html-mf-hcard", // 2316
+//			"html-mf-hlisting", // 4
+//			"html-mf-hrecipe", // 4
 			"html-mf-hresume", // 1
 			"html-mf-hreview", // 15
-			"html-mf-species", // 1
-			"html-mf-xfn", // 46
-			"html-microdata", // 8480
-			"html-rdfa" // 5167
+			"html-mf-species"//, // 1
+//			"html-mf-xfn", // 46
+//			"html-microdata", // 8480
+//			"html-rdfa" // 5167
 	);
 
 	public static void main(String[] args) {
@@ -81,11 +81,11 @@ public class H2CreateDatabase {
 			Connection con = DriverManager.getConnection(H2Util.DB_URL, H2Util.USER, H2Util.PASS);
 
 			createDatabaseTables(con);
-
+			
 			fillCategoryDatabaseTable(con);
 
 			fillFileOrganisationDatabaseTable(con);
-
+			
 			con.close();
 			log.info("Connection closed");
 			server.stop();

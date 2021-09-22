@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.h2.tools.Server;
@@ -20,15 +23,21 @@ public class H2DoMeasure extends Thread {
 	private static org.slf4j.Logger log;
 	
 	private static final Object lock = new Object();
+	
+	private static CountDownLatch latch;
+	private static int numThreads;
 
 	public static void main(String[] args) {
-
+		numThreads = 8;
+		latch = new CountDownLatch(numThreads);
 		System.setProperty("fName", StringUtil.createStorageFile("log"));
 
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		log = org.slf4j.LoggerFactory.getLogger("H2DoMeasurements");
 		Server server = null;
-
+		long start = 0L;
+		long end = 0L;
+		long duration = 0L;
 		// Register for JDCB driver
 		try {
 			Class.forName(H2Util.JDBC_DRIVER);
@@ -39,23 +48,35 @@ public class H2DoMeasure extends Thread {
 			log.error(e.getMessage());
 			System.exit(1);
 		}
-
-		H2DoMeasure thread1 = new H2DoMeasure();
-		thread1.start();
-
-		H2DoMeasure thread2 = new H2DoMeasure();
-		thread2.start();
-
-		H2DoMeasure thread3 = new H2DoMeasure();
-		thread3.start();
-
-		H2DoMeasure thread4 = new H2DoMeasure();
-		thread4.start();
-
+		start = System.currentTimeMillis();
+		List<H2DoMeasure> threads = new ArrayList<H2DoMeasure>();
+		for (int i = 0; i < numThreads; i++) {
+			threads.add(new H2DoMeasure());
+			threads.get(i).start();
+		}
+		
+//		H2DoMeasure thread1 = new H2DoMeasure();
+//		H2DoMeasure thread2 = new H2DoMeasure();
+//		H2DoMeasure thread3 = new H2DoMeasure();
+//		H2DoMeasure thread4 = new H2DoMeasure();
+//
+//		thread1.start();
+//		thread2.start();
+//		thread3.start();
+//		thread4.start();
+		
+		try {
+			latch.await();
+			end = System.currentTimeMillis();
+		} catch (InterruptedException e) {
+			log.error(e.getMessage());
+		}
 		server.stop();
 		log.info("Server stopped");
+		duration = end - start;
+		log.warn(new Timestamp(System.currentTimeMillis()) + " used " + numThreads + " threads, took " + duration +"ms to finnish");
 	}
-
+	
 	private FileMeasure getNextFileMeasure (Connection con) throws NoItemException {
 		synchronized (lock) {
 			FileMeasure fileMeasure = null;
@@ -125,6 +146,7 @@ public class H2DoMeasure extends Thread {
 			System.exit(1);
 		}
 		log.info("Connection from thread " + this.getId() + " to database closed");
+		latch.countDown();
 	}
 
 }
