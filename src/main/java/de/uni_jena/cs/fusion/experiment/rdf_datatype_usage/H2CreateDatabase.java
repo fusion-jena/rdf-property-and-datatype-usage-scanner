@@ -13,7 +13,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.h2.tools.Server;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 /**
  * Initialisation at the beginning.
@@ -22,27 +21,50 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
  * Creates three databases (general file overview, results, errors)
  * </p>
  * <p>
- * Must be executed before H2DoMeasurements 
+ * Must be executed before H2DoMeasurements
  * </p>
  */
 public class H2CreateDatabase {
 
 	// Queries to generate the database
 	// Caution: overwrites existing databases!
-	private static final String CREATE_FILE_DATABASE = "CREATE TABLE " + H2Util.FILE_DATABASE_TABLE
-			+ " (FILE_ID BIGINT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, URL VARCHAR(2048) NOT NULL, START_TIME TIMESTAMP, END_TIME TIMESTAMP , TOTAL_NUMBER_OF_LINES BIGINT )";
-	private static final String CREATE_RESULT_DATABSE = "CREATE TABLE " + H2Util.RESULT_DATABASE_TABLE
+	private static final String CREATE_CATEGORY_DATABASE_TABLE = "CREATE TABLE " + H2Util.CATEGORY_DATABASE_TABLE
+			+ " (CATEGORY_ID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, NAME VARCHAR(25) NOT NULL)";
+	private static final String CREATE_FILE_DATABASE_TABLE = "CREATE TABLE " + H2Util.FILE_DATABASE_TABLE
+			+ " (FILE_ID BIGINT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, CATEGORY_ID INT REFERENCES "
+			+ H2Util.CATEGORY_DATABASE_TABLE
+			+ "(CATEGORY_ID), URL VARCHAR(2048) NOT NULL, START_TIME TIMESTAMP, END_TIME TIMESTAMP , TOTAL_NUMBER_OF_LINES BIGINT )";
+	private static final String CREATE_RESULT_DATABSE_TABLE = "CREATE TABLE " + H2Util.RESULT_DATABASE_TABLE
 			+ " (FILE_ID BIGINT REFERENCES " + H2Util.FILE_DATABASE_TABLE
 			+ "(FILE_ID), PROPERTY VARCHAR(2048) NOT NULL, MEASUREMENT VARCHAR(40) NOT NULL, DATATYPE VARCHAR(100) NOT NULL, QUANTITY BIGINT NOT NULL)";
-	private static final String CREATE_ERROR_LINE_DATABASE = "CREATE TABLE " + H2Util.ERROR_DATABASE_TABLE
+	private static final String CREATE_ERROR_LINE_DATABASE_TABLE = "CREATE TABLE " + H2Util.ERROR_DATABASE_TABLE
 			+ " (FILE_ID BIGINT REFERENCES " + H2Util.FILE_DATABASE_TABLE
 			+ "(FILE_ID), LINE BIGINT NOT NULL, ERROR_MESSAGE TINYTEXT)"; // TODO tinytext ausreichend?
 
 	private static org.slf4j.Logger log;
 
+	/**
+	 * List of files which store the links to the .nq files
+	 */
+	private static List<String> listFiles = Arrays.asList(// number of files in the document
+			"html-embedded-jsonld", // 5273
+			"html-mf-adr", // 19
+			"html-mf-geo", // 4
+			"html-mf-hcalendar", // 13
+			"html-mf-hcard", // 2316
+			"html-mf-hlisting", // 4
+			"html-mf-hrecipe", // 4
+			"html-mf-hresume", // 1
+			"html-mf-hreview", // 15
+			"html-mf-species", // 1
+			"html-mf-xfn", // 46
+			"html-microdata", // 8480
+			"html-rdfa" // 5167
+	);
+
 	public static void main(String[] args) {
 		// TODO log name anpassen
-		System.setProperty("fName", StringUtil.createStorageFile("log"));
+//		System.setProperty("fName", StringUtil.createStorageFile("log"));
 
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		log = org.slf4j.LoggerFactory.getLogger("H2CreateDatabase");
@@ -56,10 +78,11 @@ public class H2CreateDatabase {
 			server.start();
 			// Open connection
 			log.info("Connecting to database");
-			Connection con = DriverManager.getConnection(H2Util.DB_URL, H2Util.USER,
-					H2Util.PASS);
+			Connection con = DriverManager.getConnection(H2Util.DB_URL, H2Util.USER, H2Util.PASS);
 
 			createDatabaseTables(con);
+
+			fillCategoryDatabaseTable(con);
 
 			fillFileOrganisationDatabaseTable(con);
 
@@ -104,17 +127,37 @@ public class H2CreateDatabase {
 	 * @throws SQLException in case of an invalid sql command
 	 */
 	private static void createDatabaseTables(Connection con) throws SQLException {
+		log.info("Create table " + H2Util.CATEGORY_DATABASE_TABLE);
+		H2Util.executeAndUpdate(con, CREATE_CATEGORY_DATABASE_TABLE);
+		log.info("Table " + H2Util.CATEGORY_DATABASE_TABLE + " created");
+
 		log.info("Create table " + H2Util.FILE_DATABASE_TABLE);
-		H2Util.executeAndUpdate(con, CREATE_FILE_DATABASE);
+		H2Util.executeAndUpdate(con, CREATE_FILE_DATABASE_TABLE);
 		log.info("Table " + H2Util.FILE_DATABASE_TABLE + " created");
 
 		log.info("Create table " + H2Util.RESULT_DATABASE_TABLE);
-		H2Util.executeAndUpdate(con, CREATE_RESULT_DATABSE);
+		H2Util.executeAndUpdate(con, CREATE_RESULT_DATABSE_TABLE);
 		log.info("Table " + H2Util.RESULT_DATABASE_TABLE + " created");
 
 		log.info("Create table " + H2Util.ERROR_DATABASE_TABLE);
-		H2Util.executeAndUpdate(con, CREATE_ERROR_LINE_DATABASE);
+		H2Util.executeAndUpdate(con, CREATE_ERROR_LINE_DATABASE_TABLE);
 		log.info("Table " + H2Util.ERROR_DATABASE_TABLE + " created");
+	}
+
+	/**
+	 * Each .list file represents a category that is assigned an id
+	 * 
+	 * @param con connection to the database
+	 * @throws SQLException in case of an invalid SQL command
+	 */
+	private static void fillCategoryDatabaseTable(Connection con) throws SQLException {
+		log.info("Fill " + H2Util.CATEGORY_DATABASE_TABLE);
+		for (int idx = 0; idx < listFiles.size(); idx++) {
+			String query = "INSERT into " + H2Util.CATEGORY_DATABASE_TABLE + " values (" + (idx + 1) + ", '"
+					+ listFiles.get(idx) + "')";
+			H2Util.executeAndUpdate(con, query);
+		}
+		log.info(H2Util.CATEGORY_DATABASE_TABLE + " filled");
 	}
 
 	/**
@@ -137,31 +180,17 @@ public class H2CreateDatabase {
 	private static void fillFileOrganisationDatabaseTable(Connection con) throws SQLException {
 		String path = "src/main/resources/list_files/";
 		String fileExtension = ".list";
-		List<String> listFiles = Arrays.asList(
-				"html-embedded-jsonld", //5273
-				"html-mf-adr", // 19
-				"html-mf-geo", // 4
-				"html-mf-hcalendar", // 13
-				"html-mf-hcard", //2316
-				"html-mf-hlisting", // 4
-				"html-mf-hrecipe", // 4
-				"html-mf-hresume", // 1
-				"html-mf-hreview", // 15
-				"html-mf-species", // , //1
-				"html-mf-xfn", //46
-				"html-microdata", //8480
-				"html-rdfa" //5167
-		);
 
-		for (String file : listFiles) {
+		for (int idx = 0; idx < listFiles.size(); idx++) {
+			String file = listFiles.get(idx);
 			log.info("Start reading lines from file " + path + file + fileExtension);
 			BufferedReader reader;
 			try {
 				reader = new BufferedReader(new FileReader(path + file + fileExtension));
 				String line = reader.readLine();
 				while (line != null) {
-					String query = "INSERT into " + H2Util.FILE_DATABASE_TABLE + " values (default, '" + line
-							+ "', null, null, null)";
+					String query = "INSERT into " + H2Util.FILE_DATABASE_TABLE + " values (default, " + (idx + 1)
+							+ ", '" + line + "', null, null, null)";
 					H2Util.executeAndUpdate(con, query);
 					line = reader.readLine();
 				}

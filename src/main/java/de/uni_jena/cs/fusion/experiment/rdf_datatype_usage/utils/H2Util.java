@@ -18,6 +18,7 @@ public abstract class H2Util {
 	public static final String FILE_DATABASE_TABLE = "FILE_ORGANISATION";
 	public static final String RESULT_DATABASE_TABLE = "MEASUREMENT_RESULT";
 	public static final String ERROR_DATABASE_TABLE = "ERROR_LINES";
+	public static final String CATEGORY_DATABASE_TABLE = "CATEGORIES";
 	
 	//Column names
 	public static final String START = "START_TIME";
