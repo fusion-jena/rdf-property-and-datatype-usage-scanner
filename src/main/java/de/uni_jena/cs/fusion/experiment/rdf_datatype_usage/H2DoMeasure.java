@@ -55,16 +55,6 @@ public class H2DoMeasure extends Thread {
 			threads.get(i).start();
 		}
 		
-//		H2DoMeasure thread1 = new H2DoMeasure();
-//		H2DoMeasure thread2 = new H2DoMeasure();
-//		H2DoMeasure thread3 = new H2DoMeasure();
-//		H2DoMeasure thread4 = new H2DoMeasure();
-//
-//		thread1.start();
-//		thread2.start();
-//		thread3.start();
-//		thread4.start();
-		
 		try {
 			latch.await();
 			end = System.currentTimeMillis();
