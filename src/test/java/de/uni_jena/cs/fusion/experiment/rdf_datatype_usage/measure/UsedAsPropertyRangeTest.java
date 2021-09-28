@@ -6,19 +6,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.jena.datatypes.xsd.impl.XSDDouble;
+import org.apache.jena.datatypes.xsd.impl.XSDFloat;
+import org.apache.jena.vocabulary.XSD;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UsedAsPropertyRangeTest {
 
 	private org.slf4j.Logger log;
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 	private UsedAsPropertyRange m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measures = new ArrayList<Measure<?,?>>();
+		measures = new ArrayList<Measure>();
 		m = new UsedAsPropertyRange();
 		measures.add(m);
 	}
@@ -26,10 +29,10 @@ class UsedAsPropertyRangeTest {
 	@Test
 	void propertyRangeStatementNQ() {
 		List<String> datatypes = Arrays.asList(
-				"http://www.w3.org/2001/XMLSchema#double",
-				"http://www.w3.org/2001/XMLSchema#int", 
-				"http://www.w3.org/2001/XMLSchema#float", 
-				"http://www.w3.org/2001/XMLSchema#dateTime"
+				XSDDouble.XSDdouble.getURI(),//"http://www.w3.org/2001/XMLSchema#double",
+				XSD.integer.getURI(),//"http://www.w3.org/2001/XMLSchema#int", 
+				XSDFloat.XSDfloat.getURI(),//"http://www.w3.org/2001/XMLSchema#float", 
+				XSD.dateTime.getURI()//"http://www.w3.org/2001/XMLSchema#dateTime"
 				);
 		
 		for (String type : datatypes) {

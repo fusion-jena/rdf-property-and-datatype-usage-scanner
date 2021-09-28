@@ -24,7 +24,7 @@ public class MeasureMain {
 	/**
 	 * Contains one class for each measurement that will be conducted
 	 */
-	private static List<Measure<?, ?>> measures;
+	private static List<Measure> measures;
 
 	private static String dataPath;
 
@@ -61,7 +61,7 @@ public class MeasureMain {
 	 * conducted
 	 */
 	private static void initaliseMeasureFunctions() {
-		measures = new ArrayList<Measure<?, ?>>();
+		measures = new ArrayList<Measure>();
 		measures.add(new CouldBeFloat());
 		measures.add(new CouldBeDouble());
 		measures.add(new CouldBeTemporal());
@@ -108,7 +108,7 @@ public class MeasureMain {
 		FileMeasure fileIterator = new FileMeasure(dataPath, measures, log);
 		fileIterator.startMeasurements();
 		// get the results
-		for (Measure<?, ?> me : measures) {
+		for (Measure me : measures) {
 			log.info(me.toString());
 		}
 	}

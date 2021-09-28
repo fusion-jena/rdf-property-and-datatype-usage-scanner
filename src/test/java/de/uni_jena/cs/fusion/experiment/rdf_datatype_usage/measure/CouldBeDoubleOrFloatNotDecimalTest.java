@@ -22,14 +22,14 @@ class CouldBeDoubleOrFloatNotDecimalTest {
 	List<String> validDouble = Arrays.asList("5E-1", "1250E-4", "0.0", "0.52886675", "10E2");
 	
 	private org.slf4j.Logger log;
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 	private CouldBeDoubleOrFloatNotDecimal m;
 
 
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measures = new ArrayList<Measure<?, ?>>();
+		measures = new ArrayList<Measure>();
 		m = new CouldBeDoubleOrFloatNotDecimal();
 		measures.add(m);
 	}
@@ -103,7 +103,11 @@ class CouldBeDoubleOrFloatNotDecimalTest {
 		for (String number: specialFloatingpointValues) {
 			String line = MeasureTestUtil.createStringLine(number);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}

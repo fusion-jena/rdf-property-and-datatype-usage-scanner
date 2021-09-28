@@ -11,20 +11,19 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.GlobalNames;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.NumberUtil;
 
 public class ShouldBeDecimalTest {
 	
 	private org.slf4j.Logger log;
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 	private ShouldBeDecimal m;
 
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measures = new ArrayList<Measure<?, ?>>();
+		measures = new ArrayList<Measure>();
 		m = new ShouldBeDecimal();
 		measures.add(m);
 	}
@@ -63,8 +62,13 @@ public class ShouldBeDecimalTest {
 			String line = MeasureTestUtil.createDoubleLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
 			//only double entries
-			assertFalse(m.getOccurs().get(MeasureTestUtil.predicateName).containsKey(GlobalNames.FLOAT)); 
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName).get(GlobalNames.DOUBLE));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.doubleIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.doubleIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.doubleIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.doubleIRI).get(MeasureTestUtil.predicateName));
+			assertTrue(m.getOccurs().get(MeasureTestUtil.doubleIRI).containsKey(MeasureTestUtil.predicateName)); 
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.doubleIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -160,8 +164,13 @@ public class ShouldBeDecimalTest {
 		for (String value : invalidFloatValues) {
 			String line = MeasureTestUtil.createFloatLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertFalse(m.getOccurs().get(MeasureTestUtil.predicateName).containsKey(GlobalNames.DOUBLE));
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName).get(GlobalNames.FLOAT));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.floatIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.floatIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.floatIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.floatIRI).get(MeasureTestUtil.predicateName));
+			assertTrue(m.getOccurs().get(MeasureTestUtil.floatIRI).containsKey(MeasureTestUtil.predicateName)); 
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.floatIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}

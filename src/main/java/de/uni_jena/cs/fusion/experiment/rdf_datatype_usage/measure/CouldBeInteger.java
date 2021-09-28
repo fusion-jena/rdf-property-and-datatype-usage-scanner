@@ -5,9 +5,14 @@ import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;
 import org.apache.jena.rdf.model.Literal;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUtil;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.MapInsertUtil;
 
-public class CouldBeInteger extends MeasureOnObjectWithDatatypeString {
+/**
+ * Using String but Integer should be used
+ *
+ * Issue #17
+ */
+public class CouldBeInteger extends MeasureOnObject {
 
 	@Override
 	public void measure(String propertyName, Literal literal) {
@@ -20,7 +25,7 @@ public class CouldBeInteger extends MeasureOnObjectWithDatatypeString {
 		String lexicalValue = literal.getLexicalForm();
 
 		if (StringUtil.isValidInteger(lexicalValue)) {
-			HashMapInsertUtil.insertElement(propertyName, super.occurs);
+			MapInsertUtil.insertElement(literal.getDatatypeURI(), propertyName, super.occurs);
 		}
 
 	}

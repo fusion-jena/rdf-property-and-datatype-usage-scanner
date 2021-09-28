@@ -15,7 +15,7 @@ public class FileMeasure {
 	/**
 	 * List of all measures performed on the file
 	 */
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 
 	private String dataPath;
 
@@ -61,7 +61,7 @@ public class FileMeasure {
 	 * @param measures which measures should be conducted
 	 * @param log          logging information
 	 */
-	public FileMeasure(String dataPath, List<Measure<?, ?>> measures, org.slf4j.Logger log) {
+	public FileMeasure(String dataPath, List<Measure> measures, org.slf4j.Logger log) {
 		this.dataPath = dataPath;
 		this.log = log;
 		this.measures = measures;
@@ -108,7 +108,7 @@ public class FileMeasure {
 	 * @throws SQLException when an error occurs
 	 */
 	private void writeToErrorDatabaseTable() throws SQLException {
-		log.info("Start writing errors");
+		log.info("Start writing errors from file " + fileID);
 		HashMap<Long, String> errors = fileIter.getErrors();
 		for (Long line : errors.keySet()) {
 			String errorMsg = errors.get(line).replace("'", "''");
@@ -116,7 +116,7 @@ public class FileMeasure {
 					+ errorMsg + "')";
 			H2Util.executeAndUpdate(con, query);
 		}
-		log.info("Finished writing errors");
+		log.info("Finished writing errors from file " + fileID);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class FileMeasure {
 	 */
 	private void writeToResultDatabaseTable() throws SQLException {
 		log.info("Start writing results from file " + fileID);
-		for (Measure<?, ?> measure : measures) {
+		for (Measure measure : measures) {
 			List<String> queries = measure.writeToDatabase();
 			String queryBeginning = "INSERT into " + H2Util.RESULT_DATABASE_TABLE + " values (" + fileID + ", ";
 			String queryEnd = ")";
@@ -155,7 +155,7 @@ public class FileMeasure {
 	 * Configure, which measurements will be conducted
 	 */
 	private void initaliseMeasures() {
-		measures = new ArrayList<Measure<?, ?>>();
+		measures = new ArrayList<Measure>();
 		measures.add(new CouldBeFloat());
 		measures.add(new CouldBeDouble());
 		measures.add(new CouldBeTemporal());

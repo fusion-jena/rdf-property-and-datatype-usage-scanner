@@ -25,13 +25,13 @@ class CouldBeIntegerTest {
 	private List<String> invalidEntries = Arrays.asList("as235", "9/345,23", "kjldsfjk", "NaN", "+INF", "-INF");
 
 	private org.slf4j.Logger log;
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 	private CouldBeInteger m;
 
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measures = new ArrayList<Measure<?, ?>>();
+		measures = new ArrayList<Measure>();
 		m = new CouldBeInteger();
 		measures.add(m);
 	}
@@ -77,7 +77,11 @@ class CouldBeIntegerTest {
 		for (String entry : validPositiveIntegers) {
 			String line = MeasureTestUtil.createStringLine(entry);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -87,7 +91,11 @@ class CouldBeIntegerTest {
 		for (String entry : validNegativeIntegers) {
 			String line = MeasureTestUtil.createStringLine(entry);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}

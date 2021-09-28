@@ -1,20 +1,30 @@
 package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 
 /**
  * Abstraction of all measurement classes
- * 
- * @param K - property name
- * @param V - can be a HashMap for data type and value or a single value
  */
-public abstract class Measure<K, V> {
+public abstract class Measure {
 
-	protected HashMap<K, V> occurs;
+	/**
+	 * Map for the results
+	 * key: datatype
+	 * value : map with 
+	 * 	key: property
+	 * 	value: how often the combination occured
+	 */
+	protected Map<String, Map<String, Long>> occurs;
+
+	public Measure() {
+		occurs = new HashMap<String, Map<String, Long>>();
+	}
 
 	/**
 	 * Conduct the measurement on a single statement
@@ -25,10 +35,6 @@ public abstract class Measure<K, V> {
 	 */
 	public abstract void measure(RDFNode subject, Property property, RDFNode object);
 
-	public HashMap<K, V> getOccurs() {
-		return occurs;
-	}
-	
 	/**
 	 * Creates a list of Strings that can be used to fill a database
 	 * 
@@ -38,10 +44,35 @@ public abstract class Measure<K, V> {
 	 * <p>
 	 * 'INSERT into <NAME OF DATABASE> values ( <FILE_IDENTIFIER>, ' and ')'
 	 * </p>
-	 * @return a list of String statements 
+	 * 
+	 * @return a list of String statements
 	 */
-	public abstract List<String> writeToDatabase();
+	public List<String> writeToDatabase(){
+		List<String> values = new ArrayList<String>();
+		for (String datatype : occurs.keySet()) {
+			Map<String, Long> propertyDatatypeMap = occurs.get(datatype);
+			for (String property : propertyDatatypeMap.keySet()) {
+				values.add("'" + property + "', '" + this.getClass().getSimpleName() + "', '" + datatype + "', "
+						+ propertyDatatypeMap.get(property));
+			}
+		}
+		return values;
+	}
 
 	@Override
-	public abstract String toString();
+	public String toString() {
+		String s = "\n" + this.getClass().getSimpleName() + ":";
+		for (String datatype : occurs.keySet()) {
+			Map<String, Long> propertyDatatypeMap = occurs.get(datatype);
+			for (String property : propertyDatatypeMap.keySet()) {
+				s += "\n\t" + datatype + "\t" + property + "\t" + propertyDatatypeMap.get(property);
+			}
+		}
+		return s;
+	}
+	
+	public Map<String, Map<String, Long>> getOccurs() {
+		return occurs;
+	}
+
 }

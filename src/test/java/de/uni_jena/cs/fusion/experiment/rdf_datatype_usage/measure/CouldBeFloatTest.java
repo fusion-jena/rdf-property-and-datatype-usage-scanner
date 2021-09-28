@@ -26,13 +26,13 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 	
 	
 	private org.slf4j.Logger log;
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 	private CouldBeFloat m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measures = new ArrayList<Measure<?, ?>>();
+		measures = new ArrayList<Measure>();
 		m = new CouldBeFloat();
 		measures.add(m);
 	}
@@ -84,7 +84,11 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 		for (String value : validFloatingpointNumber) {
 			String line = MeasureTestUtil.createStringLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -94,7 +98,11 @@ private List<String> specialValues = Arrays.asList("NaN", "Infinity", "-Infinity
 		for (String value : specialValues) {
 			String line = MeasureTestUtil.createStringLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}

@@ -121,6 +121,7 @@ public abstract class ModelUtil {
 		List<Statement> allStatements = new ArrayList<Statement>();
 
 		Dataset dataSet = DatasetFactory.create();
+		
 		// Try to parse the current line into the dataset
 		RDFParser.fromString(line).lang(Lang.NQUADS).errorHandler(ErrorHandlerFactory.errorHandlerStrictNoLogging)
 				.parse(dataSet);
@@ -142,7 +143,7 @@ public abstract class ModelUtil {
 	 * @param allStatements Model whose statements will be examined
 	 * @param log           Logging of information
 	 */
-	public static void conductMeasurements(List<Measure<?, ?>> measurements, FileIterator allStatements,
+	public static void conductMeasurements(List<Measure> measurements, FileIterator allStatements,
 			org.slf4j.Logger log) {
 		//Iterate over all statements of the file
 		Iterator<Statement> iter = allStatements.iterator();
@@ -154,7 +155,7 @@ public abstract class ModelUtil {
 			RDFNode object = stmt.getObject();
 
 			// Conduct all measurements on the current statement
-			for (Measure<?, ?> measurement : measurements) {
+			for (Measure measurement : measurements) {
 				measurement.measure(subject, property, object);
 			}
 		}

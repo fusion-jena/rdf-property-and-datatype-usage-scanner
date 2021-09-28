@@ -6,12 +6,9 @@ import org.apache.jena.rdf.model.RDFNode;
 
 /**
  * Abstraction of all measurement classes who examine the object of a statement
- *
- * @param <K> - property name
- * @param <V> - can be a HashMap for data type and value or a single value
  */
 
-public abstract class MeasureOnObject<K, V> extends Measure<K, V> {
+public abstract class MeasureOnObject extends Measure {
 
 	/**
 	 * Conduct the measurement on the literal of the statement 
@@ -28,9 +25,5 @@ public abstract class MeasureOnObject<K, V> extends Measure<K, V> {
 			measure(property.getURI(), object.asLiteral());		
 		}
 	}
-	
-	@Override
-	public abstract String toString();
-
 
 }

@@ -12,16 +12,13 @@ import org.junit.jupiter.api.Test;
 class UsageCountTest {
 	
 	private org.slf4j.Logger log;
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 	private UsageCount m;
-	
-	private String doubleLink = "http://www.w3.org/2001/XMLSchema#double";
-	private String floatLink = "http://www.w3.org/2001/XMLSchema#float";
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measures = new ArrayList<Measure<?,?>>();
+		measures = new ArrayList<Measure>();
 		m = new UsageCount();
 		measures.add(m);
 	}
@@ -35,7 +32,10 @@ class UsageCountTest {
 			MeasureTestUtil.conductMeasurement(measures, log, line);
 		}
 		assertEquals(1, m.getOccurs().keySet().size());
-		assertEquals(values.size(), m.getOccurs().get(MeasureTestUtil.predicateName).get(doubleLink));
+		assertTrue(m.getOccurs().containsKey(MeasureTestUtil.doubleIRI));
+		assertEquals(1, m.getOccurs().get(MeasureTestUtil.doubleIRI).keySet().size());
+		assertTrue(m.getOccurs().get(MeasureTestUtil.doubleIRI).containsKey(MeasureTestUtil.predicateName));
+		assertEquals(values.size(), m.getOccurs().get(MeasureTestUtil.doubleIRI).get(MeasureTestUtil.predicateName));
 	}
 	
 	@Test
@@ -47,52 +47,87 @@ class UsageCountTest {
 		MeasureTestUtil.conductMeasurement(measures, log, line);
 		line = MeasureTestUtil.createStringLine("bbbb");
 		MeasureTestUtil.conductMeasurement(measures, log, line);
-		line = MeasureTestUtil.createPropertyRangeLine(doubleLink);
+		line = MeasureTestUtil.createPropertyRangeLine(MeasureTestUtil.doubleIRI);
 		MeasureTestUtil.conductMeasurement(measures, log, line);
-		assertEquals(1, m.getOccurs().keySet().size());
-		assertEquals(3, m.getOccurs().get(MeasureTestUtil.predicateName).keySet().size());
+		
+		assertEquals(3, m.getOccurs().keySet().size());
+		
+		assertTrue(m.getOccurs().containsKey(MeasureTestUtil.doubleIRI));
+		assertEquals(1, m.getOccurs().get(MeasureTestUtil.doubleIRI).keySet().size());
+		assertTrue(m.getOccurs().get(MeasureTestUtil.doubleIRI).containsKey(MeasureTestUtil.predicateName));
+		assertEquals(1, m.getOccurs().get(MeasureTestUtil.doubleIRI).get(MeasureTestUtil.predicateName));
+		
+		assertTrue(m.getOccurs().containsKey(MeasureTestUtil.floatIRI));
+		assertEquals(1, m.getOccurs().get(MeasureTestUtil.floatIRI).keySet().size());
+		assertTrue(m.getOccurs().get(MeasureTestUtil.floatIRI).containsKey(MeasureTestUtil.predicateName));
+		assertEquals(1, m.getOccurs().get(MeasureTestUtil.floatIRI).get(MeasureTestUtil.predicateName));
+		
+		assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+		assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+		assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+		assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
+		
 	}
 	
 	@Test
 	void multiplePredicatsOneDatatype() {
 		String line;
-		line = "<test:subject> <predicate_1> \"" + 20.5 + "\"^^" + MeasureTestUtil.floatIRI + " <test:graph>.";
+		line = "<test:subject> <predicate_1> \"" + 20.5 + "\"^^<" + MeasureTestUtil.floatIRI + "> <test:graph>.";
 		MeasureTestUtil.conductMeasurement(measures, log, line);
-		line = "<test:subject> <predicate_1> \"" + 788.0767 + "\"^^" + MeasureTestUtil.floatIRI + " <test:graph>.";
+		line = "<test:subject> <predicate_1> \"" + 788.0767 + "\"^^<" + MeasureTestUtil.floatIRI + "> <test:graph>.";
 		MeasureTestUtil.conductMeasurement(measures, log, line);
-		line = "<test:subject> <predicate_1> \"" + 666.666 + "\"^^" + MeasureTestUtil.floatIRI + " <test:graph>.";
-		MeasureTestUtil.conductMeasurement(measures, log, line);
-		
-		line = "<test:subject> <predicate_2> \"" + 323434 + "\"^^" + MeasureTestUtil.floatIRI + " <test:graph>.";
-		MeasureTestUtil.conductMeasurement(measures, log, line);
-		line = "<test:subject> <predicate_2> \"" + 9999 + "\"^^" + MeasureTestUtil.floatIRI + " <test:graph>.";
+		line = "<test:subject> <predicate_1> \"" + 666.666 + "\"^^<" + MeasureTestUtil.floatIRI + "> <test:graph>.";
 		MeasureTestUtil.conductMeasurement(measures, log, line);
 		
-		assertEquals(2, m.getOccurs().keySet().size());
-		assertEquals(1, m.getOccurs().get("predicate_1").keySet().size());
-		assertEquals(3, m.getOccurs().get("predicate_1").get(floatLink));
-		assertEquals(1, m.getOccurs().get("predicate_2").keySet().size());
-		assertEquals(2, m.getOccurs().get("predicate_2").get(floatLink));
+		line = "<test:subject> <predicate_2> \"" + 323434 + "\"^^<" + MeasureTestUtil.floatIRI + "> <test:graph>.";
+		MeasureTestUtil.conductMeasurement(measures, log, line);
+		line = "<test:subject> <predicate_2> \"" + 9999 + "\"^^<" + MeasureTestUtil.floatIRI + "> <test:graph>.";
+		MeasureTestUtil.conductMeasurement(measures, log, line);
+		
+		assertEquals(1, m.getOccurs().keySet().size());
+		assertTrue(m.getOccurs().containsKey(MeasureTestUtil.floatIRI));
+		assertEquals(2, m.getOccurs().get(MeasureTestUtil.floatIRI).keySet().size());
+		assertTrue(m.getOccurs().get(MeasureTestUtil.floatIRI).containsKey("predicate_1"));
+		assertEquals(3, m.getOccurs().get(MeasureTestUtil.floatIRI).get("predicate_1"));
+		assertTrue(m.getOccurs().get(MeasureTestUtil.floatIRI).containsKey("predicate_2"));
+		assertEquals(2, m.getOccurs().get(MeasureTestUtil.floatIRI).get("predicate_2"));
 	}
 	
 	@Test
 	void multiplePredicatesMultipleDatatypes() {
 		String line;
-		line = "<test:subject> <predicate_1> \"" + 20.15 + "\"^^" + MeasureTestUtil.floatIRI + " <test:graph>.";
+		line = "<test:subject> <predicate_1> \"" + 20.15 + "\"^^<" + MeasureTestUtil.floatIRI + "> <test:graph>.";
 		MeasureTestUtil.conductMeasurement(measures, log, line);
-		line = "<test:subject> <predicate_1> \"" + 78.80767 + "\"^^" + MeasureTestUtil.doubleIRI + " <test:graph>.";
+		line = "<test:subject> <predicate_1> \"" + 78.80767 + "\"^^<" + MeasureTestUtil.doubleIRI + "> <test:graph>.";
 		MeasureTestUtil.conductMeasurement(measures, log, line);
 		line = "<test:subject> <predicate_1> \"" + "fdsowenxkj jdsoixjwer" + "\"" + " <test:graph>.";
 		MeasureTestUtil.conductMeasurement(measures, log, line);
 		
-		line = "<test:subject> <predicate_2> \"" + 3.14159 + "\"^^" + MeasureTestUtil.floatIRI + " <test:graph>.";
+		line = "<test:subject> <predicate_2> \"" + 3.14159 + "\"^^<" + MeasureTestUtil.floatIRI + "> <test:graph>.";
 		MeasureTestUtil.conductMeasurement(measures, log, line);
 		line = "<test:subject> <predicate_2> \"" + "dswewr jsdf .,kjwer" + "\"" + " <test:graph>.";
 		MeasureTestUtil.conductMeasurement(measures, log, line);
 		
-		assertEquals(2, m.getOccurs().keySet().size());
-		assertEquals(3, m.getOccurs().get("predicate_1").keySet().size());
-		assertEquals(2, m.getOccurs().get("predicate_2").keySet().size());
+		assertEquals(3, m.getOccurs().keySet().size());
+		
+		assertTrue(m.getOccurs().containsKey(MeasureTestUtil.doubleIRI));
+		assertEquals(1 ,m.getOccurs().get(MeasureTestUtil.doubleIRI).keySet().size());
+		assertTrue(m.getOccurs().get(MeasureTestUtil.doubleIRI).containsKey("predicate_1"));
+		assertEquals(1 ,m.getOccurs().get(MeasureTestUtil.doubleIRI).get("predicate_1"));
+		
+		assertTrue(m.getOccurs().containsKey(MeasureTestUtil.floatIRI));
+		assertEquals(2 ,m.getOccurs().get(MeasureTestUtil.floatIRI).keySet().size());
+		assertTrue(m.getOccurs().get(MeasureTestUtil.floatIRI).containsKey("predicate_1"));
+		assertEquals(1 ,m.getOccurs().get(MeasureTestUtil.floatIRI).get("predicate_1"));
+		assertTrue(m.getOccurs().get(MeasureTestUtil.floatIRI).containsKey("predicate_2"));
+		assertEquals(1 ,m.getOccurs().get(MeasureTestUtil.floatIRI).get("predicate_2"));
+		
+		assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+		assertEquals(2 ,m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+		assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey("predicate_1"));
+		assertEquals(1 ,m.getOccurs().get(MeasureTestUtil.floatIRI).get("predicate_1"));
+		assertTrue(m.getOccurs().get(MeasureTestUtil.floatIRI).containsKey("predicate_2"));
+		assertEquals(1 ,m.getOccurs().get(MeasureTestUtil.floatIRI).get("predicate_2"));
 	}
 
 

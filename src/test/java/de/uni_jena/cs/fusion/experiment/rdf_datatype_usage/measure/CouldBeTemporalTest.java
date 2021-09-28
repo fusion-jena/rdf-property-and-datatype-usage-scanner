@@ -14,14 +14,14 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 class CouldBeTemporalTest {
 
 	private org.slf4j.Logger log;
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 	private CouldBeTemporal m;
 
 
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measures = new ArrayList<Measure<?, ?>>();
+		measures = new ArrayList<Measure>();
 		m = new CouldBeTemporal();
 		measures.add(m);
 	}
@@ -66,7 +66,11 @@ class CouldBeTemporalTest {
 		for (String date : validDateTimesWithoutOffset) {
 			String line = MeasureTestUtil.createStringLine(date);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(m.getOccurs().get(MeasureTestUtil.predicateName), 1);
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -77,7 +81,6 @@ class CouldBeTemporalTest {
 			String line = MeasureTestUtil.createStringLine(date);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().keySet().isEmpty());
-			m.getOccurs().clear();
 		}
 	}
 
@@ -115,7 +118,11 @@ class CouldBeTemporalTest {
 		for (String date : validDateTimeStampsWithOffset) {
 			String line = MeasureTestUtil.createStringLine(date);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(m.getOccurs().get(MeasureTestUtil.predicateName), 1);
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -200,7 +207,11 @@ class CouldBeTemporalTest {
 		for (String date : validDatesWithoutOffset) {
 			String line = MeasureTestUtil.createStringLine(date);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -210,7 +221,11 @@ class CouldBeTemporalTest {
 		for (String date : validDatesWithOffset) {
 			String line = MeasureTestUtil.createStringLine(date);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -301,7 +316,11 @@ class CouldBeTemporalTest {
 		for(String time : validTimesWithoutOffset) {
 			String line = MeasureTestUtil.createStringLine(time);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -310,7 +329,11 @@ class CouldBeTemporalTest {
 		for(String time : validTimesWithOffset) {
 			String line = MeasureTestUtil.createStringLine(time);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}

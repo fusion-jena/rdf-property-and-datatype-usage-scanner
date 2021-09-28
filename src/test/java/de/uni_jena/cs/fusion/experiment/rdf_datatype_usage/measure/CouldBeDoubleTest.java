@@ -23,13 +23,13 @@ public class CouldBeDoubleTest {
 	private List<String> invalidFloatingpointNumber = Arrays.asList("-0.1", "2e-1", "0.33333333", "-909E-2", "3.14159e-5", "10e-12");
 	
 	private org.slf4j.Logger log;
-	private List<Measure<?, ?>> measures;
+	private List<Measure> measures;
 	private CouldBeDouble m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
-		measures = new ArrayList<Measure<?, ?>>();
+		measures = new ArrayList<Measure>();
 		m = new CouldBeDouble();
 		measures.add(m);
 	}
@@ -74,7 +74,11 @@ public class CouldBeDoubleTest {
 		for (String value : validFloatingpointNumber) {
 			String line = MeasureTestUtil.createStringLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
@@ -84,7 +88,11 @@ public class CouldBeDoubleTest {
 		for (String value : specialValues) {
 			String line = MeasureTestUtil.createStringLine(value);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().keySet().size());
+			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.stringIRI));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).keySet().size());
+			assertTrue(m.getOccurs().get(MeasureTestUtil.stringIRI).containsKey(MeasureTestUtil.predicateName));
+			assertEquals(1, m.getOccurs().get(MeasureTestUtil.stringIRI).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}

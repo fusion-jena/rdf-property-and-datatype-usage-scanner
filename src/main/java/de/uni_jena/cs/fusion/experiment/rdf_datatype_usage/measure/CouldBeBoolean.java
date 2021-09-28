@@ -5,7 +5,7 @@ import org.apache.jena.datatypes.xsd.impl.XSDBaseStringType;
 import org.apache.jena.rdf.model.Literal;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUtil;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.MapInsertUtil;
 
 
 /**
@@ -13,7 +13,7 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.HashMapInsertUt
  *
  * Issue #16
  */
-public class CouldBeBoolean extends MeasureOnObjectWithDatatypeString {
+public class CouldBeBoolean extends MeasureOnObject {
 
 	@Override
 	public void measure(String propertyName, Literal literal) {
@@ -26,7 +26,7 @@ public class CouldBeBoolean extends MeasureOnObjectWithDatatypeString {
 		String lexicalValue = literal.getLexicalForm();
 
 		if (StringUtil.isValidBoolean(lexicalValue)) {
-			HashMapInsertUtil.insertElement(propertyName, super.occurs);
+			MapInsertUtil.insertElement(literal.getDatatypeURI(), propertyName, super.occurs);
 		}
 	}
 
