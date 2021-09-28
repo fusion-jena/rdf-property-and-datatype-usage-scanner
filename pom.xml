@@ -6,6 +6,7 @@
 	<groupId>de.uni_jena.cs.fusion</groupId>
 	<artifactId>experiment.rdf-datatype-usage</artifactId>
 	<version>1.0.0</version>
+	<packaging>jar</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,6 +23,63 @@
 				<configuration>
 					<release>11</release>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>build-a</id>
+						<configuration>
+							<archive>
+								<manifest>
+									<!-- <addClasspath>true</addClasspath>-->
+									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>Measure</finalName>
+						</configuration>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>build-b</id>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2CreateDatabase</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>CreateDatabase</finalName>
+						</configuration>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>default-jar</id>
+						<phase>none</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -61,4 +119,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+	
 </project>

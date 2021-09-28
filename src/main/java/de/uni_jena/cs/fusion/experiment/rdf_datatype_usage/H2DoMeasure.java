@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import org.apache.jena.query.ARQ;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.sys.JenaSystem;
 import org.apache.log4j.PropertyConfigurator;
 import org.h2.tools.Server;
 
@@ -29,6 +32,7 @@ public class H2DoMeasure extends Thread {
 
 	public static void main(String[] args) {
 		numThreads = 8;
+		ARQ.init();
 		latch = new CountDownLatch(numThreads);
 		System.setProperty("fName", StringUtil.createStorageFile("log"));
 
@@ -60,6 +64,10 @@ public class H2DoMeasure extends Thread {
 			end = System.currentTimeMillis();
 		} catch (InterruptedException e) {
 			log.error(e.getMessage());
+		} catch (Exception e) {
+			log.error("Unexpected Error occured:");
+			log.error(e.getMessage());	
+			System.exit(1);
 		}
 		server.stop();
 		log.info("Server stopped");

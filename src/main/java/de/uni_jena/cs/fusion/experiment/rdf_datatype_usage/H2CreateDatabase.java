@@ -65,7 +65,7 @@ public class H2CreateDatabase {
 	public static void main(String[] args) {
 		// TODO log name anpassen
 //		System.setProperty("fName", StringUtil.createStorageFile("log"));
-
+		
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		log = org.slf4j.LoggerFactory.getLogger("H2CreateDatabase");
 
