@@ -143,15 +143,10 @@ public class FileIterator implements Iterable<Statement> {
 					// if the line contains a statement -> while loop breaks off
 					gotNextLine = !statementsFromNextLine.isEmpty();
 				} catch (RiotException e) {
-					// In case of an error while parsing the line, log an error instead of adding
-					// the tuple to the model
-					// the error message must be updated, the line number is always 1 because the
-					// parser get's only one line to parse
-					log.warn(e.getMessage().replace("line: 1", "line: " + numLines));
-					// add the current line to the error hash map
+					// In case of an error while parsing the line, 
+					// add the current line and its error message to the error hash map
 					// remove the position information from the error message
 					errors.put(numLines, e.getMessage().replaceFirst("\\[line: 1, col: \\d*\\s*\\]\\s*", ""));
-					// TODO soll die "Spalte" mit ausgegeben werden?
 				}
 				// update the line that will be parsed next
 				nextLine = reader.readLine();
