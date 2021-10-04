@@ -122,3 +122,6 @@ buildNumber.properties
 
 #Dateien mit Links
 *.list
+
+#Exportierte Ergebnisse
+*.csv

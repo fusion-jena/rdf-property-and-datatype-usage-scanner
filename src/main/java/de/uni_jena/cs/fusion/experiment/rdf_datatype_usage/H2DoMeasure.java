@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.jena.query.ARQ;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.sys.JenaSystem;
 import org.apache.log4j.PropertyConfigurator;
 import org.h2.tools.Server;
 

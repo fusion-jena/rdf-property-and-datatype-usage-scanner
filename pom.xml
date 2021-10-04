@@ -68,6 +68,25 @@
 							<goal>single</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>build-c</id>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2CreateCSVFiles</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>ExportDatabaseToCSV</finalName>
+						</configuration>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
