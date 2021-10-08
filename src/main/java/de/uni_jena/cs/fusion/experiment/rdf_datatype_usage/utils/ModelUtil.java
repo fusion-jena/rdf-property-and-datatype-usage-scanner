@@ -22,94 +22,35 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.Measure;
  * Functions for different operations (parsing, analysing) a model
  */
 public abstract class ModelUtil {
-	
+
 	/**
-	 * Creates an iterator over the statements of the individual lines of the document 
+	 * Creates an iterator over the statements of the individual lines of the
+	 * document
 	 * 
 	 * @param urlString path to the document
-	 * @param log for logging
+	 * @param log       for logging
 	 * 
 	 * @return an iterator over the statements of the file
 	 */
 	public static FileIterator parseURLlineByLine(String urlString, org.slf4j.Logger log) {
-		FileIterator result = null;
-		
+		FileIterator fileIter = null;
+
 		try {
-			result = new FileIterator(urlString, log);
+			fileIter = new FileIterator(urlString, log);
 		} catch (IOException e) {
 			log.error(e.getMessage());
 			System.exit(1);
 		}
-		
-		return result;
+
+		return fileIter;
 
 	}
-
-	/**
-	 * Generates a model by parsing the document line by line.
-	 * 
-	 * Every line of the document is parsed individually.
-	 * </p>
-	 * In case of an error while parsing a line, this line will be skipped. The
-	 * subsequent lines are still considered without any effect.
-	 * 
-	 * @param dataPath document that will be parsed
-	 * @param log      for logging errors that are detected while parsing the
-	 *                 document
-	 * @return List which contains all the statements of the document
-	 */
-	/*
-	public static List<Statement> parseLineByLine(String dataPath, org.slf4j.Logger log) {
-		// will contain the tuple in the end
-		
-		List<Statement> allStatements = new ArrayList<Statement>();
-		long lineNumber = 0;
-		long numError = 0;
-		long startParse = System.currentTimeMillis();
-		try {// to read the file
-			InputStream stream = new FileInputStream(dataPath);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			String line = reader.readLine();// get first line
-
-			log.debug("Starting to parse the file line by line");
-
-			while (line != null) {// iterate over the lines
-				lineNumber++;
-				try {
-					// Add all the statements from the current line
-					allStatements.addAll(createStatementsFromLine(line));
-				} catch (RiotException e) {
-					// In case of an error while parsing the line, log an error instead of adding
-					// the tuple to the model
-					// the error message must be updated, the line number is always 1 because the
-					// parser get's only one line to parse
-					log.warn(e.getMessage().replace("line: 1", "line: " + lineNumber));
-					numError++;
-				}
-				line = reader.readLine();// get next line
-			}
-			log.debug("File parsed");
-
-			reader.close();
-		} catch (FileNotFoundException e) {
-			log.error(e.getMessage());
-			System.exit(1);
-		} catch (IOException e) {
-			log.error(e.getMessage());
-			System.exit(1);
-		}
-		long endParse = System.currentTimeMillis();
-		log.info("Parsing line by line: " + (endParse - startParse) + " ms");
-		log.info("Number of lines in the document: " + lineNumber);
-		log.info("Number of lines with an error: " + numError);
-		return allStatements;
-	}
-	*/
 
 	/**
 	 * Returns the statement of a single line
 	 * 
-	 * Parse a String, create a model of the created data set and return the contained statement  
+	 * Parse a String, create a model of the created data set and return the
+	 * contained statement
 	 * <p>
 	 * 
 	 * @param line String to parse
@@ -121,7 +62,7 @@ public abstract class ModelUtil {
 		List<Statement> allStatements = new ArrayList<Statement>();
 
 		Dataset dataSet = DatasetFactory.create();
-		
+
 		// Try to parse the current line into the dataset
 		RDFParser.fromString(line).lang(Lang.NQUADS).errorHandler(ErrorHandlerFactory.errorHandlerStrictNoLogging)
 				.parse(dataSet);
@@ -145,7 +86,7 @@ public abstract class ModelUtil {
 	 */
 	public static void conductMeasurements(List<Measure> measurements, FileIterator allStatements,
 			org.slf4j.Logger log) {
-		//Iterate over all statements of the file
+		// Iterate over all statements of the file
 		Iterator<Statement> iter = allStatements.iterator();
 		while (iter.hasNext()) {
 			Statement stmt = iter.next();

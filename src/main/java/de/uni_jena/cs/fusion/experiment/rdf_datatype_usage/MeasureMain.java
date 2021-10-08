@@ -17,7 +17,6 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.Measure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.ShouldBeDecimal;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.UsageCount;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.UsedAsPropertyRange;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 public class MeasureMain {
 
@@ -49,9 +48,6 @@ public class MeasureMain {
 			dataPath = examplePaths();
 		}
 		
-		//TODO log austauschen?
-		System.setProperty("fName", StringUtil.createStorageFile("log"));
-		
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		log = org.slf4j.LoggerFactory.getLogger(dataPath);
 	}
@@ -74,7 +70,7 @@ public class MeasureMain {
 	}
 
 	/**
-	 * Easy switch of examplefiles TODO entfernen
+	 * Easy switch of examplefiles
 	 * 
 	 * @return String of the filename that will be examined
 	 */
@@ -83,7 +79,8 @@ public class MeasureMain {
 //		dataPath += "ccrdf.html-rdfa.sample.nq";
 //		dataPath += "dpef.html-rdfa.nq-00000";
 //		dataPath += "test_nq.nq";
-		dataPath += "customExample.nq";
+//		dataPath += "customExample.nq";
+		dataPath  += "dpef.html-embedded-jsonld.nq-00030";
 //		dataPath += "long_nq.nq";
 		return dataPath;
 	}

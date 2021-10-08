@@ -1,8 +1,6 @@
 package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -253,48 +251,6 @@ public abstract class StringUtil {
 				);
 		Matcher matcher = pattern.matcher(s);
 		return matcher.find();
-	}
-
-	/**
-	 * Check if the parameter can be stored as float, but not as decimal
-	 * 
-	 * Check if the parameter can be interpreted as float
-	 * </p>
-	 * NaN, + and - infinity can't be represented by decimal
-	 * </p>
-	 * -> test if the parameter is one of them
-	 * 
-	 * 
-	 * @param s Literal that is checked
-	 * @return true if the parameter is Nan, + infinity, - infinity and can be
-	 *         stored as a float, else false
-	 */
-	/*
-	 * TODO weg? -> double Methode ausreichend, was bei Float NaN, +/- inf ist, ist
-	 * auch bei double einer dieser Werte
-	 */
-	/*
-	 * public static boolean isValidFloatAndInvalidDecimal(String s) { /*Float
-	 * floatValue; try { // interpret String as Float floatValue =
-	 * Float.parseFloat(s); } catch (NumberFormatException e) { return false; } //
-	 * the accuracy of float is not of interest at this point // NaN and +/-
-	 * infinity can't be represented by decimal return floatValue.isInfinite() ||
-	 * floatValue.isNaN(); return isValidDoubleOrFloatAndInvalidDecimal(s); }
-	 */
-
-	/**
-	 * Creates a string containing the current date and time combined with the file
-	 * name
-	 * 
-	 * @param fileName last substring of the generated file name
-	 * @return string combined of current date time and the file name
-	 */
-	public static String createStorageFile(String fileName) {
-		Date date = new Date();
-		SimpleDateFormat dayFormatter = new SimpleDateFormat("dd-MM-yyyy");
-		SimpleDateFormat timeFormatter = new SimpleDateFormat("HH-mm-ss");
-//		return dayFormatter.format(date) + "T" + timeFormatter.format(date) + "_" + fileName;
-		return "_" + fileName;
 	}
 
 }

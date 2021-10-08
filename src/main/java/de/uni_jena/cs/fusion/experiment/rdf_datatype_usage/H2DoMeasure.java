@@ -17,7 +17,6 @@ import org.h2.tools.Server;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.exceptions.NoItemException;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.FileMeasure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 public class H2DoMeasure extends Thread {
 
@@ -32,7 +31,6 @@ public class H2DoMeasure extends Thread {
 		numThreads = 8;
 		ARQ.init();
 		latch = new CountDownLatch(numThreads);
-		System.setProperty("fName", StringUtil.createStorageFile("log"));
 
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		log = org.slf4j.LoggerFactory.getLogger("H2DoMeasurements");
@@ -44,7 +42,7 @@ public class H2DoMeasure extends Thread {
 		try {
 			Class.forName(H2Util.JDBC_DRIVER);
 			server = Server.createTcpServer().start();
-			log.info("Starting server");
+			log.info(new Timestamp(System.currentTimeMillis()) + " - Starting server");
 			server.start();
 		} catch (ClassNotFoundException | SQLException e) {
 			log.error(e.getMessage());
@@ -62,13 +60,13 @@ public class H2DoMeasure extends Thread {
 			end = System.currentTimeMillis();
 		} catch (InterruptedException e) {
 			log.error(e.getMessage());
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			log.error("Unexpected Error occured:");
-			log.error(e.getMessage());	
+			log.error(t.getMessage());	
 			System.exit(1);
 		}
 		server.stop();
-		log.info("Server stopped");
+		log.info(new Timestamp(System.currentTimeMillis()) + " - Server stopped");
 		duration = end - start;
 		log.warn(new Timestamp(System.currentTimeMillis()) + " used " + numThreads + " threads, took " + duration +"ms to finnish");
 	}
@@ -127,11 +125,11 @@ public class H2DoMeasure extends Thread {
 				fileMeasure = getNextFileMeasure(con);
 			}
 		} catch (SQLException e) {
-			log.info("Error when working on file " + identifier);
+			log.info(new Timestamp(System.currentTimeMillis()) + " - Error when working on file " + identifier);
 			// restart thread
 			this.run();
 		} catch (NoItemException e) {
-			log.error("Cannot get next file:" + e.getMessage());			
+			log.error(new Timestamp(System.currentTimeMillis()) + " - Cannot get next file:" + e.getMessage());			
 			// restart thread
 			this.run();
 		}

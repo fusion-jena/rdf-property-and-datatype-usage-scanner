@@ -13,7 +13,6 @@ import org.h2.tools.Csv;
 import org.h2.tools.Server;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 /**
  * After the measure to export the database as csv files
@@ -39,8 +38,6 @@ public class H2CreateCSVFiles {
 	private static String fileExtension = ".csv";
 
 	public static void main(String[] args) {
-		System.setProperty("fName", StringUtil.createStorageFile("log"));
-
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		log = org.slf4j.LoggerFactory.getLogger("H2CreateCSVFiles");
 
