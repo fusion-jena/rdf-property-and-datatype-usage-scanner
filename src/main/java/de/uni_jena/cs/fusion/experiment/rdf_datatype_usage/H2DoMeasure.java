@@ -28,7 +28,7 @@ public class H2DoMeasure extends Thread {
 	private static int numThreads;
 
 	public static void main(String[] args) {
-		numThreads = 3;
+		numThreads = 8;
 		ARQ.init();
 		latch = new CountDownLatch(numThreads);
 
