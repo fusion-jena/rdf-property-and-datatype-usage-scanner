@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.FileIterator;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
@@ -109,12 +110,15 @@ public class FileMeasure {
 	 */
 	private void writeToErrorDatabaseTable() throws SQLException {
 		log.info("Start writing errors from file " + fileID);
-		HashMap<Long, String> errors = fileIter.getErrors();
+		Map<Long, List<String>> errors = fileIter.getErrors();
 		for (Long line : errors.keySet()) {
-			String errorMsg = errors.get(line).replace("'", "''");
-			String query = "INSERT into " + H2Util.ERROR_DATABASE_TABLE + " values (" + fileID + ", " + line + ", '"
-					+ errorMsg + "')";
-			H2Util.executeAndUpdate(con, query);
+			List<String> messages = errors.get(line);
+			for(String errorMsg : messages) {
+				errorMsg = errorMsg.replace("'", "''");
+				String query = "INSERT into " + H2Util.ERROR_DATABASE_TABLE + " values (" + fileID + ", " + line + ", '"
+						+ errorMsg + "')";
+				H2Util.executeAndUpdate(con, query);
+			}
 		}
 		log.info("Finished writing errors from file " + fileID);
 	}

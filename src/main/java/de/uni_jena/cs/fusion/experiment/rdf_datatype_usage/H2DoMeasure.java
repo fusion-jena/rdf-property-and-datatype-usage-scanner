@@ -28,7 +28,7 @@ public class H2DoMeasure extends Thread {
 	private static int numThreads;
 
 	public static void main(String[] args) {
-		numThreads = 8;
+		numThreads = 3;
 		ARQ.init();
 		latch = new CountDownLatch(numThreads);
 
@@ -69,6 +69,7 @@ public class H2DoMeasure extends Thread {
 		log.info(new Timestamp(System.currentTimeMillis()) + " - Server stopped");
 		duration = end - start;
 		log.warn(new Timestamp(System.currentTimeMillis()) + " used " + numThreads + " threads, took " + duration +"ms to finnish");
+		System.exit(0);
 	}
 	
 	private FileMeasure getNextFileMeasure (Connection con) throws NoItemException {
@@ -130,6 +131,11 @@ public class H2DoMeasure extends Thread {
 			this.run();
 		} catch (NoItemException e) {
 			log.error(new Timestamp(System.currentTimeMillis()) + " - Cannot get next file:" + e.getMessage());			
+			// restart thread
+			this.run();
+		}catch (Throwable t) {
+			log.error(new Timestamp(System.currentTimeMillis()) + " - Unexpected error occured on file " + identifier);
+			log.error(t.getMessage());
 			// restart thread
 			this.run();
 		}

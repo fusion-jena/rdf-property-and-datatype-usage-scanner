@@ -1,6 +1,8 @@
 package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class MapInsertUtil {
@@ -38,5 +40,14 @@ public abstract class MapInsertUtil {
 		} else {
 			insertElement(innerKey, innerMap);
 		}
+	}
+	
+	public static void appendElement(Map<Long, List<String>> map, long key, String value) {
+		List<String> list = map.get(key);
+		if(list == null) {
+			list = new ArrayList<String>();
+			map.put(key, list);
+		}
+		list.add(value);
 	}
 }

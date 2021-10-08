@@ -97,7 +97,11 @@ public abstract class ModelUtil {
 
 			// Conduct all measurements on the current statement
 			for (Measure measurement : measurements) {
-				measurement.measure(subject, property, object);
+				try {
+					measurement.measure(subject, property, object);
+				} catch (Throwable t) {
+					allStatements.addError(t.getMessage());
+				}
 			}
 		}
 

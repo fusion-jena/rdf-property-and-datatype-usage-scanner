@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.jena.rdf.model.Statement;
@@ -37,7 +38,7 @@ public class FileIterator implements Iterable<Statement> {
 	/**
 	 * key: line the error occurred; value: error message
 	 */
-	private HashMap<Long, String> errors;
+	private Map<Long, List<String>> errors;
 
 	private org.slf4j.Logger log;
 
@@ -52,7 +53,7 @@ public class FileIterator implements Iterable<Statement> {
 		this.log = log;
 		reader = createBufferedReader(url);
 		numLines = 0L;
-		errors = new HashMap<Long, String>();
+		errors = new HashMap<Long, List<String>>();
 	}
 
 	@Override
@@ -136,6 +137,7 @@ public class FileIterator implements Iterable<Statement> {
 			while (!gotNextLine && nextLine != null) {
 				// increment the total number of lines
 				numLines++;
+				
 				try {
 					// try to parse the statements from the next line
 					statementsFromNextLine = ModelUtil.createStatementsFromLine(nextLine);
@@ -146,13 +148,14 @@ public class FileIterator implements Iterable<Statement> {
 					// In case of an error while parsing the line, 
 					// add the current line and its error message to the error hash map
 					// remove the position information from the error message
-					errors.put(numLines, e.getMessage().replaceFirst("\\[line: 1, col: \\d*\\s*\\]\\s*", ""));
+					String message = e.getMessage().replaceFirst("\\[line: 1, col: \\d*\\s*\\]\\s*", "");
+					MapInsertUtil.appendElement(errors, numLines, message);
 				}
 				// update the line that will be parsed next
 				nextLine = reader.readLine();
 			}
 		}
-
+		
 		@Override
 		public boolean hasNext() {
 			// a next list of statement exists
@@ -163,7 +166,7 @@ public class FileIterator implements Iterable<Statement> {
 		@Override
 		public Statement next() {
 			//when the current statement list is empty, 
-			//update the content of current and next statemen
+			//update the content of current and next statement
 			while (statements.isEmpty()) {
 				try {
 					switchToNextLine();
@@ -175,9 +178,14 @@ public class FileIterator implements Iterable<Statement> {
 			//else return the first statement from the current statement list
 			return statements.remove(0);
 		}
-
+		
 	}
 
+	
+	public void addError(String message) {
+		MapInsertUtil.appendElement(errors, numLines, message);
+	}
+	
 	/**
 	 * Initalisation of {@link FileIterator.reader}
 	 * 
@@ -199,7 +207,7 @@ public class FileIterator implements Iterable<Statement> {
 		return numLines;
 	}
 
-	public HashMap<Long, String> getErrors() {
+	public Map<Long, List<String>> getErrors() {
 		return errors;
 	}
 }
