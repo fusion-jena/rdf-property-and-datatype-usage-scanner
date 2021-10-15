@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
@@ -47,17 +48,11 @@ public abstract class Measure {
 	 * 
 	 * @return a list of String statements
 	 */
-	public List<String> writeToDatabase(){
-		List<String> values = new ArrayList<String>();
-		for (String datatype : occurs.keySet()) {
-			//escape '
-			String datatypeInsert = datatype.replace("'", "''");
-			Map<String, Long> propertyDatatypeMap = occurs.get(datatype);
-			for (String property : propertyDatatypeMap.keySet()) {
-				//escape '
-				String propertyInsert = property.replace("'", "''");
-				values.add("'" + propertyInsert + "', '" + this.getClass().getSimpleName() + "', '" + datatypeInsert + "', "
-						+ propertyDatatypeMap.get(property));
+	public List<Object[]> writeToDatabase(){
+		List<Object[]> values = new ArrayList<Object[]>();
+		for (Entry<String, Map<String, Long>> datatype : occurs.entrySet()) {
+			for (Entry<String, Long> property : datatype.getValue().entrySet()) {
+				values.add(new Object[] {property.getKey(), this.getClass().getSimpleName(), datatype.getKey(), property.getValue()});
 			}
 		}
 		return values;
