@@ -50,9 +50,13 @@ public abstract class Measure {
 	public List<String> writeToDatabase(){
 		List<String> values = new ArrayList<String>();
 		for (String datatype : occurs.keySet()) {
+			//escape '
+			String datatypeInsert = datatype.replace("'", "''");
 			Map<String, Long> propertyDatatypeMap = occurs.get(datatype);
 			for (String property : propertyDatatypeMap.keySet()) {
-				values.add("'" + property + "', '" + this.getClass().getSimpleName() + "', '" + datatype + "', "
+				//escape '
+				String propertyInsert = property.replace("'", "''");
+				values.add("'" + propertyInsert + "', '" + this.getClass().getSimpleName() + "', '" + datatypeInsert + "', "
 						+ propertyDatatypeMap.get(property));
 			}
 		}

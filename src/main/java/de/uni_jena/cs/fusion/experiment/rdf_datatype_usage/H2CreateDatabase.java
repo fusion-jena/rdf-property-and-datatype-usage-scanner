@@ -126,19 +126,19 @@ public class H2CreateDatabase {
 	 */
 	private static void createDatabaseTables(Connection con) throws SQLException {
 		log.info("Create table " + H2Util.CATEGORY_DATABASE_TABLE);
-		H2Util.executeAndUpdate(con, CREATE_CATEGORY_DATABASE_TABLE);
+		H2Util.executeQuery(con, CREATE_CATEGORY_DATABASE_TABLE);
 		log.info("Table " + H2Util.CATEGORY_DATABASE_TABLE + " created");
 
 		log.info("Create table " + H2Util.FILE_DATABASE_TABLE);
-		H2Util.executeAndUpdate(con, CREATE_FILE_DATABASE_TABLE);
+		H2Util.executeQuery(con, CREATE_FILE_DATABASE_TABLE);
 		log.info("Table " + H2Util.FILE_DATABASE_TABLE + " created");
 
 		log.info("Create table " + H2Util.RESULT_DATABASE_TABLE);
-		H2Util.executeAndUpdate(con, CREATE_RESULT_DATABSE_TABLE);
+		H2Util.executeQuery(con, CREATE_RESULT_DATABSE_TABLE);
 		log.info("Table " + H2Util.RESULT_DATABASE_TABLE + " created");
 
 		log.info("Create table " + H2Util.ERROR_DATABASE_TABLE);
-		H2Util.executeAndUpdate(con, CREATE_ERROR_LINE_DATABASE_TABLE);
+		H2Util.executeQuery(con, CREATE_ERROR_LINE_DATABASE_TABLE);
 		log.info("Table " + H2Util.ERROR_DATABASE_TABLE + " created");
 	}
 
@@ -153,7 +153,7 @@ public class H2CreateDatabase {
 		for (int idx = 0; idx < listFiles.size(); idx++) {
 			String query = "INSERT into " + H2Util.CATEGORY_DATABASE_TABLE + " values (" + (idx + 1) + ", '"
 					+ listFiles.get(idx) + "')";
-			H2Util.executeAndUpdate(con, query);
+			H2Util.executeQuery(con, query);
 		}
 		log.info(H2Util.CATEGORY_DATABASE_TABLE + " filled");
 	}
@@ -189,7 +189,7 @@ public class H2CreateDatabase {
 				while (line != null) {
 					String query = "INSERT into " + H2Util.FILE_DATABASE_TABLE + " values (default, " + (idx + 1)
 							+ ", '" + line + "', null, null, null)";
-					H2Util.executeAndUpdate(con, query);
+					H2Util.executeQuery(con, query);
 					line = reader.readLine();
 				}
 			} catch (IOException e) {

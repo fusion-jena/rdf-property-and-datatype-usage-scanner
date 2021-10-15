@@ -14,6 +14,8 @@ import java.util.zip.GZIPInputStream;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.riot.RiotException;
 
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure;
+
 /***
  * Makes the statement of a file iterable 
  * 
@@ -39,6 +41,8 @@ public class FileIterator implements Iterable<Statement> {
 	 * key: line the error occurred; value: error message
 	 */
 	private Map<Long, List<String>> errors;
+	
+	private H2DoMeasure thread;
 
 	private org.slf4j.Logger log;
 
@@ -55,14 +59,24 @@ public class FileIterator implements Iterable<Statement> {
 		numLines = 0L;
 		errors = new HashMap<Long, List<String>>();
 	}
+	
+	public FileIterator(String url, org.slf4j.Logger log, H2DoMeasure thread) throws IOException{
+		this(url, log);
+		this.thread = thread;
+	}
 
 	@Override
 	public Iterator<Statement> iterator() {
 		try {
 			return new StatementIterator();
 		} catch (IOException e) {
+			log.error("Error when creating statement iterator");
 			log.error(e.getMessage());
-			System.exit(1);
+			if(thread != null) {
+				thread.run();
+			}else {
+				System.exit(1);
+			}
 		}
 		return null;
 	}
@@ -171,8 +185,13 @@ public class FileIterator implements Iterable<Statement> {
 				try {
 					switchToNextLine();
 				} catch (IOException e) {
+					log.error("Error when getting next line:");
 					log.error(e.getMessage());
-					System.exit(1);
+					if(thread != null) {
+						thread.run();
+					}else {
+						System.exit(1);
+					}
 				}
 			}
 			//else return the first statement from the current statement list

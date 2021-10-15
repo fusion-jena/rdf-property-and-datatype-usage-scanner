@@ -16,6 +16,7 @@ import org.apache.jena.riot.RDFParser;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
 
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.Measure;
 
 /**
@@ -40,6 +41,29 @@ public abstract class ModelUtil {
 		} catch (IOException e) {
 			log.error(e.getMessage());
 			System.exit(1);
+		}
+
+		return fileIter;
+
+	}
+	
+	/**
+	 * Creates an iterator over the statements of the individual lines of the
+	 * document in a multithread context
+	 * 
+	 * @param urlString path to the document
+	 * @param log       for logging
+	 * @param thread working on the document
+	 * @return an iterator over the statements of the file
+	 */
+	public static FileIterator parseURLlineByLine(String urlString, org.slf4j.Logger log, H2DoMeasure thread) {
+		FileIterator fileIter = null;
+
+		try {
+			fileIter = new FileIterator(urlString, log, thread);
+		} catch (IOException e) {
+			log.error(e.getMessage());
+			thread.run();
 		}
 
 		return fileIter;

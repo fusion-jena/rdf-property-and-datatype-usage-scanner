@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.FileIterator;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.ModelUtil;
@@ -52,6 +53,24 @@ public class FileMeasure {
 		this.log = log;
 		this.dataPath = url;
 		this.fileIter = ModelUtil.parseURLlineByLine(url, log);
+	}
+	
+	/**
+	 * Viewing a file from a database - multithreaded context
+	 * 
+	 * @param fileID Identifier of the file in the database
+	 * @param url    location of the file
+	 * @param con    Connection to the database
+	 * @param log    Logging information
+	 * @param thread Thread which is working on the file
+	 */
+	public FileMeasure(Long fileID, String url, Connection con, org.slf4j.Logger log, H2DoMeasure thread) throws SQLException {
+		this.con = con;
+		this.fileID = fileID;
+		initaliseMeasures();
+		this.log = log;
+		this.dataPath = url;
+		this.fileIter = ModelUtil.parseURLlineByLine(url, log, thread);
 	}
 
 	/**
@@ -101,6 +120,8 @@ public class FileMeasure {
 		writeToErrorDatabaseTable();
 		writeToResultDatabaseTable();
 		H2Util.writeTime(con, H2Util.END, fileID, log);
+		//commit all the changes and new lines to the database
+		con.commit();
 	}
 
 	/**
@@ -117,7 +138,7 @@ public class FileMeasure {
 				errorMsg = errorMsg.replace("'", "''");
 				String query = "INSERT into " + H2Util.ERROR_DATABASE_TABLE + " values (" + fileID + ", " + line + ", '"
 						+ errorMsg + "')";
-				H2Util.executeAndUpdate(con, query);
+				H2Util.executeQuery(con, query);
 			}
 		}
 		log.info("Finished writing errors from file " + fileID);
@@ -136,7 +157,7 @@ public class FileMeasure {
 			String queryEnd = ")";
 			for (String queryValue : queries) {
 				String query = queryBeginning + queryValue + queryEnd;
-				H2Util.executeAndUpdate(con, query);
+				H2Util.executeQuery(con, query);
 			}
 		}
 		log.info("Finished writing results from file " + fileID);
@@ -151,7 +172,7 @@ public class FileMeasure {
 		log.info("Start writing total number of lines of file " + fileID);
 		String query = "UPDATE " + H2Util.FILE_DATABASE_TABLE + " SET TOTAL_NUMBER_OF_LINES = " + fileIter.getNumLines()
 				+ " WHERE FILE_ID = " + fileID;
-		H2Util.executeAndUpdate(con, query);
+		H2Util.executeQuery(con, query);
 		log.info("Finished writing total number of lines of file " + fileID);
 	}
 

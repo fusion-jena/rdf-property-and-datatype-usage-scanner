@@ -77,19 +77,22 @@ public class H2DoMeasure extends Thread {
 			FileMeasure fileMeasure = null;
 			try {
 				Statement stmt = con.createStatement();
-				String queryFilesToWorkOn = "SELECT FILE_ID, URL FROM " + H2Util.FILE_DATABASE_TABLE + " WHERE (START_TIME < '"
+				String queryFilesToWorkOn = "SELECT FILE_ID, URL FROM " + H2Util.FILE_DATABASE_TABLE 
+						+ " WHERE (START_TIME < '"
 						+ new Timestamp(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000) // restart after a week
-						+ "' AND END_TIME IS NULL) OR START_TIME IS NULL LIMIT 1";
+					   + "' AND END_TIME IS NULL) OR START_TIME IS NULL LIMIT 1";
 				ResultSet result = stmt.executeQuery(queryFilesToWorkOn);
 				if(!result.next()) {
 					log.info("No data available");
 					return null;
 				}
 				
-				fileMeasure = new FileMeasure(result.getLong("FILE_ID"), result.getString("URL"), con, log);
+				fileMeasure = new FileMeasure(result.getLong("FILE_ID"), result.getString("URL"), con, log, this);
 				result.close();
 
 				H2Util.writeTime(con, H2Util.START, fileMeasure.getFileID(), log);
+				//write the start time to the database
+				con.commit();
 			} catch (SQLException e) {
 				throw new NoItemException(e.getMessage());
 			}
@@ -105,6 +108,8 @@ public class H2DoMeasure extends Thread {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(H2Util.DB_URL, H2Util.USER, H2Util.PASS);
+			//changes are only committed to the database explicitly
+			con.setAutoCommit(false);
 		} catch (SQLException e) {
 			log.error(e.getMessage());
 			System.exit(1);
@@ -127,6 +132,7 @@ public class H2DoMeasure extends Thread {
 			}
 		} catch (SQLException e) {
 			log.info(new Timestamp(System.currentTimeMillis()) + " - Error when working on file " + identifier);
+			log.info(e.getMessage());
 			// restart thread
 			this.run();
 		} catch (NoItemException e) {

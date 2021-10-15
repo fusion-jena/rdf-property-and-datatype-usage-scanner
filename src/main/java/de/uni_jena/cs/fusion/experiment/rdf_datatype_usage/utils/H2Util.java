@@ -11,7 +11,7 @@ public abstract class H2Util {
 
 	// public static final String DB_URL = "jdbc:h2:mem:"; //in memory
 	public static final String DB_URL = "jdbc:h2:file:" + System.getProperty("user.dir")
-			+ "/h2/rdf-analyse;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090";
+			+ "/h2_vm/rdf-analyse;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090";
 	public static final String USER = "user_00";
 	public static final String PASS = "pwd";
 
@@ -26,16 +26,16 @@ public abstract class H2Util {
 	public static final String END = "END_TIME";
 
 	/**
-	 * Executes a single SQL Query and updates the database
+	 * Executes a single SQL Query
 	 * 
 	 * @param con   Connection to the the database
 	 * @param query is executed
 	 * @throws SQLException in case of an invalid sql command
 	 * 
 	 */
-	public static void executeAndUpdate(Connection con, String query) throws SQLException {
+	public static void executeQuery(Connection con, String query) throws SQLException {
 		Statement stmt = con.createStatement();
-		stmt.executeUpdate(query);
+		stmt.execute(query);
 		stmt.close();
 	}
 
@@ -50,7 +50,7 @@ public abstract class H2Util {
 		log.info("Start writing time to " + column + " of file " + fileID);
 		String query = "UPDATE " + H2Util.FILE_DATABASE_TABLE + " SET " + column + " = '"
 				+ new Timestamp(System.currentTimeMillis()) + "' WHERE FILE_ID = " + fileID;
-		H2Util.executeAndUpdate(con, query);
+		H2Util.executeQuery(con, query);
 		log.info("Finished writing time to " + column + " of file " + fileID);
 	}
 
