@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
@@ -15,10 +14,10 @@ import org.apache.jena.rdf.model.RDFNode;
 public abstract class Measure {
 
 	/**
-	 * Map for the results
-	 * key: datatype
+	 * Map for the results 
+	 * key: datatype 
 	 * value : map with 
-	 * 	key: property
+	 * 	key: property 
 	 * 	value: how often the combination occured
 	 */
 	protected Map<String, Map<String, Long>> occurs;
@@ -37,25 +36,20 @@ public abstract class Measure {
 	public abstract void measure(RDFNode subject, Property property, RDFNode object);
 
 	/**
-	 * Creates a list of Strings that can be used to fill a database
+	 * Creates a list of {@link MeasureResult} that can be used to fill a database
 	 * 
-	 * <p>
-	 * Important: each string must be appended to another string which contains:
-	 * </p>
-	 * <p>
-	 * 'INSERT into <NAME OF DATABASE> values ( <FILE_IDENTIFIER>, ' and ')'
-	 * </p>
-	 * 
-	 * @return a list of String statements
+	 * @return a list of {@link MeasureResults}
 	 */
-	public List<Object[]> writeToDatabase(){
-		List<Object[]> values = new ArrayList<Object[]>();
-		for (Entry<String, Map<String, Long>> datatype : occurs.entrySet()) {
-			for (Entry<String, Long> property : datatype.getValue().entrySet()) {
-				values.add(new Object[] {property.getKey(), this.getClass().getSimpleName(), datatype.getKey(), property.getValue()});
+	public List<MeasureResult> writeToDatabase() {
+		List<MeasureResult> results = new ArrayList<MeasureResult>();
+		for (String datatype : occurs.keySet()) {
+			Map<String, Long> propertyQuantityMap = occurs.get(datatype);
+			for (String property : propertyQuantityMap.keySet()) {
+				results.add(new MeasureResult(this.getClass().getSimpleName(), property, datatype,
+						propertyQuantityMap.get(property)));
 			}
 		}
-		return values;
+		return results;
 	}
 
 	@Override
@@ -69,7 +63,7 @@ public abstract class Measure {
 		}
 		return s;
 	}
-	
+
 	public Map<String, Map<String, Long>> getOccurs() {
 		return occurs;
 	}

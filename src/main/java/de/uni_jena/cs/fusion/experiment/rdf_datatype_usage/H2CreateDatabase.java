@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -186,11 +187,13 @@ public class H2CreateDatabase {
 			try {
 				reader = new BufferedReader(new FileReader(path + file + fileExtension));
 				String line = reader.readLine();
-				while (line != null) {
-					String query = "INSERT into " + H2Util.FILE_DATABASE_TABLE + " values (default, " + (idx + 1)
-							+ ", '" + line + "', null, null, null)";
-					H2Util.executeQuery(con, query);
-					line = reader.readLine();
+				try(PreparedStatement ps = con.prepareStatement("INSERT into " + H2Util.FILE_DATABASE_TABLE + " values (default, " + (idx + 1)
+						+ ", ? , null, null, null)");){
+					while (line != null) {
+						ps.setString(1, line);
+						ps.executeUpdate();
+						line = reader.readLine();
+					}
 				}
 			} catch (IOException e) {
 				log.error(e.getMessage());

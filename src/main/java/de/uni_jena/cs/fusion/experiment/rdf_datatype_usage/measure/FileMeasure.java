@@ -126,13 +126,15 @@ public class FileMeasure {
 	private void writeToErrorDatabaseTable() throws SQLException {
 		log.info("Start writing errors from file " + fileID);
 		Map<Long, List<String>> errors = fileIter.getErrors();
-		for (Long line : errors.keySet()) {
-			List<String> messages = errors.get(line);
-			for (String errorMsg : messages) {
-				errorMsg = errorMsg.replace("'", "''");
-				String query = "INSERT into " + H2Util.ERROR_DATABASE_TABLE + " values (" + fileID + ", " + line + ", '"
-						+ errorMsg + "')";
-				H2Util.executeQuery(con, query);
+		try (PreparedStatement ps = con
+				.prepareStatement("INSERT into " + H2Util.ERROR_DATABASE_TABLE + " VALUES (?,?,?)");) {
+			ps.setLong(1, fileID);
+			for (Long line : errors.keySet()) {
+				ps.setLong(2, line);
+				for (String errorMsg : errors.get(line)) {
+					ps.setString(3, errorMsg);
+					ps.execute();
+				}
 			}
 		}
 		log.info("Finished writing errors from file " + fileID);
@@ -149,12 +151,12 @@ public class FileMeasure {
 				.prepareStatement("INSERT into " + H2Util.RESULT_DATABASE_TABLE + " VALUES (?,?,?,?,?)");) {
 			ps.setLong(1, fileID);
 			for (Measure measure : measures) {
-				for (Object[] queryValue : measure.writeToDatabase()) {
-					ps.setString(2, (String) queryValue[0]);
-					ps.setString(3, (String) queryValue[1]);
-					ps.setString(4, (String) queryValue[2]);
-					ps.setLong(5, (Long) queryValue[3]);
-					ps.executeUpdate();
+				for (MeasureResult result : measure.writeToDatabase()) {
+					ps.setString(2, result.getProperty());
+					ps.setString(3, result.getMeasure());
+					ps.setString(4, result.getDatatype());
+					ps.setLong(5, result.getQuantity());
+					ps.execute();
 				}
 			}
 			log.info("Finished writing results from file " + fileID);
