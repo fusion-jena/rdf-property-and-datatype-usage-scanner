@@ -21,9 +21,9 @@ import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
 public class H2DoMeasure extends Thread {
 
 	private static org.slf4j.Logger log;
-	
+
 	private static final Object lock = new Object();
-	
+
 	private static CountDownLatch latch;
 	private static int numThreads;
 
@@ -54,7 +54,7 @@ public class H2DoMeasure extends Thread {
 			threads.add(new H2DoMeasure());
 			threads.get(i).start();
 		}
-		
+
 		try {
 			latch.await();
 			end = System.currentTimeMillis();
@@ -62,36 +62,39 @@ public class H2DoMeasure extends Thread {
 			log.error(e.getMessage());
 		} catch (Throwable t) {
 			log.error("Unexpected Error occured:");
-			log.error(t.getMessage());	
+			log.error(t.getMessage());
 			System.exit(1);
 		}
 		server.stop();
 		log.info(new Timestamp(System.currentTimeMillis()) + " - Server stopped");
 		duration = end - start;
-		log.warn(new Timestamp(System.currentTimeMillis()) + " used " + numThreads + " threads, took " + duration +"ms to finnish");
+		log.warn(new Timestamp(System.currentTimeMillis()) + " used " + numThreads + " threads, took " + duration
+				+ "ms to finnish");
 		System.exit(0);
 	}
-	
-	private FileMeasure getNextFileMeasure (Connection con) throws NoItemException {
+
+	private FileMeasure getNextFileMeasure(Connection con) throws NoItemException {
 		synchronized (lock) {
 			FileMeasure fileMeasure = null;
 			try {
 				Statement stmt = con.createStatement();
-				String queryFilesToWorkOn = "SELECT FILE_ID, URL FROM " + H2Util.FILE_DATABASE_TABLE 
-						+ " WHERE (START_TIME < '"
-						+ new Timestamp(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000) // restart after a week
-					   + "' AND END_TIME IS NULL) OR START_TIME IS NULL LIMIT 1";
+				String queryFilesToWorkOn = "SELECT FILE_ID, URL FROM " + H2Util.FILE_DATABASE_TABLE
+						+ " WHERE (START_TIME < '" + new Timestamp(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000)
+						+ "' AND END_TIME IS NULL) " // restart after a week
+						+ "OR START_TIME IS NULL " // files that have never been edited
+						+ "LIMIT 1";
 				ResultSet result = stmt.executeQuery(queryFilesToWorkOn);
-				if(!result.next()) {
+				if (!result.next()) {
 					log.info("No data available");
 					return null;
 				}
-				
+
 				fileMeasure = new FileMeasure(result.getLong("FILE_ID"), result.getString("URL"), con, log, this);
 				result.close();
 
+				// write the start time to the database
 				H2Util.writeTime(con, H2Util.START, fileMeasure.getFileID(), log);
-				//write the start time to the database
+				//commit the changes
 				con.commit();
 			} catch (SQLException e) {
 				throw new NoItemException(e.getMessage());
@@ -108,7 +111,7 @@ public class H2DoMeasure extends Thread {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(H2Util.DB_URL, H2Util.USER, H2Util.PASS);
-			//changes are only committed to the database explicitly
+			// changes are only committed to the database explicitly
 			con.setAutoCommit(false);
 		} catch (SQLException e) {
 			log.error(e.getMessage());
@@ -136,10 +139,10 @@ public class H2DoMeasure extends Thread {
 			// restart thread
 			this.run();
 		} catch (NoItemException e) {
-			log.error(new Timestamp(System.currentTimeMillis()) + " - Cannot get next file:" + e.getMessage());			
+			log.error(new Timestamp(System.currentTimeMillis()) + " - Cannot get next file:" + e.getMessage());
 			// restart thread
 			this.run();
-		}catch (Throwable t) {
+		} catch (Throwable t) {
 			log.error(new Timestamp(System.currentTimeMillis()) + " - Unexpected error occured on file " + identifier);
 			log.error(t.getMessage());
 			// restart thread
