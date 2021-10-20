@@ -110,11 +110,6 @@ public class FileMeasure {
 	 * @throws SQLException when an error occurs during writing to the database
 	 */
 	public void writeToDatabase() throws SQLException {
-		// remove existing entries from previous executions with errors
-		String dropExsistingResultsAndErrorsQuery = "DELETE FROM " + H2Util.RESULT_DATABASE_TABLE
-				+ " WHERE FILE_ID = " + fileID+ "; DELETE FROM "
-						+ H2Util.ERROR_DATABASE_TABLE + " WHERE FILE_ID = " + fileID;
-		H2Util.executeQuery(con, dropExsistingResultsAndErrorsQuery);
 		writeNumLines();
 		writeToErrorDatabaseTable();
 		writeToResultDatabaseTable();
