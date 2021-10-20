@@ -11,7 +11,7 @@ public abstract class H2Util {
 
 	// public static final String DB_URL = "jdbc:h2:mem:"; //in memory
 	public static final String DB_URL = "jdbc:h2:file:" + System.getProperty("user.dir")
-			+ "/h2_vm/rdf-analyse;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090";
+			+ "/h2/rdf-analyse;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090";
 	public static final String USER = "user_00";
 	public static final String PASS = "pwd";
 
