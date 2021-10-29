@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.riot.RiotException;
 
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure;
 
@@ -158,7 +157,7 @@ public class FileIterator implements Iterable<Statement> {
 					// check if the line contains statements
 					// if the line contains a statement -> while loop breaks off
 					gotNextLine = !statementsFromNextLine.isEmpty();
-				} catch (RiotException e) {
+				} catch (Throwable e) {
 					// In case of an error while parsing the line, 
 					// add the current line and its error message to the error hash map
 					// remove the position information from the error message
