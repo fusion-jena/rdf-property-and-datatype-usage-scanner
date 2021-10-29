@@ -8,9 +8,8 @@ B) Run:
      to create the database
   2) java -jar target/Measure.jar
      to start the measure
-C) Export:
-  1) java -jar target/ExportDatabaseToCSV.jar
-    to export each table of the database as a .csv file
+  3) java -jar target/ExportDatabaseToCSV.jar
+     to export each table of the database as a .csv file
 
 For automatic restart on Linux:
   1) Edit crontab:
