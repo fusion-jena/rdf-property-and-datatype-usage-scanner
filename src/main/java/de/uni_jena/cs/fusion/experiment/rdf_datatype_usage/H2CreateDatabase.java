@@ -29,18 +29,34 @@ public class H2CreateDatabase {
 
 	// Queries to generate the database
 	// Caution: overwrites existing databases!
-	private static final String CREATE_CATEGORY_DATABASE_TABLE = "CREATE TABLE " + H2Util.CATEGORY_DATABASE_TABLE
-			+ " (CATEGORY_ID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, NAME VARCHAR(25) NOT NULL)";
-	private static final String CREATE_FILE_DATABASE_TABLE = "CREATE TABLE " + H2Util.FILE_DATABASE_TABLE
-			+ " (FILE_ID BIGINT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL, CATEGORY_ID INT REFERENCES "
-			+ H2Util.CATEGORY_DATABASE_TABLE
-			+ "(CATEGORY_ID), URL VARCHAR(2048) NOT NULL, START_TIME TIMESTAMP, END_TIME TIMESTAMP , TOTAL_NUMBER_OF_LINES BIGINT )";
-	private static final String CREATE_RESULT_DATABSE_TABLE = "CREATE TABLE " + H2Util.RESULT_DATABASE_TABLE
-			+ " (FILE_ID BIGINT REFERENCES " + H2Util.FILE_DATABASE_TABLE
-			+ "(FILE_ID), PROPERTY VARCHAR(2048) NOT NULL, MEASUREMENT VARCHAR(40) NOT NULL, DATATYPE VARCHAR(2048) NOT NULL, QUANTITY BIGINT NOT NULL)";
-	private static final String CREATE_ERROR_LINE_DATABASE_TABLE = "CREATE TABLE " + H2Util.ERROR_DATABASE_TABLE
-			+ " (FILE_ID BIGINT REFERENCES " + H2Util.FILE_DATABASE_TABLE
-			+ "(FILE_ID), LINE BIGINT NOT NULL, ERROR_MESSAGE TINYTEXT)"; // TODO tinytext ausreichend?
+	private static final String CREATE_CATEGORY_DATABASE_TABLE = ""//
+			+ "CREATE TABLE " + H2Util.CATEGORY_DATABASE_TABLE + " ("//
+			+ "  CATEGORY_ID INT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL,"//
+			+ "  NAME VARCHAR(25) NOT NULL"//
+			+ ")";
+	private static final String CREATE_FILE_DATABASE_TABLE = ""//
+			+ "CREATE TABLE " + H2Util.FILE_DATABASE_TABLE + " ("//
+			+ "  FILE_ID BIGINT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL,"//
+			+ "  CATEGORY_ID INT REFERENCES " + H2Util.CATEGORY_DATABASE_TABLE + "(CATEGORY_ID),"//
+			+ "  URL VARCHAR(2048) NOT NULL,"//
+			+ "  START_TIME TIMESTAMP,"//
+			+ "  END_TIME TIMESTAMP,"//
+			+ "  TOTAL_NUMBER_OF_LINES BIGINT"//
+			+ ")";
+	private static final String CREATE_RESULT_DATABSE_TABLE = ""//
+			+ "CREATE TABLE " + H2Util.RESULT_DATABASE_TABLE + " ("//
+			+ "  FILE_ID BIGINT REFERENCES " + H2Util.FILE_DATABASE_TABLE + "(FILE_ID),"//
+			+ "  PROPERTY VARCHAR(2048) NOT NULL,"//
+			+ "  MEASUREMENT VARCHAR(40) NOT NULL,"//
+			+ "  DATATYPE VARCHAR(2048) NOT NULL,"//
+			+ "  QUANTITY BIGINT NOT NULL"//
+			+ ")";
+	private static final String CREATE_ERROR_LINE_DATABASE_TABLE = ""//
+			+ "CREATE TABLE " + H2Util.ERROR_DATABASE_TABLE + " ("//
+			+ "  FILE_ID BIGINT REFERENCES " + H2Util.FILE_DATABASE_TABLE + "(FILE_ID),"//
+			+ "  LINE BIGINT NOT NULL,"//
+			+ "  ERROR_MESSAGE TINYTEXT"// TODO tinytext ausreichend?
+			+ ")";
 
 	private static org.slf4j.Logger log;
 
@@ -64,7 +80,7 @@ public class H2CreateDatabase {
 	);
 
 	public static void main(String[] args) {
-	
+
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		log = org.slf4j.LoggerFactory.getLogger("H2CreateDatabase");
 
@@ -80,11 +96,11 @@ public class H2CreateDatabase {
 			Connection con = DriverManager.getConnection(H2Util.DB_URL, H2Util.USER, H2Util.PASS);
 
 			createDatabaseTables(con);
-			
+
 			fillCategoryDatabaseTable(con);
 
 			fillFileOrganisationDatabaseTable(con);
-			
+
 			con.close();
 			log.info("Connection closed");
 			server.stop();
@@ -187,8 +203,8 @@ public class H2CreateDatabase {
 			try {
 				reader = new BufferedReader(new FileReader(path + file + fileExtension));
 				String line = reader.readLine();
-				try(PreparedStatement ps = con.prepareStatement("INSERT into " + H2Util.FILE_DATABASE_TABLE + " values (default, " + (idx + 1)
-						+ ", ? , null, null, null)");){
+				try (PreparedStatement ps = con.prepareStatement("INSERT into " + H2Util.FILE_DATABASE_TABLE
+						+ " values (default, " + (idx + 1) + ", ? , null, null, null)");) {
 					while (line != null) {
 						ps.setString(1, line);
 						ps.executeUpdate();
