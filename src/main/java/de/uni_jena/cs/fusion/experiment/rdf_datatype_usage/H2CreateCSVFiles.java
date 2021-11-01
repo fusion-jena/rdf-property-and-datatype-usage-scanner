@@ -1,5 +1,10 @@
 package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.h2.tools.Csv;
@@ -68,7 +74,14 @@ public class H2CreateCSVFiles {
 			for (int i = 0; i < queries.size(); i++) {
 				log.info("Exporting " + fileNames.get(i) + " as csv file");
 				ResultSet result = stmt.executeQuery(queries.get(i));
-				new Csv().write(path + fileNames.get(i) + fileExtension, result, null);
+				try (Writer writer = new OutputStreamWriter(
+						new GZIPOutputStream(new FileOutputStream(path + fileNames.get(i) + fileExtension + ".gz")),
+						StandardCharsets.UTF_8)) {
+					new Csv().write(writer, result);
+				} catch (IOException e) {
+					log.error(e.getMessage());
+					System.exit(1);
+				}
 			}
 		} catch (SQLException e) {
 			log.error(e.getMessage());
