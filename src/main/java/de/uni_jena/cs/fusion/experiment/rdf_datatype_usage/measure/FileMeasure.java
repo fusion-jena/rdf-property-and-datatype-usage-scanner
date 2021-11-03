@@ -183,6 +183,7 @@ public class FileMeasure {
 		measures = new ArrayList<Measure>();
 		measures.add(new CouldBeFloat());
 		measures.add(new CouldBeDouble());
+		measures.add(new CouldBeDecimal());
 		measures.add(new CouldBeTemporal());
 		measures.add(new ShouldBeDecimal());
 		measures.add(new CouldBeDoubleOrFloatNotDecimal());
