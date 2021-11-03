@@ -7,9 +7,7 @@ How to start the experiment:
 1. Preparation: Clone the repository and run `mvn clean package` to build the tool.
 2. Run:
   * `java -jar target/CreateDatabase.jar` to create the database
-  * `java -jar target/Measure.jar` to start the measure
-  * `java -jar target/ExportDatabaseToCSV.jar` to export each table of the database as a .csv file
+  * `./measure.sh` to start the measure
+  * `java -jar target/ExportDatabaseToCSV.jar` to export each table of the database as a .csv.gz file
 
-For automatic restart on Linux:
-1. Edit crontab using `crontab -e` and add the line: `@reboot bash <path to script>restartMeasure.sh` (keep an empty line at the end of the document)
-2. Update the path in restartMeasure.sh to your working directory
+For automatic restart on Linux edit crontab using `crontab -e` and add the line: `@reboot bash <path to script>/measure.sh` (keep an empty line at the end of the document)
