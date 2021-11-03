@@ -1,8 +1,9 @@
 package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -193,28 +194,27 @@ public class H2CreateDatabase {
 	 * @throws SQLException in case of an invalid SQL command
 	 */
 	private static void fillFileOrganisationDatabaseTable(Connection con) throws SQLException {
-		String path = "src/main/resources/list_files/";
-		String fileExtension = ".list";
 
 		for (int idx = 0; idx < listFiles.size(); idx++) {
 			String file = listFiles.get(idx);
-			log.info("Start reading lines from file " + path + file + fileExtension);
-			BufferedReader reader;
 			try {
-				reader = new BufferedReader(new FileReader(path + file + fileExtension));
-				String line = reader.readLine();
-				try (PreparedStatement ps = con.prepareStatement("INSERT into " + H2Util.FILE_DATABASE_TABLE
-						+ " values (default, " + (idx + 1) + ", ? , null, null, null)");) {
-					while (line != null) {
-						ps.setString(1, line);
-						ps.executeUpdate();
-						line = reader.readLine();
+				URL url = new URL("http://webdatacommons.org/structureddata/2020-12/files/" + file + ".list");
+				log.info("Start reading lines from " + url);
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+					String line = reader.readLine();
+					try (PreparedStatement ps = con.prepareStatement("INSERT into " + H2Util.FILE_DATABASE_TABLE
+							+ " values (default, " + (idx + 1) + ", ? , null, null, null)");) {
+						while (line != null) {
+							ps.setString(1, line);
+							ps.executeUpdate();
+							line = reader.readLine();
+						}
 					}
 				}
+				log.info("Finished reading lines from " + url);
 			} catch (IOException e) {
 				log.error(e.getMessage());
 			}
-			log.info("Finished reading lines from file " + path + file + fileExtension);
 		}
 
 	}
