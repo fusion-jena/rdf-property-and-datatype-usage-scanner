@@ -124,4 +124,4 @@ buildNumber.properties
 *.list
 
 #Exportierte Ergebnisse
-*.csv
+*.csv.gz
