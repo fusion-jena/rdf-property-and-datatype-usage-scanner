@@ -1,10 +1,10 @@
-# RDF Datatype Usage Analyser
+# RDF Datatype Usage Scanner
 
 This is a tool to survey the usage of datatypes in RDF dataset files (as the [Web Data Commons](http://webdatacommons.org/))  on the web.
 
 # Usage
 How to start the experiment:
-1. Preparation: Clone the repository and run `mvn clean package` to build teh tool.
+1. Preparation: Clone the repository and run `mvn clean package` to build the tool.
 2. Run:
   * `java -jar target/CreateDatabase.jar` to create the database
   * `java -jar target/Measure.jar` to start the measure
