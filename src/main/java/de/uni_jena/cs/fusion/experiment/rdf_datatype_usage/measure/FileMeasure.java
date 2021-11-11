@@ -181,16 +181,19 @@ public class FileMeasure {
 	 */
 	private void initaliseMeasures() {
 		measures = new ArrayList<Measure>();
-		measures.add(new CouldBeFloat());
-		measures.add(new CouldBeDouble());
-		measures.add(new CouldBeDecimal());
-		measures.add(new CouldBeTemporal());
-		measures.add(new ShouldBeDecimal());
-		measures.add(new CouldBeDoubleOrFloatNotDecimal());
+		measures.add(new UnpreciseRepresentableInDouble());
+		measures.add(new UnpreciseRepresentableInFloat());
+		measures.add(new UsedAsDatatype());
 		measures.add(new UsedAsPropertyRange());
-		measures.add(new CouldBeBoolean());
-		measures.add(new CouldBeInteger());
-		measures.add(new UsageCount());
+		measures.add(new ValidDateNotation());
+		measures.add(new ValidDateTimeNotation());
+		measures.add(new ValidDecimalNotation());
+		measures.add(new ValidExponentialNotation());
+		measures.add(new ValidInfOrNaNNotation());
+		measures.add(new ValidIntegerNotation());
+		measures.add(new ValidTimeNotation());
+		measures.add(new ValidTrueOrFalseNotation());
+		measures.add(new ValidZeroOrOneNotation());
 	}
 
 	public long getFileID() {

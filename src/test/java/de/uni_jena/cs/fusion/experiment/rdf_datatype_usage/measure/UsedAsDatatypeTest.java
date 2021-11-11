@@ -9,17 +9,17 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class UsageCountTest {
+class UsedAsDatatypeTest {
 	
 	private org.slf4j.Logger log;
 	private List<Measure> measures;
-	private UsageCount m;
+	private UsedAsDatatype m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
 		measures = new ArrayList<Measure>();
-		m = new UsageCount();
+		m = new UsedAsDatatype();
 		measures.add(m);
 	}
 	

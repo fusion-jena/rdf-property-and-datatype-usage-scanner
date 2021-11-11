@@ -1,6 +1,7 @@
 package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,8 +9,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.StringUtil;
 
 class CouldBeDecimalTest {
 
@@ -58,13 +57,13 @@ class CouldBeDecimalTest {
 	
 	private org.slf4j.Logger log;
 	private List<Measure> measures;
-	private CouldBeDecimal m;
+	private ValidDecimalNotation m;
 	
 	@BeforeEach
 	void init() {
 		log = org.slf4j.LoggerFactory.getLogger("test");
 		measures = new ArrayList<Measure>();
-		m = new CouldBeDecimal();
+		m = new ValidDecimalNotation();
 		measures.add(m);
 	}
 	
@@ -83,13 +82,6 @@ class CouldBeDecimalTest {
 			m.getOccurs().clear();
 		}
 	}
-	
-	@Test
-	void validStringsMethod() {
-		for (String number : validNumbers) {
-			assertTrue(StringUtil.isValidDecimal(number));
-		}
-	}
 
 	@Test
 	void invalidStringsNQ() {
@@ -97,13 +89,6 @@ class CouldBeDecimalTest {
 			String line = MeasureTestUtil.createStringLine(number);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
 			assertTrue(m.getOccurs().isEmpty());
-		}
-	}
-	
-	@Test
-	void invalidStringsMethod() {
-		for (String number : invalidNumbers) {
-			assertFalse(StringUtil.isValidDecimal(number));
 		}
 	}
 
