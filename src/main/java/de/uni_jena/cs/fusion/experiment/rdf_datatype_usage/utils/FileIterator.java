@@ -162,7 +162,7 @@ public class FileIterator implements Iterable<Statement> {
 					// add the current line and its error message to the error hash map
 					// remove the position information from the error message
 					String message = e.getMessage().replaceFirst("\\[line: 1, col: \\d*\\s*\\]\\s*", "");
-					MapInsertUtil.appendElement(errors, numLines, message);
+					errors.computeIfAbsent(numLines, k -> new ArrayList<String>()).add(message);
 				}
 				// update the line that will be parsed next
 				nextLine = reader.readLine();
@@ -201,7 +201,7 @@ public class FileIterator implements Iterable<Statement> {
 
 	
 	public void addError(String message) {
-		MapInsertUtil.appendElement(errors, numLines, message);
+		errors.computeIfAbsent(numLines, k -> new ArrayList<String>()).add(message);
 	}
 	
 	/**

@@ -1,10 +1,10 @@
 package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 
+import java.util.HashMap;
+
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
-
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.MapInsertUtil;
 
 /**
  * Counts occurrences of an IRI as datatype of a literal
@@ -24,7 +24,8 @@ public class UsedAsDatatype extends Measure {
 	 */
 	public void measure(String propertyName, Literal literal) {
 		if (this.measure(literal.getLexicalForm())) {
-			MapInsertUtil.insertElement(literal.getDatatypeURI(), propertyName, super.occurs);
+			super.occurs.computeIfAbsent(literal.getDatatypeURI(), k -> new HashMap<String, Long>()).merge(propertyName,
+					1L, Long::sum);
 		}
 	}
 
