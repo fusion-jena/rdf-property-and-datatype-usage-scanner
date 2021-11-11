@@ -8,13 +8,14 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jena.query.ARQ;
 import org.apache.log4j.PropertyConfigurator;
 import org.h2.tools.Server;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.exceptions.NoItemException;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.FileMeasure;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
 
@@ -73,10 +74,18 @@ public class H2DoMeasure extends Thread {
 		System.exit(0);
 	}
 
-	private FileMeasure getNextFileMeasure(Connection con) throws NoItemException {
-		synchronized (lock) {
-			FileMeasure fileMeasure = null;
-			try {
+	private FileMeasure getNextFileMeasure(Connection con) throws SQLException, NoSuchElementException {
+		// if no unfinished file exist, return null, otherwise try to get one
+		String leftFilesCountQuery = ""//
+				+ "SELECT COUNT(*) AS UNFINISHED_COUNT "//
+				+ "FROM " + H2Util.FILE_DATABASE_TABLE + " "//
+				+ "WHERE END_TIME IS NULL";
+		ResultSet leftFilesCountResult = con.createStatement().executeQuery(leftFilesCountQuery);
+		leftFilesCountResult.next();
+		if (leftFilesCountResult.getLong("UNFINISHED_COUNT") == 0) {
+			return null;
+		} else {
+			synchronized (lock) {
 				Statement stmt = con.createStatement();
 				String queryFilesToWorkOn = ""//
 						+ "SELECT FILE_ID, URL "//
@@ -86,72 +95,59 @@ public class H2DoMeasure extends Thread {
 						+ "OR (START_TIME < '" + new Timestamp(System.currentTimeMillis() - 24 * 60 * 60 * 1000)
 						+ "' AND END_TIME IS NULL) "//
 						+ "LIMIT 1";
-				ResultSet result = stmt.executeQuery(queryFilesToWorkOn);
-				if (!result.next()) {
-					log.info("No data available");
-					return null;
+				try (ResultSet result = stmt.executeQuery(queryFilesToWorkOn)) {
+					if (result.next()) {
+						FileMeasure fileMeasure = new FileMeasure(result.getLong("FILE_ID"), result.getString("URL"),
+								con, log, this);
+						H2Util.writeTime(con, H2Util.START, fileMeasure.getFileID(), log);
+						return fileMeasure;
+					} else {
+						throw new NoSuchElementException();
+					}
 				}
-
-				fileMeasure = new FileMeasure(result.getLong("FILE_ID"), result.getString("URL"), con, log, this);
-				result.close();
-
-				H2Util.writeTime(con, H2Util.START, fileMeasure.getFileID(), log);
-				// write the start time to the database
-				con.commit();
-			} catch (SQLException e) {
-				throw new NoItemException(e.getMessage());
 			}
-
-			return fileMeasure;
 		}
 	}
 
 	@Override
 	public void run() {
-		// Open connection
-		log.info("Connecting Thread " + this.getId() + " to database");
-		try (Connection con = DriverManager.getConnection(H2Util.DB_URL, H2Util.USER, H2Util.PASS)) {
-			// changes are only committed to the database explicitly
-			con.setAutoCommit(false);
+		try {
+			while (true) {
+				Long identifier = null;
+				// Open connection
+				try (Connection con = DriverManager.getConnection(H2Util.DB_URL, H2Util.USER, H2Util.PASS)) {
 
-			long identifier = -1;
-			try {
-				FileMeasure fileMeasure = getNextFileMeasure(con);
-				while (fileMeasure != null) {
-					identifier = fileMeasure.getFileID();
+					FileMeasure fileMeasure = getNextFileMeasure(con);
+					if (fileMeasure != null) {
+						identifier = fileMeasure.getFileID();
 
-					log.info(new Timestamp(System.currentTimeMillis()) + " - Thread " + this.getId()
-							+ " - Start processing file: " + identifier);
-					fileMeasure.startMeasurements();
-					fileMeasure.writeToDatabase();
-					log.info(new Timestamp(System.currentTimeMillis()) + " - Thread " + this.getId()
-							+ " - Finished processing file: " + identifier);
-					// Get the next file
-					fileMeasure = getNextFileMeasure(con);
+						// changes will be committed to the database explicitly
+						con.setAutoCommit(false);
+
+						log.info("%s - Thread %s - Start processing file: %s",
+								new Timestamp(System.currentTimeMillis()), this.getId(), identifier);
+						fileMeasure.startMeasurements();
+						fileMeasure.writeToDatabase();
+						log.info("%s - Thread %s - Finished processing file: %s",
+								new Timestamp(System.currentTimeMillis()), this.getId(), identifier);
+					} else {
+						break;
+					}
+				} catch (NoSuchElementException e) {
+					TimeUnit.HOURS.sleep(1);
+				} catch (Throwable t) {
+					if (identifier != null) {
+						log.info(new Timestamp(System.currentTimeMillis()) + " - Error during work on file "
+								+ identifier);
+					}
+					log.error(t.getMessage());
+
+					TimeUnit.MINUTES.sleep(1); // wait one minutes to not flood the log
 				}
-			} catch (SQLException e) {
-				log.info(new Timestamp(System.currentTimeMillis()) + " - Error when working on file " + identifier);
-				log.info(e.getMessage());
-				// restart thread
-				this.run();
-			} catch (NoItemException e) {
-				log.error(new Timestamp(System.currentTimeMillis()) + " - Cannot get next file:" + e.getMessage());
-				// restart thread
-				this.run();
-			} catch (Throwable t) {
-				log.error(new Timestamp(System.currentTimeMillis()) + " - Unexpected error occured on file "
-						+ identifier);
-				log.error(t.getMessage());
-				// restart thread
-				this.run();
 			}
-
-		} catch (SQLException e) {
-			log.error(e.getMessage());
-			System.exit(1);
+		} catch (InterruptedException ie) {
+			log.error(ie.getMessage());
 		}
-		log.info("Connection from thread " + this.getId() + " to database closed");
 		latch.countDown();
 	}
-
 }
