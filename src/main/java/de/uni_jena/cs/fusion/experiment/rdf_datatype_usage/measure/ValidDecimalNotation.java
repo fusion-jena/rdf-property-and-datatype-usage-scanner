@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class ValidDecimalNotation extends UsedAsDatatype {
 
 	/**
-	 * Check if the passed string is a valid decimal notation.
+	 * Check if the passed string is a valid decimal nut not integer notation.
 	 * 
 	 * @param s String to examine
 	 * @return true if the string can be interpreted as a decimal number else false
@@ -19,11 +19,7 @@ public class ValidDecimalNotation extends UsedAsDatatype {
 		// 3.3.1 Lexical Mapping
 		Pattern pattern = Pattern.compile("^" // String beginning
 				+ "(\\+|-)?" // optional sign
-				+ "("//
-				+ "[0-9]+(\\.[0-9]*)?" // integer, or number with digits before and after '.'
-				+ "|"//
-				+ "\\.?[0-9]+"// only decimal numbers or a integer
-				+ ")" //
+				+ "[0-9]*(\\.[0-9]+)" // number with digits after and optionally before '.'
 				+ "$" // End of the string
 		);
 		Matcher matcher = pattern.matcher(lexicalValue);

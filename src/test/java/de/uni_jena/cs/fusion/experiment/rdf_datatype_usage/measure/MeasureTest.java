@@ -220,7 +220,7 @@ public class MeasureTest {
 			assertFalse(new ValidDecimalNotation().measure(lexivalValue), lexivalValue);
 		}
 		for (String lexivalValue : integerNotation) {
-			assertTrue(new ValidDecimalNotation().measure(lexivalValue), lexivalValue);
+			assertFalse(new ValidDecimalNotation().measure(lexivalValue), lexivalValue);
 		}
 		for (String lexivalValue : decimalNotation) {
 			assertTrue(new ValidDecimalNotation().measure(lexivalValue), lexivalValue);
