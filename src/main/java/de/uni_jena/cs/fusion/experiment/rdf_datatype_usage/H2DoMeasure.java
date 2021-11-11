@@ -124,11 +124,11 @@ public class H2DoMeasure extends Thread {
 						// changes will be committed to the database explicitly
 						con.setAutoCommit(false);
 
-						log.info("%s - Thread %s - Start processing file: %s",
+						log.info("{} - Thread {} - Start processing file: {}",
 								new Timestamp(System.currentTimeMillis()), this.getId(), identifier);
 						fileMeasure.startMeasurements();
 						fileMeasure.writeToDatabase();
-						log.info("%s - Thread %s - Finished processing file: %s",
+						log.info("{} - Thread {} - Finished processing file: {}",
 								new Timestamp(System.currentTimeMillis()), this.getId(), identifier);
 					} else {
 						break;
