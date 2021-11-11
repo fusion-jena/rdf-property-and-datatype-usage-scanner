@@ -38,8 +38,7 @@ class UsedAsPropertyRangeTest {
 		for (String type : datatypes) {
 			String line = MeasureTestUtil.createPropertyRangeLine(type);
 			MeasureTestUtil.conductMeasurement(measures, log, line);
-			assertTrue(m.getOccurs().containsKey(MeasureTestUtil.predicateName));
-			assertEquals(1, m.getOccurs().get(MeasureTestUtil.predicateName).get(type));
+			assertEquals(1, m.getOccurs().get(type).get(MeasureTestUtil.predicateName));
 			m.getOccurs().clear();
 		}
 	}
