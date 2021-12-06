@@ -111,17 +111,10 @@ buildNumber.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,eclipse
 
-# Testdateien
-
+# test/input/output data
 *.ttl
 *.rdf
 *.nq*
-
-# Datenbank
 *.db
-
-#Dateien mit Links
 *.list
-
-#Exportierte Ergebnisse
 *.csv.gz
