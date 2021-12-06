@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>de.uni_jena.cs.fusion</groupId>
+	<groupId>blind</groupId>
 	<artifactId>experiment.rdf-datatype-usage</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
@@ -35,7 +35,7 @@
 							<archive>
 								<manifest>
 									<!-- <addClasspath>true</addClasspath>-->
-									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure</mainClass>
+									<mainClass>blind.experiment.rdf_datatype_usage.H2DoMeasure</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
@@ -54,7 +54,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2CreateDatabase</mainClass>
+									<mainClass>blind.experiment.rdf_datatype_usage.H2CreateDatabase</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
@@ -73,7 +73,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2CreateCSVFiles</mainClass>
+									<mainClass>blind.experiment.rdf_datatype_usage.H2CreateCSVFiles</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
