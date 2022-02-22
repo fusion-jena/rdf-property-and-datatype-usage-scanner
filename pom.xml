@@ -27,7 +27,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<id>build-a</id>
@@ -117,7 +116,7 @@
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>
-			<version>4.1.0</version>
+			<version>4.4.0</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>
