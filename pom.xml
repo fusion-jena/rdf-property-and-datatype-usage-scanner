@@ -6,6 +6,37 @@
 	<groupId>de.uni_jena.cs.fusion</groupId>
 	<artifactId>experiment.rdf-datatype-usage</artifactId>
 	<version>1.1.0</version>
+
+	<name>RDF Property and Datatype Usage Scanner</name>
+	<description>Creates statistics about the usage of properties and datatypes in Web Data Commons datasets.</description>
+	<inceptionYear>2021</inceptionYear>
+
+	<organization>
+		<name>Heinz Nixdorf Chair for Distributed Information Systems, Friedrich Schiller University Jena</name>
+		<url>http://fusion.cs.uni-jena.de/</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>MerleGa</id>
+			<name>Merle Gänßinger</name>
+			<email>merle.gaenssinger@uni-jena.de</email>
+		</developer>
+		<developer>
+			<id>jmkeil</id>
+			<name>Jan Martin Keil</name>
+			<email>jan-martin.keil@uni-jena.de</email>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>MIT</name>
+			<url>https://mit-license.org/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
 	<packaging>jar</packaging>
 
 	<properties>
@@ -56,6 +87,30 @@
 					<execution>
 						<id>default-jar</id>
 						<phase>none</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
+					<properties>
+						<owner>${project.organization.name}</owner>
+						<email>${project.organization.url}</email>
+					</properties>
+					<excludes>
+						<exclude>LICENSE</exclude>
+						<exclude>pom.xml</exclude>
+						<exclude>.*/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
