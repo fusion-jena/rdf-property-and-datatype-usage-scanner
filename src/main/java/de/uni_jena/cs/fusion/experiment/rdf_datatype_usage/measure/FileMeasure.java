@@ -92,9 +92,7 @@ public class FileMeasure {
 	 * which conducts all measures on each statement of the file
 	 */
 	public void startMeasurements() {
-		long start = System.currentTimeMillis();
 		ModelUtil.conductMeasurements(measures, fileIter, log);
-		long end = System.currentTimeMillis();
 	}
 
 	/**
