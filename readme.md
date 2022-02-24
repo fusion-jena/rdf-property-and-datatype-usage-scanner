@@ -1,4 +1,4 @@
-# RDF Datatype Usage Scanner
+# RDF Property and Datatype Usage Scanner
 
 This is a tool to survey the usage of properties and datatypes in RDF dataset files (as the [Web Data Commons](http://webdatacommons.org/)) on the web.
 
