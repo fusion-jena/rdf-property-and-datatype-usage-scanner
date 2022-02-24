@@ -13,7 +13,7 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.jena.rdf.model.Statement;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.ScanThread;
 
 /***
  * Makes the statement of a file iterable 
@@ -41,7 +41,7 @@ public class FileIterator implements Iterable<Statement> {
 	 */
 	private Map<Long, List<String>> errors;
 	
-	private H2DoMeasure thread;
+	private ScanThread thread;
 
 	private org.slf4j.Logger log;
 
@@ -59,7 +59,7 @@ public class FileIterator implements Iterable<Statement> {
 		errors = new HashMap<Long, List<String>>();
 	}
 	
-	public FileIterator(String url, org.slf4j.Logger log, H2DoMeasure thread) throws IOException{
+	public FileIterator(String url, org.slf4j.Logger log, ScanThread thread) throws IOException{
 		this(url, log);
 		this.thread = thread;
 	}

@@ -5,7 +5,7 @@
 
 	<groupId>de.uni_jena.cs.fusion</groupId>
 	<artifactId>experiment.rdf-datatype-usage</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -29,57 +29,17 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>build-a</id>
 						<configuration>
 							<archive>
 								<manifest>
-									<!-- <addClasspath>true</addClasspath> -->
-									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure</mainClass>
+									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.Scanner</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
 							<appendAssemblyId>false</appendAssemblyId>
-							<finalName>Measure</finalName>
-						</configuration>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>build-b</id>
-						<configuration>
-							<archive>
-								<manifest>
-									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2CreateDatabase</mainClass>
-								</manifest>
-							</archive>
-							<descriptorRefs>
-								<descriptorRef>jar-with-dependencies</descriptorRef>
-							</descriptorRefs>
-							<appendAssemblyId>false</appendAssemblyId>
-							<finalName>CreateDatabase</finalName>
-						</configuration>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>build-c</id>
-						<configuration>
-							<archive>
-								<manifest>
-									<mainClass>de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2CreateCSVFiles</mainClass>
-								</manifest>
-							</archive>
-							<descriptorRefs>
-								<descriptorRef>jar-with-dependencies</descriptorRef>
-							</descriptorRefs>
-							<appendAssemblyId>false</appendAssemblyId>
-							<finalName>ExportDatabaseToCSV</finalName>
+							<finalName>Scanner</finalName>
 						</configuration>
 						<phase>package</phase>
 						<goals>
@@ -104,39 +64,50 @@
 
 	<dependencies>
 		<dependency>
+			<!-- Apache 2.0 -->
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+			<version>4.6.3</version>
+		</dependency>
+		<dependency>
+			<!-- Apache 2.0 -->
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.0</version>
 		</dependency>
 		<dependency>
+			<!-- MIT -->
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>2.0.0-alpha1</version>
+			<version>2.0.0-alpha6</version>
 		</dependency>
 		<dependency>
+			<!-- Apache 2.0 -->
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>
 			<version>4.4.0</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>
+			<!-- EPL 1.0, MPL 2.0 -->
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>2.1.210</version>
 		</dependency>
 		<dependency>
+			<!-- EPL 2.0 -->
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<!-- EPL 2.0 -->
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 
 </project>

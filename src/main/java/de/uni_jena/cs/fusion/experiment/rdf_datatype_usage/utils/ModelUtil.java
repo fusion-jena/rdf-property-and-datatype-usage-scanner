@@ -16,7 +16,7 @@ import org.apache.jena.riot.RDFParser;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.ScanThread;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure.Measure;
 
 /**
@@ -56,7 +56,7 @@ public abstract class ModelUtil {
 	 * @param thread working on the document
 	 * @return an iterator over the statements of the file
 	 */
-	public static FileIterator parseURLlineByLine(String urlString, org.slf4j.Logger log, H2DoMeasure thread) {
+	public static FileIterator parseURLlineByLine(String urlString, org.slf4j.Logger log, ScanThread thread) {
 		FileIterator fileIter = null;
 
 		try {

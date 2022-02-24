@@ -3,13 +3,13 @@ package de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.measure;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.H2DoMeasure;
+import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.ScanThread;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.FileIterator;
-import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.H2Util;
 import de.uni_jena.cs.fusion.experiment.rdf_datatype_usage.utils.ModelUtil;
 
 public class FileMeasure {
@@ -36,6 +36,8 @@ public class FileMeasure {
 	 */
 	private Long fileID;
 
+	private String url;
+
 	/**
 	 * Viewing a file from a database
 	 * 
@@ -49,6 +51,7 @@ public class FileMeasure {
 		this.fileID = fileID;
 		initaliseMeasures();
 		this.log = log;
+		this.url = url;
 		this.fileIter = ModelUtil.parseURLlineByLine(url, log);
 	}
 
@@ -61,12 +64,13 @@ public class FileMeasure {
 	 * @param log    Logging information
 	 * @param thread Thread which is working on the file
 	 */
-	public FileMeasure(Long fileID, String url, Connection con, org.slf4j.Logger log, H2DoMeasure thread)
+	public FileMeasure(Long fileID, String url, Connection con, org.slf4j.Logger log, ScanThread thread)
 			throws SQLException {
 		this.con = con;
 		this.fileID = fileID;
 		initaliseMeasures();
 		this.log = log;
+		this.url = url;
 		this.fileIter = ModelUtil.parseURLlineByLine(url, log, thread);
 	}
 
@@ -89,10 +93,8 @@ public class FileMeasure {
 	 */
 	public void startMeasurements() {
 		long start = System.currentTimeMillis();
-		log.info("Start measures on file #" + fileID);
 		ModelUtil.conductMeasurements(measures, fileIter, log);
 		long end = System.currentTimeMillis();
-		log.info("Finished measures on file #" + fileID + " after " + (end - start) + "ms");
 	}
 
 	/**
@@ -113,7 +115,8 @@ public class FileMeasure {
 		writeNumLines();
 		writeToErrorDatabaseTable();
 		writeToResultDatabaseTable();
-		H2Util.writeTime(con, H2Util.END, fileID, log);
+		con.createStatement().execute("UPDATE files SET end_time = '"
+				+ new Timestamp(System.currentTimeMillis()) + "' WHERE file_id = " + fileID);
 		// commit all the changes and new lines to the database
 		con.commit();
 	}
@@ -124,10 +127,8 @@ public class FileMeasure {
 	 * @throws SQLException when an error occurs
 	 */
 	private void writeToErrorDatabaseTable() throws SQLException {
-		log.info("Start writing errors from file " + fileID);
 		Map<Long, List<String>> errors = fileIter.getErrors();
-		try (PreparedStatement ps = con
-				.prepareStatement("INSERT into " + H2Util.ERROR_DATABASE_TABLE + " VALUES (?,?,?)");) {
+		try (PreparedStatement ps = con.prepareStatement("INSERT INTO errors VALUES (?,?,?)");) {
 			ps.setLong(1, fileID);
 			for (Long line : errors.keySet()) {
 				ps.setLong(2, line);
@@ -137,7 +138,6 @@ public class FileMeasure {
 				}
 			}
 		}
-		log.info("Finished writing errors from file " + fileID);
 	}
 
 	/**
@@ -146,9 +146,7 @@ public class FileMeasure {
 	 * @throws SQLException when an error occurs
 	 */
 	private void writeToResultDatabaseTable() throws SQLException {
-		log.info("Start writing results from file " + fileID);
-		try (PreparedStatement ps = con
-				.prepareStatement("INSERT into " + H2Util.RESULT_DATABASE_TABLE + " VALUES (?,?,?,?,?)");) {
+		try (PreparedStatement ps = con.prepareStatement("INSERT INTO measurements VALUES (?,?,?,?,?)");) {
 			ps.setLong(1, fileID);
 			for (Measure measure : measures) {
 				for (MeasureResult result : measure.writeToDatabase()) {
@@ -159,7 +157,6 @@ public class FileMeasure {
 					ps.execute();
 				}
 			}
-			log.info("Finished writing results from file " + fileID);
 		}
 	}
 
@@ -169,11 +166,8 @@ public class FileMeasure {
 	 * @throws SQLException when an error occurs
 	 */
 	private void writeNumLines() throws SQLException {
-		log.info("Start writing total number of lines of file " + fileID);
-		String query = "UPDATE " + H2Util.FILE_DATABASE_TABLE + " SET TOTAL_NUMBER_OF_LINES = " + fileIter.getNumLines()
-				+ " WHERE FILE_ID = " + fileID;
-		H2Util.executeQuery(con, query);
-		log.info("Finished writing total number of lines of file " + fileID);
+		con.createStatement().execute(
+				"UPDATE files SET total_number_of_lines = " + fileIter.getNumLines() + " WHERE file_id = " + fileID);
 	}
 
 	/**
@@ -198,6 +192,10 @@ public class FileMeasure {
 
 	public long getFileID() {
 		return fileID;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 
 }
