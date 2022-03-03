@@ -65,7 +65,7 @@ public class Scanner implements Runnable {
 			+ "CREATE TABLE IF NOT EXISTS files ("//
 			+ "  file_id BIGINT PRIMARY KEY AUTO_INCREMENT(1,1) NOT NULL,"//
 			+ "  category_id BIGINT REFERENCES categories(category_id),"//
-			+ "  url VARCHAR(2048) NOT NULL,"//
+			+ "  url VARCHAR NOT NULL,"//
 			+ "  start_time TIMESTAMP,"//
 			+ "  end_time TIMESTAMP,"//
 			+ "  total_number_of_lines BIGINT"//
@@ -73,9 +73,9 @@ public class Scanner implements Runnable {
 	private static final String CREATE_RESULT_DATABSE_TABLE = ""//
 			+ "CREATE TABLE IF NOT EXISTS measurements ("//
 			+ "  file_id BIGINT REFERENCES files(file_id),"//
-			+ "  property VARCHAR(2048) NOT NULL,"//
-			+ "  measurement VARCHAR(40) NOT NULL,"//
-			+ "  datatype VARCHAR(2048) NOT NULL,"//
+			+ "  property VARCHAR NOT NULL,"//
+			+ "  measurement VARCHAR NOT NULL,"//
+			+ "  datatype VARCHAR NOT NULL,"//
 			+ "  quantity BIGINT NOT NULL"//
 			+ ")";
 	private static final String CREATE_ERROR_LINE_DATABASE_TABLE = ""//
