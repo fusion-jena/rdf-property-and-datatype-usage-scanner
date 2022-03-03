@@ -23,7 +23,7 @@
 #
 
 pushd "$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )" > /dev/null
-mkdir -p logs
-printf "\n\nStart measuring at %s ...\n" "$(date)" >> logs/logging.log
-nohup java -jar target/Scanner.jar --scan $1 < /dev/null >> /dev/null 2>&1 &
+mkdir -p $1
+printf "\n\nStart measuring at %s ...\n" "$(date)" >> "$1/scan.log"
+nohup java -jar target/Scanner.jar --scan $1 < /dev/null >> "$1/scan.log" 2>&1 &
 popd > /dev/null
