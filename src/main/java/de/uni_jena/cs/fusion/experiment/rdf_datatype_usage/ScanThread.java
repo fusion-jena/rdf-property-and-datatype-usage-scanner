@@ -106,12 +106,11 @@ public class ScanThread extends Thread {
 
 						long start = System.currentTimeMillis();
 
-						log.info("{} - Start processing file: {} ({})", new Timestamp(start), url, identifier);
+						log.info("Start processing file: {} ({})", url, identifier);
 						fileMeasure.startMeasurements();
 						fileMeasure.writeToDatabase();
 						long end = System.currentTimeMillis();
-						log.info("{} - Finished processing after {} ms file: {} ({})", new Timestamp(end), end - start,
-								url, identifier);
+						log.info("Finished processing after {} ms file: {} ({})", end - start, url, identifier);
 					} else {
 						break;
 					}
@@ -119,8 +118,7 @@ public class ScanThread extends Thread {
 					TimeUnit.HOURS.sleep(1);
 				} catch (Throwable t) {
 					if (identifier != null) {
-						log.info(new Timestamp(System.currentTimeMillis()) + " - Error during work on file "
-								+ identifier);
+						log.info("Error during work on file " + identifier);
 					}
 					log.error(t.getMessage());
 

@@ -37,7 +37,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPOutputStream;
 
@@ -153,7 +152,7 @@ public class Scanner implements Runnable {
 			}
 
 			if (scan) {
-				log.info("Running scan");
+				log.info("Start measuring");
 				scan(pool);
 			}
 
@@ -269,7 +268,6 @@ public class Scanner implements Runnable {
 		latch.await();
 		long end = System.currentTimeMillis();
 
-		log.info(String.format("[%s] Scan with %d threads finished after %d ms.",
-				new Timestamp(System.currentTimeMillis()), +this.threads, end - start));
+		log.info(String.format("Scan with %d threads finished after %d ms.", this.threads, end - start));
 	}
 }
